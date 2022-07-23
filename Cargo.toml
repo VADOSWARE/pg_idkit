@@ -1,0 +1,9 @@
+[package]
+name = "pg_idkit"
+version = "0.1.0"
+edition = "2021"
+author = "Victor Adossi <vados@vadosware.io>"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]

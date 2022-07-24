@@ -2,17 +2,22 @@
 
 `pg_idkit` is a [Postgres][postgres] extension for generating IDs. It aims to be have just about every ID you'd normally think of using:
 
-| Methodology      | function                             | Description                                    |
-|------------------|--------------------------------------|------------------------------------------------|
-| [UUIDv1][uuidv1] | `gen_uuid_v1`/`gen_uuid_v1_with_mac` | time-based, with random/non-random hmac        |
-| [UUIDv4][uuidv4] | `gen_uuid_v4`                        |                                                |
-| [UUIDv6][uuidv6] | `gen_uuid_v6`                        | time ordered, with sort-friendly byte ordering |
-| [UUIDv7][uuidv7] | `gen_uuid_v7`                        | time ordered, with sort-friendly byte ordering |
-| [UUIDv8][uuidv8] | `gen_uuid_v8`                        | time ordered, with sort-friendly byte ordering |
-| [ksuid][ksuid]   | `gen_ksuid`                          | developed by [Segment][segment]                |
-| [ulid][ulid]     | `gen_ulid`                           | unique, lexicographically sortable identifiers |
+| Methodology                            | function                 | Crate                                 | Description                                              |
+|----------------------------------------|--------------------------|---------------------------------------|----------------------------------------------------------|
+| [nanoid][nanoid]                       | `idkit_gen_nanoid`       | https://crates.io/crates/nanoid       | NanoID, develepod by [Andrey Sitnik][github-ai]          |
+| [ksuid][ksuid]                         | `idkit_gen_ksuid`        | https://crates.io/crates/ksuid        | developed by [Segment][segment]                          |
+| [ulid][ulid]                           | `idkit_gen_ulid`         | https://crates.io/crates/ulid         | unique, lexicographically sortable identifiers           |
+| [Twitter Snowflake][twitter-snowflake] | `idkit_gen_tw_snowflake` | https://crates.io/crates/rs-snowflake | Twitter Snowflake                                        |
+| [Timeflake][twitter-snowflake]         | `idkit_gen_timeflake`    | https://crates.io/crates/timeflake-rs | Twitter's Snowflake + Instagram's ID + Firebase's PushID |
+| [SonyFlake][sonyflake]                 | `idkit_gen_sonyflake`    | https://crates.io/crates/sonyflake-rs | SonyFlake                                                |
+| [PushID][pushid]                       | `idkit_gen_pushid`       | https://crates.io/crates/pushid       | Google Firebase's PushID                                 |
+| [xid][xid]                             | `idkit_gen_xid`          | https://crates.io/crates/xid          | XID                                                      |
+| [cuid][cuid]                           | `idkit_gen_cuid`         | https://crates.io/crates/cuid         | CUID                                                     |
+| [UUID v6][uuidv6]                      | `idkit_gen_uuidv6`       | https://crates.io/crates/uuidv6       | UUID v6 ([RFC 4122][rfc-4122-update])                    |
+| [UUID v7][uuidv7]                      | `idkit_gen_uuidv7`       | https://crates.io/crates/uuid7        | UUID v7 ([RFC 4122][rfc-4122-update])                    |
 
-This Postgres extension is made possible by [`pgx`][pgx].
+
+This Postgres extension is made possible thanks to [`pgx`][pgx].
 
 # How to install `pg_idkit`
 
@@ -77,3 +82,5 @@ make db-local-psql
 ```
 
 [pgx]: https://github.com/tcdi/pgx
+[github-ai]: https://github.com/ai
+[rfc-4122-update]: https://www.ietf.org/archive/id/draft-peabody-dispatch-new-uuid-format-01.html

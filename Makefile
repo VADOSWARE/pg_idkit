@@ -2,7 +2,7 @@
 # Tooling
 				check-tool-cargo \
 # Build
-				print-version build \
+				print-version build package \
 # Docker
 				image
 
@@ -29,6 +29,9 @@ print-version:
 build:
 	$(CARGO) build
 
+package:
+	$(CARGO) pgx package
+
 ##########
 # Docker #
 ##########
@@ -37,11 +40,13 @@ build:
 VERSION ?= $(shell grep 'version' Cargo.toml | head -n 1 | sed -rn 's/version\s*=\s*(.*)/\1/p')
 
 POSTGRES_IMAGE_VERSION ?= 14.4.0
+POSTGRES_IMAGE_TAG ?= ${POSTGRES_VERSION}-alpine
 
 IMAGE_NAME ?= postgres
-IMAGE_TAG ?= postgres:${POSTGRES_VERSION}-pg_idkit-${VERSION}
+IMAGE_TAG ?= ${POSTGRES_VERSION}-pg_idkit-${VERSION}
+IMAGE_NAME_FULL ?= "$(IMAGE_NAME):$(IMAGE_TAG)"
 
-DOCKERFILE_PATH ?= ./infra/docker/Dockerfile
+DOCKERFILE_PATH ?= ./infra/docker/${POSTGRES_IMAGE_TAG}.Dockerfile
 
 image:
-	$(DOCKERFILE) -f $(DOCKERFILE_PATH)
+	$(DOCKERFILE) -f $(DOCKERFILE_PATH) -t $(IMAGE_NAME_FULL)

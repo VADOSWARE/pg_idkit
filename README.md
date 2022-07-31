@@ -49,6 +49,7 @@ To work on `pg_idkit`, you'll need the following:
 
 - [Rust][rust] toolchain ([`rustup`][rustup])
 - (optional) [Docker][docker]
+- [`pgx`][pgx] and it's toolchain (the rust subcommand)
 
 ## Building the project
 
@@ -57,6 +58,16 @@ To build the project:
 ```console
 make build
 ```
+
+## Run tests
+
+To run the tests:
+
+```console
+make test
+```
+
+Note that you can use the `pgx`-documented development flow as well (using `cargo pgx`) as well!
 
 ## Starting a local Postgres instance with `pg_idkit` installed
 

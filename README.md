@@ -15,7 +15,7 @@
 | [cuid][cuid]                           | `idkit_gen_cuid`         | [`cuid`](https://crates.io/crates/cuid)                 | CUID                                                     |
 | [UUID v6][uuidv6]                      | `idkit_gen_uuidv6`       | [`uuidv6`](https://crates.io/crates/uuidv6)             | UUID v6 ([RFC 4122][rfc-4122-update])                    |
 | [UUID v7][uuidv7]                      | `idkit_gen_uuidv7`       | [`uuid7`](https://crates.io/crates/uuid7)               | UUID v7 ([RFC 4122][rfc-4122-update])                    |
-    
+
 This Postgres extension is made possible thanks to [`pgx`][pgx].
 
 # Installing `pg_idkit`
@@ -60,13 +60,19 @@ make build
 
 ## Starting a local Postgres instance with `pg_idkit` installed
 
-Assuming you have Docker installed, to start a local Postgres instance with `pg_idkit`:
+Assuming you have Docker installed, to start a local Postgres instance first you must build a `postgres` docker image with `pg_idkit`:
+
+```console
+make image
+```
+
+Then start the container:
 
 ```console
 make db-local
 ```
 
-You may attach to the local DB with `psql`:
+You may attach to the local DB with `psql` and execute commands:
 
 ```console
 make db-local-psql

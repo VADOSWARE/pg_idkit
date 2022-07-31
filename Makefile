@@ -2,7 +2,7 @@
 # Tooling
 				check-tool-cargo \
 # Build
-				print-version build package \
+				print-version build package test \
 # Docker
 				image
 
@@ -31,6 +31,10 @@ build:
 
 package:
 	$(CARGO) pgx package
+
+test:
+	$(CARGO) test
+	$(CARGO) pgx test
 
 ##########
 # Docker #

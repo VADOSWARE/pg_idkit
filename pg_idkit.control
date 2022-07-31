@@ -1,6 +1,7 @@
-# pg_idkit extension
 comment = 'multi-tool for generating new/niche universally unique identifiers (ex. UUIDv6, ULID, KSUID)'
-default_version = '0.1'
+default_version = '@CARGO_VERSION@'
 module_pathname = '$libdir/pg_idkit'
+relocatable = false
+superuser = false
 relocatable = true
 trusted = true

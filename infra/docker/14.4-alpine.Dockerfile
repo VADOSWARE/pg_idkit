@@ -11,7 +11,7 @@ RUN make build
 FROM sha256:7d6403121b12c9d29c13c9873bc0f76da8ff51f6c89fae10b99dc890807e27ae
 
 # SHAREDIR should be /usr/local/share/postgresql (pg_config --sharedir)
-COPY --from=build /app/target/pg_idkit.so /usr/local/share/postgresql/extension/
+COPY --from=build /app/target/pg_idkit.so /usr/local/share/postgresql/extension/pg_idkit--$(VERSION).so
 COPY --from=build /app/infra/pg/pg_idkit.control /usr/local/share/postgresql/extension/
 
 RUN cat <<EOT >> /var/lib/postgresql/data/postgresql.com \

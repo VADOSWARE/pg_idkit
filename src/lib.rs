@@ -5,7 +5,7 @@ mod ksuid;
 mod ulid;
 mod timeflake;
 mod sonyflake;
-// mod pushid;
+mod pushid;
 // mod xid;
 // mod cuid;
 

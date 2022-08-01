@@ -7,7 +7,7 @@ mod timeflake;
 mod sonyflake;
 mod pushid;
 mod xid;
-// mod cuid;
+mod cuid;
 
 use pgx::*;
 

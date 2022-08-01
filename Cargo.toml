@@ -30,6 +30,7 @@ timeflake-rs = "0.2.2"
 sonyflake = "0.1.2"
 pushid = "0.0.1"
 xid = "1.0.2"
+cuid = "1.2.0"
 
 [dev-dependencies]
 pgx-tests = "=0.4.5"

@@ -21,6 +21,6 @@ mod tests {
     #[pg_test]
     fn test_pushid_len() {
         let generated = crate::pushid::idkit_pushid_generate();
-        assert_eq!(generated.len(), 15);
+        assert_eq!(generated.len(), 20);
     }
 }

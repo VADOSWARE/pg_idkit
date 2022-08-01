@@ -2,18 +2,17 @@
 
 `pg_idkit` is a [Postgres][postgres] extension for generating IDs. It aims to be have just about every ID you'd normally think of using:
 
-| Methodology                            | function                 | Crate                                                   | Description                                              |
-|----------------------------------------|--------------------------|---------------------------------------------------------|----------------------------------------------------------|
-| [UUID v6][uuidv6]                      | `idkit_gen_uuidv6`       | [`uuidv6`](https://crates.io/crates/uuidv6)             | UUID v6 ([RFC 4122][rfc-4122-update])                    |
-| [UUID v7][uuidv7]                      | `idkit_gen_uuidv7`       | [`uuid7`](https://crates.io/crates/uuid7)               | UUID v7 ([RFC 4122][rfc-4122-update])                    |
-| [nanoid][nanoid]                       | `idkit_gen_nanoid`       | [`nanoid`](https://crates.io/crates/nanoid)             | NanoID, develepod by [Andrey Sitnik][github-ai]          |
-| [ksuid][ksuid]                         | `idkit_gen_ksuid`        | [`ksuid`](https://crates.io/crates/ksuid)               | developed by [Segment][segment]                          |
-| [ulid][ulid]                           | `idkit_gen_ulid`         | [`ulid`](https://crates.io/crates/ulid)                 | unique, lexicographically sortable identifiers           |
-| [Timeflake][twitter-snowflake]         | `idkit_gen_timeflake`    | [`timeflake-rs`](https://crates.io/crates/timeflake-rs) | Twitter's Snowflake + Instagram's ID + Firebase's PushID |
-| [SonyFlake][sonyflake]                 | `idkit_gen_sonyflake`    | [`sonyflake`](https://crates.io/crates/sonyflake)       | SonyFlake                                                |
-| [PushID][pushid]                       | `idkit_gen_pushid`       | [`pushid`](https://crates.io/crates/pushid)             | Google Firebase's PushID                                 |
-| [xid][xid]                             | `idkit_gen_xid`          | [`xid`](https://crates.io/crates/xid)                   | XID                                                      |
-| [cuid][cuid]                           | `idkit_gen_cuid`         | [`cuid`](https://crates.io/crates/cuid)                 | CUID                                                     |
+| Methodology            | function                   | Crate                                                   | Description                                              |
+|------------------------|----------------------------|---------------------------------------------------------|----------------------------------------------------------|
+| [UUID v6][uuidv6]      | `idkit_uuidv6_generate`    | [`uuidv6`](https://crates.io/crates/uuidv6)             | UUID v6 ([RFC 4122][rfc-4122-update])                    |
+| [UUID v7][uuidv7]      | `idkit_uuidv7_generate`    | [`uuid7`](https://crates.io/crates/uuid7)               | UUID v7 ([RFC 4122][rfc-4122-update])                    |
+| [nanoid][nanoid]       | `idkit_nanoid_generate`    | [`nanoid`](https://crates.io/crates/nanoid)             | NanoID, develepod by [Andrey Sitnik][github-ai]          |
+| [ksuid][ksuid]         | `idkit_ksuid_generate`     | [`ksuid`](https://crates.io/crates/ksuid)               | developed by [Segment][segment]                          |
+| [ulid][ulid]           | `idkit_ulid_generate`      | [`ulid`](https://crates.io/crates/ulid)                 | unique, lexicographically sortable identifiers           |
+| [Timeflake][timeflake] | `idkit_timeflake_generate` | [`timeflake-rs`](https://crates.io/crates/timeflake-rs) | Twitter's Snowflake + Instagram's ID + Firebase's PushID |
+| [PushID][pushid]       | `idkit_pushid_generate`    | [`pushid`](https://crates.io/crates/pushid)             | Google Firebase's PushID                                 |
+| [xid][xid]             | `idkit_xid_generate`       | [`xid`](https://crates.io/crates/xid)                   | XID                                                      |
+| [cuid][cuid]           | `idkit_cuid_generate`      | [`cuid`](https://crates.io/crates/cuid)                 | CUID                                                     |
 
 This Postgres extension is made possible thanks to [`pgx`][pgx].
 
@@ -105,3 +104,38 @@ make db-local-psql
 [github-ai]: https://github.com/ai
 [rfc-4122-update]: https://www.ietf.org/archive/id/draft-peabody-dispatch-new-uuid-format-01.html
 [cargo-watch]: https://github.com/passcod/cargo-watch
+[uuidv1]: https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_1_(date-time_and_MAC_address)
+[ksuid]: https://github.com/segmentio/ksuid
+[ulid]: https://github.com/ulid/spec
+[pushid]: https://firebase.googleblog.com/2015/02/the-2120-ways-to-ensure-unique_68.html
+[cuid]: https://github.com/ericelliott/cuid
+[xid]: https://github.com/rs/xid
+[objectid]: https://www.mongodb.com/docs/manual/reference/method/ObjectId/
+[nanoid]: https://www.npmjs.com/package/nanoid
+[wiki-uuid]: https://en.wikipedia.org/wiki/Universally_unique_identifier
+[twitter]: https://blog.twitter.com/engineering
+[wiki-mac-address]: https://en.wikipedia.org/wiki/MAC_address
+[instagram]: instagram-engineering.com/
+[p-pearcy]: https://github.com/ppearcy/elasticflake
+[segment]: https://segment.com/blog/engineering/
+[r-tallent]: https://github.com/richardtallent
+[a-chilton]: https://github.com/chilts
+[it-cabrera]: https://darkghosthunter.medium.com/
+[sony]: https://github.com/sony
+[t-pawlak]: https://github.com/T-PWK
+[a-feerasta]: https://github.com/alizain
+[google]: https://google.com
+[o-poitrey]: https://github.com/rs
+[mongodb]: https://www.mongodb.com/blog/channel/engineering-blog
+[e-elliott]: https://github.com/ericelliott
+[wiki-gregorian]: https://en.wikipedia.org/wiki/Gregorian_calendar
+[rust]: https://rust-lang.org
+[pgx]: https://github.com/tcdi/pgx
+[pg-docs-operator-classes]: https://www.postgresql.org/docs/current/indexes-opclass.html
+[repo]: https://github.com/t3hmrman/pg_idkit
+[oryx-pro]: https://system76.com/laptops/oryx
+[pgstattuple]: https://www.postgresql.org/docs/current/pgstattuple.html
+[uuidv6]: https://www.ietf.org/archive/id/draft-peabody-dispatch-new-uuid-format-01.html
+[uuidv7]: https://www.ietf.org/archive/id/draft-peabody-dispatch-new-uuid-format-01.html
+[twitter-snowflake]: https://blog.twitter.com/engineering/en_us/a/2010/announcing-snowflake
+[timeflake]: https://github.com/anthonynsimon/timeflake

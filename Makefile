@@ -41,7 +41,7 @@ build-watch: check-tool-cargo check-tool-cargo-watch
 	$(CARGO_WATCH) -x "build $(CARGO_BUILD_FLAGS)" --watch src
 
 build-test-watch: check-tool-cargo check-tool-cargo-watch
-	$(CARGO_WATCH) -x "test $(CARGO_BUILD_FLAGS)" --watch src --watch tests
+	$(CARGO_WATCH) -x "test $(CARGO_BUILD_FLAGS)" --watch src
 
 package:
 	$(CARGO) pgx package

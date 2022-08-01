@@ -1,6 +1,6 @@
 mod uuid_v6;
 mod uuid_v7;
-// mod nanoid;
+mod nanoid;
 // mod ulid;
 // mod ksuid;
 // mod twtr_snowflake;

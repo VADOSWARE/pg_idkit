@@ -48,8 +48,9 @@ Here's how to get started working on `pg_idkit` locally.
 To work on `pg_idkit`, you'll need the following:
 
 - [Rust][rust] toolchain ([`rustup`][rustup])
-- (optional) [Docker][docker]
 - [`pgx`][pgx] and it's toolchain (the rust subcommand)
+- (optional) [Docker][docker]
+- (optional) [`cargo-watch`][cargo-watch]
 
 ## Building the project
 
@@ -57,6 +58,12 @@ To build the project:
 
 ```console
 make build
+```
+
+To run the build continuously for quicker local development (assuming you have `cargo-watch` installed):
+
+```console
+make build-watch
 ```
 
 ## Run tests
@@ -68,6 +75,12 @@ make test
 ```
 
 Note that you can use the `pgx`-documented development flow as well (using `cargo pgx`) as well!
+
+To run tests continuously for quicker local development (requires `cargo-watch`):
+
+```console
+make build-test-watch
+```
 
 ## Starting a local Postgres instance with `pg_idkit` installed
 
@@ -92,3 +105,4 @@ make db-local-psql
 [pgx]: https://github.com/tcdi/pgx
 [github-ai]: https://github.com/ai
 [rfc-4122-update]: https://www.ietf.org/archive/id/draft-peabody-dispatch-new-uuid-format-01.html
+[cargo-watch]: https://github.com/passcod/cargo-watch

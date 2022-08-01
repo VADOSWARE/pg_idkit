@@ -9,7 +9,6 @@
 | [nanoid][nanoid]                       | `idkit_gen_nanoid`       | [`nanoid`](https://crates.io/crates/nanoid)             | NanoID, develepod by [Andrey Sitnik][github-ai]          |
 | [ksuid][ksuid]                         | `idkit_gen_ksuid`        | [`ksuid`](https://crates.io/crates/ksuid)               | developed by [Segment][segment]                          |
 | [ulid][ulid]                           | `idkit_gen_ulid`         | [`ulid`](https://crates.io/crates/ulid)                 | unique, lexicographically sortable identifiers           |
-| [Twitter Snowflake][twitter-snowflake] | `idkit_gen_tw_snowflake` | [`rs-snowflake`](https://crates.io/crates/rs-snowflake) | Twitter Snowflake                                        |
 | [Timeflake][twitter-snowflake]         | `idkit_gen_timeflake`    | [`timeflake-rs`](https://crates.io/crates/timeflake-rs) | Twitter's Snowflake + Instagram's ID + Firebase's PushID |
 | [SonyFlake][sonyflake]                 | `idkit_gen_sonyflake`    | [`sonyflake`](https://crates.io/crates/sonyflake)       | SonyFlake                                                |
 | [PushID][pushid]                       | `idkit_gen_pushid`       | [`pushid`](https://crates.io/crates/pushid)             | Google Firebase's PushID                                 |

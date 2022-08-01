@@ -27,6 +27,7 @@ nanoid = "0.4.0"
 ksuid = "0.2.0"
 ulid = "0.6.0"
 timeflake-rs = "0.2.2"
+sonyflake = "0.1.2"
 
 [dev-dependencies]
 pgx-tests = "=0.4.5"

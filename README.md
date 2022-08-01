@@ -64,6 +64,14 @@ To run the build continuously for quicker local development (assuming you have `
 make build-watch
 ```
 
+### `pgx` workflow
+
+Note that you can use the `pgx`-documented development flow as well (using `cargo pgx`) as well, for example:
+
+```console
+cargo pgx run pg14
+```
+
 ## Run tests
 
 To run the tests:
@@ -71,8 +79,6 @@ To run the tests:
 ```console
 make test
 ```
-
-Note that you can use the `pgx`-documented development flow as well (using `cargo pgx`) as well!
 
 To run tests continuously for quicker local development (requires `cargo-watch`):
 

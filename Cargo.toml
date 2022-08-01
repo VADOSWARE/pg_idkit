@@ -25,6 +25,7 @@ uuidv6 = "0.1.1"
 uuid7 = "0.2.6"
 nanoid = "0.4.0"
 ksuid = "0.2.0"
+ulid = "0.6.0"
 
 [dev-dependencies]
 pgx-tests = "=0.4.5"

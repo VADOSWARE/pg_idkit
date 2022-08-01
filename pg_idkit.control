@@ -3,5 +3,3 @@ default_version = '@CARGO_VERSION@'
 module_pathname = '$libdir/pg_idkit'
 relocatable = false
 superuser = false
-relocatable = true
-trusted = true

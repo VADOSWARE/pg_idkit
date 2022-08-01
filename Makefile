@@ -1,12 +1,15 @@
 .PHONY: all \
 # Tooling
-				check-tool-cargo \
+				check-tool-cargo check-tool-cargo-watch \
 # Build
-				print-version build package test \
+				print-version \
+				build build-watch build-test-watch \
+				package test \
 # Docker
 				image
 
 CARGO ?= cargo
+CARGO_WATCH ?= cargo-watch
 
 all: build
 
@@ -19,6 +22,11 @@ ifeq (,$(shell which $(CARGO)))
 	$(error "please enture cargo and the rust toolchain is installed (see: https://github.com/rust-lang/cargo/)")
 endif
 
+check-tool-cargo-watch:
+ifeq (, $(shell which $(CARGO_WATCH)))
+	$(error "`cargo-watch` is not available please install cargo-watch (https://github.com/passcod/cargo-watch)")
+endif
+
 #########
 # Build #
 #########
@@ -28,6 +36,12 @@ print-version:
 
 build:
 	$(CARGO) build
+
+build-watch: check-tool-cargo check-tool-cargo-watch
+	$(CARGO_WATCH) -x "build $(CARGO_BUILD_FLAGS)" --watch src
+
+build-test-watch: check-tool-cargo check-tool-cargo-watch
+	$(CARGO_WATCH) -x "test $(CARGO_BUILD_FLAGS)" --watch src --watch tests
 
 package:
 	$(CARGO) pgx package

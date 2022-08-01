@@ -2,7 +2,10 @@
 name = "pg_idkit"
 version = "0.1.0"
 edition = "2021"
-author = "Victor Adossi <vados@vadosware.io>"
+authors = [
+  "Victor Adossi <vados@vadosware.io>"
+]
+
 
 [lib]
 crate-type = ["cdylib"]
@@ -18,6 +21,8 @@ pg_test = []
 
 [dependencies]
 pgx = "=0.4.5"
+uuidv6 = "0.1.1"
+uuid7 = "0.2.6"
 
 [dev-dependencies]
 pgx-tests = "=0.4.5"

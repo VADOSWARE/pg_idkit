@@ -4,6 +4,8 @@
 
 | Methodology                            | function                 | Crate                                                   | Description                                              |
 |----------------------------------------|--------------------------|---------------------------------------------------------|----------------------------------------------------------|
+| [UUID v6][uuidv6]                      | `idkit_gen_uuidv6`       | [`uuidv6`](https://crates.io/crates/uuidv6)             | UUID v6 ([RFC 4122][rfc-4122-update])                    |
+| [UUID v7][uuidv7]                      | `idkit_gen_uuidv7`       | [`uuid7`](https://crates.io/crates/uuid7)               | UUID v7 ([RFC 4122][rfc-4122-update])                    |
 | [nanoid][nanoid]                       | `idkit_gen_nanoid`       | [`nanoid`](https://crates.io/crates/nanoid)             | NanoID, develepod by [Andrey Sitnik][github-ai]          |
 | [ksuid][ksuid]                         | `idkit_gen_ksuid`        | [`ksuid`](https://crates.io/crates/ksuid)               | developed by [Segment][segment]                          |
 | [ulid][ulid]                           | `idkit_gen_ulid`         | [`ulid`](https://crates.io/crates/ulid)                 | unique, lexicographically sortable identifiers           |
@@ -13,8 +15,6 @@
 | [PushID][pushid]                       | `idkit_gen_pushid`       | [`pushid`](https://crates.io/crates/pushid)             | Google Firebase's PushID                                 |
 | [xid][xid]                             | `idkit_gen_xid`          | [`xid`](https://crates.io/crates/xid)                   | XID                                                      |
 | [cuid][cuid]                           | `idkit_gen_cuid`         | [`cuid`](https://crates.io/crates/cuid)                 | CUID                                                     |
-| [UUID v6][uuidv6]                      | `idkit_gen_uuidv6`       | [`uuidv6`](https://crates.io/crates/uuidv6)             | UUID v6 ([RFC 4122][rfc-4122-update])                    |
-| [UUID v7][uuidv7]                      | `idkit_gen_uuidv7`       | [`uuid7`](https://crates.io/crates/uuid7)               | UUID v7 ([RFC 4122][rfc-4122-update])                    |
 
 This Postgres extension is made possible thanks to [`pgx`][pgx].
 

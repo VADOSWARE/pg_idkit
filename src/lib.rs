@@ -4,7 +4,6 @@ mod nanoid;
 mod ksuid;
 mod ulid;
 mod timeflake;
-mod sonyflake;
 mod pushid;
 mod xid;
 mod cuid;

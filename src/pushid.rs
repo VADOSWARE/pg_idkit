@@ -1,5 +1,6 @@
 use pgx::*;
 use pushid::PushId;
+use pushid::PushIdGen;
 
 /// Generate a random pushid UUID (hex encoded)
 #[pg_extern]

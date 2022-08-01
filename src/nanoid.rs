@@ -1,6 +1,7 @@
 use pgx::*;
 use nanoid::nanoid;
 
+/// Generate a nanoid
 #[pg_extern]
 fn idkit_nanoid_generate() -> String {
     nanoid!()

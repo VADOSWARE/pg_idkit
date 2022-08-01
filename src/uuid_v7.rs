@@ -1,6 +1,7 @@
 use pgx::*;
 use uuid7::uuid7;
 
+/// Generate a UUID v7
 #[pg_extern]
 fn idkit_uuidv7_generate() -> String {
     uuid7().to_string()
@@ -15,15 +16,15 @@ fn idkit_uuidv7_generate() -> String {
 mod tests {
     use pgx::*;
 
-    #[pg_test]
     /// Basic length test
+    #[pg_test]
     fn test_uuidv7_len() {
         let generated = crate::uuid_v7::idkit_uuidv7_generate();
         assert_eq!(generated.len(), 36);
     }
 
-    #[pg_test]
     /// Check version integer in UUID string
+    #[pg_test]
     fn test_uuidv7_version_int() {
         let generated = crate::uuid_v7::idkit_uuidv7_generate();
         let c9 = generated.chars().nth(14);

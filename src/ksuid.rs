@@ -1,6 +1,7 @@
 use pgx::*;
 use ksuid::Ksuid;
 
+/// Generate a random KSUID (HEX-encoded)
 #[pg_extern]
 fn idkit_ksuid_generate() -> String {
     Ksuid::generate().to_hex()
@@ -15,8 +16,8 @@ fn idkit_ksuid_generate() -> String {
 mod tests {
     use pgx::*;
 
-    #[pg_test]
     /// Basic length test
+    #[pg_test]
     fn test_ksuid_len() {
         let generated = crate::ksuid::idkit_ksuid_generate();
         assert_eq!(generated.len(), 40);

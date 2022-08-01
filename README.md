@@ -139,3 +139,6 @@ make db-local-psql
 [uuidv7]: https://www.ietf.org/archive/id/draft-peabody-dispatch-new-uuid-format-01.html
 [twitter-snowflake]: https://blog.twitter.com/engineering/en_us/a/2010/announcing-snowflake
 [timeflake]: https://github.com/anthonynsimon/timeflake
+[postgres]: https://postgresql.org
+[rustup]: https://rust-lang.github.io/rustup
+[docker]: https://docs.docker.com/get-started/overview/

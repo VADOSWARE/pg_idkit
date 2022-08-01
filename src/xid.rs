@@ -1,11 +1,10 @@
 use pgx::*;
-use pushid::PushId;
-use pushid::PushIdGen;
+use ::xid::{new as generate_xid};
 
-/// Generate a random PushID UUID
+/// Generate a random xid UUID
 #[pg_extern]
-fn idkit_pushid_generate() -> String {
-    PushId::new().get_id()
+fn idkit_xid_generate() -> String {
+    generate_xid().to_string()
 }
 
 //////////
@@ -19,8 +18,8 @@ mod tests {
 
     /// Basic length test
     #[pg_test]
-    fn test_pushid_len() {
-        let generated = crate::pushid::idkit_pushid_generate();
+    fn test_xid_len() {
+        let generated = crate::xid::idkit_xid_generate();
         assert_eq!(generated.len(), 20);
     }
 }

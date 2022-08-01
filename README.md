@@ -11,7 +11,7 @@
 | [ulid][ulid]                           | `idkit_gen_ulid`         | [`ulid`](https://crates.io/crates/ulid)                 | unique, lexicographically sortable identifiers           |
 | [Twitter Snowflake][twitter-snowflake] | `idkit_gen_tw_snowflake` | [`rs-snowflake`](https://crates.io/crates/rs-snowflake) | Twitter Snowflake                                        |
 | [Timeflake][twitter-snowflake]         | `idkit_gen_timeflake`    | [`timeflake-rs`](https://crates.io/crates/timeflake-rs) | Twitter's Snowflake + Instagram's ID + Firebase's PushID |
-| [SonyFlake][sonyflake]                 | `idkit_gen_sonyflake`    | [`sonyflake-rs`](https://crates.io/crates/sonyflake-rs) | SonyFlake                                                |
+| [SonyFlake][sonyflake]                 | `idkit_gen_sonyflake`    | [`sonyflake`](https://crates.io/crates/sonyflake)       | SonyFlake                                                |
 | [PushID][pushid]                       | `idkit_gen_pushid`       | [`pushid`](https://crates.io/crates/pushid)             | Google Firebase's PushID                                 |
 | [xid][xid]                             | `idkit_gen_xid`          | [`xid`](https://crates.io/crates/xid)                   | XID                                                      |
 | [cuid][cuid]                           | `idkit_gen_cuid`         | [`cuid`](https://crates.io/crates/cuid)                 | CUID                                                     |

@@ -1,8 +1,8 @@
 mod uuid_v6;
 mod uuid_v7;
 mod nanoid;
+mod ksuid;
 // mod ulid;
-// mod ksuid;
 // mod twtr_snowflake;
 // mod timeflake;
 // mod sonyflake;

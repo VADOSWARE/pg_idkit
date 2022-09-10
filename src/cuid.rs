@@ -4,12 +4,10 @@ use cuid;
 /// Generate a random cuid UUID
 #[pg_extern]
 fn idkit_cuid_generate() -> String {
-    let generated = cuid::cuid();
-    if let Err(e) = generated {
-        error!("{}", format!("failed to generate sonyflake: {}", e));
+    match cuid::cuid() {
+        Err(e) => error!("failed to generate cuid: {}", e),
+        Ok(id) => id,
     }
-
-    generated.unwrap()
 }
 
 //////////

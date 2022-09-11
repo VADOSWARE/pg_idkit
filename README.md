@@ -108,7 +108,7 @@ make db-local-psql
 
 [pgx]: https://github.com/tcdi/pgx
 [github-ai]: https://github.com/ai
-[rfc-4122-update]: https://www.ietf.org/archive/id/draft-peabody-dispatch-new-uuid-format-01.html
+[rfc-4122-update]: https://datatracker.ietf.org/doc/html/draft-peabody-dispatch-new-uuid-format-04
 [cargo-watch]: https://github.com/passcod/cargo-watch
 [uuidv1]: https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_1_(date-time_and_MAC_address)
 [ksuid]: https://github.com/segmentio/ksuid

@@ -9,27 +9,31 @@ jobs:
 
     strategy:
       matrix:
-        rust_container_version: [ "1.63" ]
-        alpine_postgresql_package: [ "postgresql14" ]
-        alpine_postgresql_version: [ "14.5-r0" ]
+        pg_version_major: [ "14" ]
+        pg_version: [ "14.5" ]
+        alpine_rust_package: [ "rust" ]
+        alpine_rust_version: [ "1.63.0-r0" ]
 
     container:
-      image: "rust:${{ matrix.rust_container_version }}-alpine"
-      options: --user idkit
+      image: "postgres:${{ matrix.pg_version }}-alpine"
+      options: --user postgres
 
     steps:
       # Checkout the repo
       - uses: actions/checkout@v3
 
-      # Setup rust toolchain
-      #- name: Setup rust toolchain
-      #  run: rustup toolchain install stable --profile minimal
-
       # Install deps (mostly for rust-cache)
       - name: Install dependencies
         run: |
-          apk add nodejs musl-dev openssl openssl-dev \
-            ${{ matrix.alpine_postgresql_package}}=${{ matrix.alpine_postgresql_version}}
+          apk add nodejs g++ make musl-dev openssl openssl-dev rustup
+
+      # Setup rust toolchain
+      - name: Setup rust toolchain
+        # run: /usr/bin/rustup-init toolchain install stable --profile minimal
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
 
       # Install pgx
       - name: Install cargo-pgx
@@ -45,7 +49,7 @@ jobs:
       # Initialize pgx
       - name: Initialize pgx
         run: |
-          cargo pgx init --pg14 $(which pg_config)
+          cargo pgx init --pg${{ matrix.pg_version_major }} $(which pg_config)
 
       # Run cargo check
       - name: cargo check

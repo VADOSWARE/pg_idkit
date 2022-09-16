@@ -15,7 +15,6 @@ jobs:
 
     container:
       image: "rust:${{ matrix.rust_container_version }}-alpine"
-      options: --user idkit
 
     steps:
       # Checkout the repo
@@ -49,7 +48,7 @@ jobs:
         run: |
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           echo 'SCCACHE_CACHE_SIZE="20G"' >> $GITHUB_ENV
-          mkdir -p /home/runner/.cache/sccache
+          mkdir -p /home/postgres/.cache/sccache
 
       - name: Start sccache server
         run: sccache --start-server
@@ -65,16 +64,15 @@ jobs:
           mkdir -p /var/lib/postgresql; \
           chown -R postgres:postgres /var/lib/postgresql
 
-      # Install pgx
-      - name: Install cargo-pgx
-        uses: actions-rs/cargo@v1
-        with:
-          command: install
-          args: cargo-pgx
+      # Setup rust toolchain
+      - name: Setup rust toolchain
+        run: |
+          su postgres -c "rustup toolchain install stable --profile minimal"
 
-      # # Setup cargo and rust cache
-      # - name: Setup cargo and rust cache
-      #   uses: Swatinem/rust-cache@v2
+      # Install cargo-pgx
+      - name: Install cargo-pgx
+        run: |
+          su postgres -c "cargo install cargo-pgx"
 
       # Initialize pgx
       - name: Initialize pgx

@@ -1,15 +1,38 @@
+# Makefile preamble (https://tech.davis-hansson.com/p/make/)
+SHELL := bash
+.ONESHELL:
+.SHELLFLAGS := -eu -o pipefail -c
+.DELETE_ON_ERROR:
+MAKEFLAGS += --warn-undefined-variables
+MAKEFLAGS += --no-builtin-rules
+MAKEFLAGS += --no-print-directory
+MAKEFLAGS += --quiet
+
+ifeq ($(origin .RECIPEPREFIX), undefined)
+  $(error This Make does not support .RECIPEPREFIX. Please use GNU Make 4.0 or later)
+endif
+.RECIPEPREFIX = >
+
+OPENSSL ?= openssl
+
+PULUMI_SECRET_DIR ?= secrets/pulumi
+PULUMI_AWS_ACCESS_KEY_ID_PATH ?= $(PULUMI_SECRET_DIR)/aws-access-key-id.secret
+PULUMI_AWS_SECRET_ACCESS_KEY_PATH ?= $(PULUMI_SECRET_DIR)/aws-secret-access-key.secret
+
 .PHONY: all \
 # Tooling
-				check-tool-cargo check-tool-cargo-watch \
+>				check-tool-cargo check-tool-cargo-watch \
 # Build
-				print-version \
-				build build-watch build-test-watch \
-				package test \
+>				print-version \
+>				build build-watch build-test-watch \
+>				package test \
 # Docker
-				image
+>				image
 
 CARGO ?= cargo
 CARGO_WATCH ?= cargo-watch
+
+CHANGELOG_FILE_PATH ?= CHANGELOG
 
 all: build
 
@@ -19,43 +42,46 @@ all: build
 
 check-tool-cargo:
 ifeq (,$(shell which $(CARGO)))
-	$(error "please enture cargo and the rust toolchain is installed (see: https://github.com/rust-lang/cargo/)")
+>	$(error "please enture cargo and the rust toolchain is installed (see: https://github.com/rust-lang/cargo/)")
 endif
 
 check-tool-cargo-watch:
 ifeq (, $(shell which $(CARGO_WATCH)))
-	$(error "`cargo-watch` is not available please install cargo-watch (https://github.com/passcod/cargo-watch)")
+>	$(error "`cargo-watch` is not available please install cargo-watch (https://github.com/passcod/cargo-watch)")
 endif
 
 #########
 # Build #
 #########
 
+# NOTE: this assumes the *first* version is the package version
+VERSION ?= $(shell grep 'version' Cargo.toml | head -n 1 | sed -rn 's/version\s*=\s*(.*)/\1/p')
+
 print-version:
-	@echo -n "$(VERSION)"
+>	@echo -n "$(VERSION)"
+
+changelog:
+>	$(GIT) cliff --unreleased --tag=$(VERSION) --prepend=$(CHANGELOG_FILE_PATH)
 
 build:
-	$(CARGO) build
+>	$(CARGO) build
 
 build-watch: check-tool-cargo check-tool-cargo-watch
-	$(CARGO_WATCH) -x "build $(CARGO_BUILD_FLAGS)" --watch src
+>	$(CARGO_WATCH) -x "build $(CARGO_BUILD_FLAGS)" --watch src
 
 build-test-watch: check-tool-cargo check-tool-cargo-watch
-	$(CARGO_WATCH) -x "test $(CARGO_BUILD_FLAGS)" --watch src
+>	$(CARGO_WATCH) -x "test $(CARGO_BUILD_FLAGS)" --watch src
 
 package:
-	$(CARGO) pgx package
+>	$(CARGO) pgx package
 
 test:
-	$(CARGO) test
-	$(CARGO) pgx test
+>	$(CARGO) test
+>	$(CARGO) pgx test
 
 ##########
 # Docker #
 ##########
-
-# NOTE: this assumes the *first* version is the package version
-VERSION ?= $(shell grep 'version' Cargo.toml | head -n 1 | sed -rn 's/version\s*=\s*(.*)/\1/p')
 
 POSTGRES_IMAGE_VERSION ?= 14.4.0
 POSTGRES_IMAGE_TAG ?= ${POSTGRES_VERSION}-alpine
@@ -67,4 +93,4 @@ IMAGE_NAME_FULL ?= "$(IMAGE_NAME):$(IMAGE_TAG)"
 DOCKERFILE_PATH ?= ./infra/docker/${POSTGRES_IMAGE_TAG}.Dockerfile
 
 image:
-	$(DOCKERFILE) -f $(DOCKERFILE_PATH) -t $(IMAGE_NAME_FULL)
+>	$(DOCKERFILE) -f $(DOCKERFILE_PATH) -t $(IMAGE_NAME_FULL)

@@ -56,13 +56,13 @@ jobs:
       - name: Print sccache stats (before run)
         run: sccache --show-stats
 
-      # Create pg user
-      - name: Create postgres user
-        run: |
-          addgroup -g 70 -S postgres; \
-          adduser -u 70 -S -D -G postgres -H -h /var/lib/postgresql -s /bin/sh postgres; \
-          mkdir -p /var/lib/postgresql; \
-          chown -R postgres:postgres /var/lib/postgresql
+      # # Create pg user
+      # - name: Create postgres user
+      #   run: |
+      #     addgroup -g 70 -S postgres || true; \
+      #     adduser -u 70 -S -D -G postgres -H -h /var/lib/postgresql -s /bin/sh postgres; \
+      #     mkdir -p /var/lib/postgresql; \
+      #     chown -R postgres:postgres /var/lib/postgresql
 
       # Setup rust toolchain
       - name: Setup rust toolchain

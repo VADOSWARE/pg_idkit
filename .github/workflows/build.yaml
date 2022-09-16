@@ -33,14 +33,14 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-          key: pg_idkit-tests-rust-${{ matrix.rust_constainer_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}-${{ hashFiles('**/Cargo.lock', '.github/workflows/tests.yml') }}
+          key: pg_idkit-tests-rust-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}-${{ hashFiles('**/Cargo.lock', '.github/workflows/tests.yml') }}
 
       - name: Cache sccache directory
         uses: actions/cache@v2
         continue-on-error: false
         with:
-          path: /home/runner/.cache/sccache
-          key: pg_idkit-tests-sccache-${{ matrix.rust_constainer_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}-${{ hashFiles('**/Cargo.lock', '.github/workflows/tests.yml') }}
+          path: /github/home/.cache/sccache
+          key: pg_idkit-tests-sccache-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}-${{ hashFiles('**/Cargo.lock', '.github/workflows/tests.yml') }}
 
       # Setup sccache
       # https://github.com/tcdi/pgx/blob/master/.github/workflows/tests.yml#L36

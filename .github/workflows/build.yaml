@@ -29,6 +29,11 @@ jobs:
           apk add nodejs musl-dev openssl openssl-dev sccache zstd \
             ${{ matrix.alpine_postgresql_package}}=${{ matrix.alpine_postgresql_version}}
 
+      # Setup rust toolchain
+      - name: Setup rust toolchain
+        run: |
+          su postgres -c "rustup toolchain install stable --profile minimal"
+
       - name: Cache cargo registry
         uses: actions/cache@v2
         continue-on-error: false
@@ -46,6 +51,7 @@ jobs:
           path: /github/home/.cache/sccache
           key: pg_idkit-tests-sccache-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}-${{ hashFiles('**/Cargo.lock', '.github/workflows/tests.yml') }}
 
+
       # Setup sccache
       # https://github.com/tcdi/pgx/blob/master/.github/workflows/tests.yml#L36
       - name: Setup sccache options
@@ -59,14 +65,6 @@ jobs:
 
       - name: Print sccache stats (before run)
         run: sccache --show-stats
-
-      # # Create pg user
-      # - name: Create postgres user
-      #   run: |
-      #     addgroup -g 70 -S postgres || true; \
-      #     adduser -u 70 -S -D -G postgres -H -h /var/lib/postgresql -s /bin/sh postgres; \
-      #     mkdir -p /var/lib/postgresql; \
-      #     chown -R postgres:postgres /var/lib/postgresql
 
       # Setup rust toolchain
       - name: Setup rust toolchain

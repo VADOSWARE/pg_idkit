@@ -25,8 +25,9 @@ jobs:
 
       # Install deps (mostly for rust-cache)
       - name: Install dependencies
+        # https://gitlab.alpinelinux.org/alpine/aports/-/issues/12226
         run: |
-          apk add nodejs musl-dev openssl openssl-dev sccache zstd llvm-dev clang-dev g++ \
+          apk add nodejs musl-dev openssl openssl-dev sccache zstd llvm-dev clang clang-static clang-dev g++ \
             ${{ matrix.alpine_postgresql_package}}=${{ matrix.alpine_postgresql_version}}
 
       # Setup rust toolchain

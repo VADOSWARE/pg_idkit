@@ -85,6 +85,12 @@ jobs:
         run: |
           su postgres -c "cargo pgx init --pg14 $(which pg_config)"
 
+      # https://github.com/actions/runner/issues/2058
+      - name: chown code to postgres user
+        run: |
+          chown -R postgres ${{ github.workspace }}
+          chown -R postgres $GITHUB_WORKSPACE
+
       # Run cargo check
       - name: cargo check
         run: |

@@ -34,6 +34,10 @@ jobs:
         run: |
           su postgres -c "rustup toolchain install stable --profile minimal"
 
+      - name: Add postgres user to root group
+        run: |
+          addgroup postgres root
+
       - name: Cache cargo registry
         uses: actions/cache@v2
         continue-on-error: false

@@ -1,0 +1,37 @@
+name: Build pg_idkit
+
+on: [push]
+
+jobs:
+  ## Build the project
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        rust_container_version: [ "1.63" ]
+
+    container:
+      image: "rust:${{ matrix.rust_container_version }}-alpine"
+
+    steps:
+      # Checkout the repo
+      - uses: actions/checkout@v3
+
+      # Setup rust toolchain
+      #- name: Setup rust toolchain
+      #  run: rustup toolchain install stable --profile minimal
+
+      # Install deps (mostly for rust-cache)
+      - name: Install dependencies
+        run: apk add nodejs
+
+      # Setup cargo and rust cache
+      - name: Setup cargo and rust cache
+        uses: Swatinem/rust-cache@v2
+
+      # Run cargo check
+      - name: cargo check
+        uses: actions-rs/cargo@v1
+        with:
+          command: check

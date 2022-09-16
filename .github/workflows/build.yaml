@@ -46,9 +46,9 @@ jobs:
       # https://github.com/tcdi/pgx/blob/master/.github/workflows/tests.yml#L36
       - name: Setup sccache options
         run: |
-          su postgres -c "echo -e $HOME/.local/bin >> $GITHUB_PATH"
-          su postgres -c "echo SCCACHE_CACHE_SIZE=20G >> $GITHUB_ENV"
-          su postgres -c 'mkdir -p /home/postgres/.cache/sccache'
+          echo -e /home/postgres/.local/bin >> $GITHUB_PATH
+          echo SCCACHE_CACHE_SIZE=20G >> $GITHUB_ENV
+          mkdir -p /home/postgres/.cache/sccache
 
       - name: Start sccache server
         run: sccache --start-server

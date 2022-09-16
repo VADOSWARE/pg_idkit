@@ -79,10 +79,10 @@ jobs:
         run: |
           su postgres -c "cargo pgx init --pg14 $(which pg_config)"
 
-      # Run cargo check
-      - name: cargo check
-        run: |
-          su postgres -c "cargo check"
+      # # Run cargo check
+      # - name: cargo check
+      #   run: |
+      #     su postgres -c "cargo check"
 
       # Attempt to make the cache payload slightly smaller.
       - name: Clean up built PGX files

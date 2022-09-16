@@ -9,31 +9,61 @@ jobs:
 
     strategy:
       matrix:
-        pg_version_major: [ "14" ]
-        pg_version: [ "14.5" ]
-        alpine_rust_package: [ "rust" ]
-        alpine_rust_version: [ "1.63.0-r0" ]
+        rust_container_version: [ "1.63" ]
+        alpine_postgresql_package: [ "postgresql14" ]
+        alpine_postgresql_version: [ "14.5-r0" ]
 
     container:
-      image: "postgres:${{ matrix.pg_version }}-alpine"
-      options: --user postgres
+      image: "rust:${{ matrix.rust_container_version }}-alpine"
+      options: --user idkit
 
     steps:
-      # Install deps (mostly for rust-cache)
-      - name: Install dependencies
-        run: |
-          sudo apk add git openssh nodejs g++ make musl-dev openssl openssl-dev rustup
-
       # Checkout the repo
       - uses: actions/checkout@v3
 
-      # Setup rust toolchain
-      - name: Setup rust toolchain
-        # run: /usr/bin/rustup-init toolchain install stable --profile minimal
-        uses: actions-rs/toolchain@v1
+      # Install deps (mostly for rust-cache)
+      - name: Install dependencies
+        run: |
+          apk add nodejs musl-dev openssl openssl-dev sccache zstd \
+            ${{ matrix.alpine_postgresql_package}}=${{ matrix.alpine_postgresql_version}}
+
+      - name: Cache cargo registry
+        uses: actions/cache@v2
+        continue-on-error: false
         with:
-          profile: minimal
-          toolchain: stable
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: pg_idkit-tests-rust-${{ matrix.rust_constainer_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}-${{ hashFiles('**/Cargo.lock', '.github/workflows/tests.yml') }}
+
+      - name: Cache sccache directory
+        uses: actions/cache@v2
+        continue-on-error: false
+        with:
+          path: /home/runner/.cache/sccache
+          key: pg_idkit-tests-sccache-${{ matrix.rust_constainer_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}-${{ hashFiles('**/Cargo.lock', '.github/workflows/tests.yml') }}
+
+      # Setup sccache
+      # https://github.com/tcdi/pgx/blob/master/.github/workflows/tests.yml#L36
+      - name: Setup sccache options
+        run: |
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          echo 'SCCACHE_CACHE_SIZE="20G"' >> $GITHUB_ENV
+          mkdir -p /home/runner/.cache/sccache
+
+      - name: Start sccache server
+        run: sccache --start-server
+
+      - name: Print sccache stats (before run)
+        run: sccache --show-stats
+
+      # Create pg user
+      - name: Create postgres user
+        run: |
+          addgroup -g 70 -S postgres; \
+          adduser -u 70 -S -D -G postgres -H -h /var/lib/postgresql -s /bin/sh postgres; \
+          mkdir -p /var/lib/postgresql; \
+          chown -R postgres:postgres /var/lib/postgresql
 
       # Install pgx
       - name: Install cargo-pgx
@@ -42,17 +72,34 @@ jobs:
           command: install
           args: cargo-pgx
 
-      # Setup cargo and rust cache
-      - name: Setup cargo and rust cache
-        uses: Swatinem/rust-cache@v2
+      # # Setup cargo and rust cache
+      # - name: Setup cargo and rust cache
+      #   uses: Swatinem/rust-cache@v2
 
       # Initialize pgx
       - name: Initialize pgx
         run: |
-          cargo pgx init --pg${{ matrix.pg_version_major }} $(which pg_config)
+          su postgres -c "cargo pgx init --pg14 $(which pg_config)"
 
       # Run cargo check
       - name: cargo check
-        uses: actions-rs/cargo@v1
-        with:
-          command: check
+        run: |
+          su postgres -c "cargo check"
+
+      # Attempt to make the cache payload slightly smaller.
+      - name: Clean up built PGX files
+        run: |
+          cd target/debug/deps/
+          for built_file in $(find * -type f -executable -print | grep -v "\.so$"); do
+            base_name=$(echo $built_file | cut -d- -f1);
+            for basefile in "$base_name".*; do
+              [ -f "$basefile" ] || continue;
+              echo "Removing $basefile"
+              rm $basefile
+            done;
+            echo "Removing $built_file"
+            rm $built_file
+          done
+
+      - name: Stop sccache server
+        run: sccache --stop-server || true

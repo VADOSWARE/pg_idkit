@@ -10,6 +10,8 @@ jobs:
     strategy:
       matrix:
         rust_container_version: [ "1.63" ]
+        alpine_postgresql_package: [ "postgresql14" ]
+        alpine_postgresql_version: [ "14.5-r0" ]
 
     container:
       image: "rust:${{ matrix.rust_container_version }}-alpine"
@@ -24,11 +26,25 @@ jobs:
 
       # Install deps (mostly for rust-cache)
       - name: Install dependencies
-        run: apk add nodejs
+        run: |
+          apk add nodejs musl-dev openssl openssl-dev \
+            ${{ matrix.alpine_postgresql_package}}=${{ matrix.alpine_postgresql_version}}
 
       # Setup cargo and rust cache
       - name: Setup cargo and rust cache
         uses: Swatinem/rust-cache@v2
+
+      # Install pgx
+      - name: Install cargo-pgx
+        uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: cargo-pgx
+
+      # Initialize pgx
+      - name: Initialize pgx
+        run: |
+          cargo pgx init --pg14 $(which pg_config)
 
       # Run cargo check
       - name: cargo check

@@ -19,13 +19,13 @@ jobs:
       options: --user postgres
 
     steps:
-      # Checkout the repo
-      - uses: actions/checkout@v3
-
       # Install deps (mostly for rust-cache)
       - name: Install dependencies
         run: |
-          apk add nodejs g++ make musl-dev openssl openssl-dev rustup
+          apk add git openssh nodejs g++ make musl-dev openssl openssl-dev rustup
+
+      # Checkout the repo
+      - uses: actions/checkout@v3
 
       # Setup rust toolchain
       - name: Setup rust toolchain

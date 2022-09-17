@@ -15,10 +15,8 @@ jobs:
 
     container:
       image: "rust:${{ matrix.rust_container_version }}-bullseye"
-      # env:
-      #   RUSTC_WRAPPER: sccache
-      #   SCCACHE_DIR: /var/cache/sccache
-      #   SCCACHE_CACHE_SIZE: "20G"
+      env:
+        CARGO_HOME: /usr/local/cargo
 
     steps:
       # Checkout the repo

@@ -149,7 +149,7 @@ jobs:
       # Run cargo pgx-text
       - name: Run cargo pgx-test
         run: |
-          su idkit -c "cargo pgx-test"
+          su idkit -c "cargo pgx test"
 
       ###########
       # Cleanup #

@@ -22,31 +22,21 @@ jobs:
       # Checkout the repo
       - uses: actions/checkout@v3
 
-      ##################
-      # Setup Postgres #
-      ##################
-
-      - name: Add postgres repo
-        run: sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-
-      - name: Add postgresql.org PGP keys
-        run: wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add
-
-      - name: Add postgres user to root group
-        run: |
-          useradd --user-group --system --create-home --no-log-init idkit && \
-          usermod -aG sudo idkit && \
-          chown -R idkit /home/idkit && \
-          addgroup idkit root
-
       ########################
       # Install dependencies #
       ########################
 
-      - name: Install NPM repository
+      # - name: Add postgres repo
+      #   run: sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
+      # - name: Add postgresql.org PGP keys
+      #   run: wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add
+
+      - name: Install NodeJS
         run: |
           curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
 
+      # Install dependencies for building postgres, NodeJS, etc
       - name: Apt dependencies
         run: |
           apt-get update && \
@@ -55,6 +45,21 @@ jobs:
           postgresql postgresql-server-dev-14 \
           curl libreadline6-dev zlib1g-dev libclang-dev \
           pkg-config cmake nodejs
+
+      ####################
+      # Configure system #
+      ####################
+
+      - name: Add postgres user to root group
+        run: |
+          useradd --user-group --system --create-home --no-log-init idkit && \
+          usermod -aG sudo idkit && \
+          chown -R idkit /home/idkit && \
+          addgroup idkit root
+
+      - name: Allow writing to postgres extensions folder
+        run: |
+          chmod g+w -R /usr/share/postgresql/14/extension
 
       ##############################
       # Install toolchains & cache #

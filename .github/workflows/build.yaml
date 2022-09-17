@@ -65,14 +65,12 @@ jobs:
         run: |
           su idkit -c "rustup toolchain install stable --profile minimal"
 
-      - name: Cache cargo registry
+      - name: Cache CARGO_HOME
         uses: actions/cache@v2
         continue-on-error: false
         with:
           path: |
-            /usr/local/cargo/registry
-            /usr/local/cargo/bin
-            /usr/local/cargo/git
+            /usr/local/cargo
           key: pg_idkit-tests-rust-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}
 
       # - name: Cache sccache directory
@@ -150,5 +148,5 @@ jobs:
       # Cleanup #
       ###########
 
-      - name: Stop sccache server
-        run: /usr/local/cargo/bin/sccache --stop-server || true
+      # - name: Stop sccache server
+      #   run: /usr/local/cargo/bin/sccache --stop-server || true

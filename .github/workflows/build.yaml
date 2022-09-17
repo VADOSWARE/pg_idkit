@@ -88,6 +88,24 @@ jobs:
             /var/cache/apt
           key: pg_idkit-tests-apt-cache-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}
 
+
+      ###############
+      # Setup Cargo #
+      ###############
+
+      # Install cargo-cache
+      - name: Install cargo bins
+        run: |
+          su idkit -c "cargo install cargo-cache cargo-pgx"
+
+      # - name: print home and other vars
+      #   run: |
+      #     su idkit -c "echo $CARGO_HOME"
+
+      # - name: print home and other vars
+      #   run: |
+      #     su idkit -c "cargo cache -i"
+
       # #################
       # # Setup sccache #
       # #################
@@ -97,23 +115,6 @@ jobs:
 
       # - name: Print sccache stats (before run)
       #   run: /usr/local/cargo/bin/sccache --show-stats
-
-      ###############
-      # Setup Cargo #
-      ###############
-
-      - name: print home and other vars
-        run: |
-          su idkit -c "echo $CARGO_HOME"
-
-      - name: print home and other vars
-        run: |
-          su idkit -c "cargo cache -i"
-
-      # Install cargo-cache
-      - name: Install cargo bins
-        run: |
-          su idkit -c "cargo install cargo-cache cargo-pgx"
 
       # Initialize pgx
       - name: Initialize pgx

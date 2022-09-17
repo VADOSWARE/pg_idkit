@@ -15,10 +15,10 @@ jobs:
 
     container:
       image: "rust:${{ matrix.rust_container_version }}-bullseye"
-      env:
-        RUSTC_WRAPPER: sccache
-        SCCACHE_DIR: /var/cache/sccache
-        SCCACHE_CACHE_SIZE: "20G"
+      # env:
+      #   RUSTC_WRAPPER: sccache
+      #   SCCACHE_DIR: /var/cache/sccache
+      #   SCCACHE_CACHE_SIZE: "20G"
 
     steps:
       # Checkout the repo
@@ -77,12 +77,12 @@ jobs:
             /usr/local/cargo/git
           key: pg_idkit-tests-rust-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}
 
-      - name: Cache sccache directory
-        uses: actions/cache@v2
-        continue-on-error: false
-        with:
-          path: /var/cache/sccache
-          key: pg_idkit-tests-sccache-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}
+      # - name: Cache sccache directory
+      #   uses: actions/cache@v2
+      #   continue-on-error: false
+      #   with:
+      #     path: /var/cache/sccache
+      #     key: pg_idkit-tests-sccache-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}
 
       - name: Cache apt install
         uses: actions/cache@v2
@@ -92,34 +92,24 @@ jobs:
             /var/cache/apt
           key: pg_idkit-tests-apt-cache-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}
 
-      #################
-      # Setup sccache #
-      #################
+      # #################
+      # # Setup sccache #
+      # #################
 
-      - name: Start sccache server
-        run: /usr/local/cargo/bin/sccache --start-server
+      # - name: Start sccache server
+      #   run: /usr/local/cargo/bin/sccache --start-server
 
-      - name: Print sccache stats (before run)
-        run: /usr/local/cargo/bin/sccache --show-stats
+      # - name: Print sccache stats (before run)
+      #   run: /usr/local/cargo/bin/sccache --show-stats
 
       ###############
       # Setup Cargo #
       ###############
 
-      # Install sccache
-      - name: Install cargo-cache
-        run: |
-          su idkit -c "cargo install cargo-cache"
-
       # Install cargo-cache
-      - name: Print cache location
+      - name: Install cargo bins
         run: |
-          su idkit -c "cargo cache -i"
-
-      # Install cargo-pgx
-      - name: Install cargo-pgx
-        run: |
-          su idkit -c "cargo install cargo-pgx"
+          su idkit -c "cargo install cargo-cache cargo-pgx"
 
       # Initialize pgx
       - name: Initialize pgx

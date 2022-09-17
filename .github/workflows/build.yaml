@@ -59,7 +59,8 @@ jobs:
 
       - name: Allow writing to postgres extensions folder
         run: |
-          chmod g+w -R /usr/share/postgresql/14/extension
+          chmod g+w -R /usr/share/postgresql/**/extension && \
+          chmod g+w -R /usr/lib/postgresql/**/lib
 
       ##############################
       # Install toolchains & cache #

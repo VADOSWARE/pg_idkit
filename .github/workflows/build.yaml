@@ -14,87 +14,127 @@ jobs:
         alpine_postgresql_version: [ "14.5-r0" ]
 
     container:
-      image: "rust:${{ matrix.rust_container_version }}-alpine"
+      image: "rust:${{ matrix.rust_container_version }}-bullseye"
       env:
         RUSTC_WRAPPER: sccache
-        SCCACHE_DIR: /github/home/.cache/sccache
+        SCCACHE_DIR: /var/cache/sccache
+        SCCACHE_CACHE_SIZE: "20G"
 
     steps:
       # Checkout the repo
       - uses: actions/checkout@v3
 
-      # Install deps (mostly for rust-cache)
-      - name: Install dependencies
-        # https://gitlab.alpinelinux.org/alpine/aports/-/issues/12226
+      ##################
+      # Setup Postgres #
+      ##################
+
+      - name: Add postgres repo
+        run: sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
+      - name: Add postgresql.org PGP keys
+        run: wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add
+
+      - name: Add postgres user to root group
         run: |
-          apk add nodejs musl-dev openssl openssl-dev sccache zstd llvm-dev clang clang-static clang-dev g++ \
-            ${{ matrix.alpine_postgresql_package}}=${{ matrix.alpine_postgresql_version}}
+          useradd --user-group --system --create-home --no-log-init idkit && \
+          usermod -aG sudo idkit && \
+          chown -R idkit /home/idkit && \
+          addgroup idkit root
+
+      ########################
+      # Install dependencies #
+      ########################
+
+      - name: Install NPM repository
+        run: |
+          curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+
+      - name: Apt dependencies
+        run: |
+          apt-get update && \
+          apt-get install -y --no-install-recommends ca-certificates \
+          git build-essential libpq-dev \
+          postgresql postgresql-server-dev-14 \
+          curl libreadline6-dev zlib1g-dev libclang-dev \
+          pkg-config cmake nodejs
+
+      ##############################
+      # Install toolchains & cache #
+      ##############################
 
       # Setup rust toolchain
       - name: Setup rust toolchain
         run: |
-          su postgres -c "rustup toolchain install stable --profile minimal"
-
-      - name: Add postgres user to root group
-        run: |
-          addgroup postgres root
+          su idkit -c "rustup toolchain install stable --profile minimal"
 
       - name: Cache cargo registry
         uses: actions/cache@v2
         continue-on-error: false
         with:
           path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            ~/.cargo/bin
-          key: pg_idkit-tests-rust-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}-${{ hashFiles('**/Cargo.lock', '.github/workflows/tests.yml') }}
+            /usr/local/cargo/registry
+            /usr/local/cargo/bin
+            /usr/local/cargo/git
+          key: pg_idkit-tests-rust-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}
 
       - name: Cache sccache directory
         uses: actions/cache@v2
         continue-on-error: false
         with:
-          path: /github/home/.cache/sccache
-          key: pg_idkit-tests-sccache-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}-${{ hashFiles('**/Cargo.lock', '.github/workflows/tests.yml') }}
+          path: /var/cache/sccache
+          key: pg_idkit-tests-sccache-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}
 
+      - name: Cache apt install
+        uses: actions/cache@v2
+        continue-on-error: false
+        with:
+          path: |
+            /var/cache/apt
+          key: pg_idkit-tests-apt-cache-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}
 
-      # Setup sccache
-      # https://github.com/tcdi/pgx/blob/master/.github/workflows/tests.yml#L36
-      - name: Setup sccache options
-        run: |
-          echo -e /home/postgres/.local/bin >> $GITHUB_PATH
-          echo SCCACHE_CACHE_SIZE=20G >> $GITHUB_ENV
-          mkdir -p /home/postgres/.cache/sccache
+      #################
+      # Setup sccache #
+      #################
 
       - name: Start sccache server
-        run: sccache --start-server
+        run: /usr/local/cargo/bin/sccache --start-server
 
       - name: Print sccache stats (before run)
-        run: sccache --show-stats
+        run: /usr/local/cargo/bin/sccache --show-stats
 
-      # Setup rust toolchain
-      - name: Setup rust toolchain
+      ###############
+      # Setup Cargo #
+      ###############
+
+      # Install sccache
+      - name: Install cargo-cache
         run: |
-          su postgres -c "rustup toolchain install stable --profile minimal"
+          su idkit -c "cargo install cargo-cache"
+
+      # Install cargo-cache
+      - name: Print cache location
+        run: |
+          su idkit -c "cargo cache -i"
 
       # Install cargo-pgx
       - name: Install cargo-pgx
         run: |
-          su postgres -c "cargo install cargo-pgx"
+          su idkit -c "cargo install cargo-pgx"
 
       # Initialize pgx
       - name: Initialize pgx
         run: |
-          su postgres -c "cargo pgx init --pg14 $(which pg_config)"
+          su idkit -c "cargo pgx init --pg14 $(which pg_config)"
 
       # https://github.com/actions/runner/issues/2058
-      - name: chown code to postgres user
+      - name: chown code to idkit user
         run: |
-          chown -R postgres $GITHUB_WORKSPACE
+          chown -R idkit $GITHUB_WORKSPACE
 
       # Run cargo check
       - name: cargo check
         run: |
-          su postgres -c "cargo check"
+          su idkit -c "cargo check"
 
       - name: Stop sccache server
-        run: sccache --stop-server || true
+        run: /usr/local/cargo/bin/sccache --stop-server || true

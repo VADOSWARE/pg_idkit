@@ -104,6 +104,14 @@ jobs:
       # Setup Cargo #
       ###############
 
+      - name: print home and other vars
+        run: |
+          su idkit -c "echo $CARGO_HOME"
+
+      - name: print home and other vars
+        run: |
+          su idkit -c "cargo cache -i"
+
       # Install cargo-cache
       - name: Install cargo bins
         run: |

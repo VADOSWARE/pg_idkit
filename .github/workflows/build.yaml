@@ -79,13 +79,6 @@ jobs:
             /usr/local/cargo
           key: pg_idkit-tests-rust-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}
 
-      # - name: Cache sccache directory
-      #   uses: actions/cache@v2
-      #   continue-on-error: false
-      #   with:
-      #     path: /var/cache/sccache
-      #     key: pg_idkit-tests-sccache-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}
-
       - name: Cache apt install
         uses: actions/cache@v2
         continue-on-error: false
@@ -103,24 +96,6 @@ jobs:
       - name: Install cargo bins
         run: |
           su idkit -c "cargo install cargo-cache cargo-pgx"
-
-      # - name: print home and other vars
-      #   run: |
-      #     su idkit -c "echo $CARGO_HOME"
-
-      # - name: print home and other vars
-      #   run: |
-      #     su idkit -c "cargo cache -i"
-
-      # #################
-      # # Setup sccache #
-      # #################
-
-      # - name: Start sccache server
-      #   run: /usr/local/cargo/bin/sccache --start-server
-
-      # - name: Print sccache stats (before run)
-      #   run: /usr/local/cargo/bin/sccache --show-stats
 
       # Initialize pgx
       - name: Initialize pgx
@@ -150,10 +125,3 @@ jobs:
       - name: Run cargo pgx-test
         run: |
           su idkit -c "cargo pgx test"
-
-      ###########
-      # Cleanup #
-      ###########
-
-      # - name: Stop sccache server
-      #   run: /usr/local/cargo/bin/sccache --stop-server || true

@@ -26,11 +26,11 @@ jobs:
       # Install dependencies #
       ########################
 
-      # - name: Add postgres repo
-      #   run: sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+      - name: Add postgres repo
+        run: sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 
-      # - name: Add postgresql.org PGP keys
-      #   run: wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add
+      - name: Add postgresql.org PGP keys
+        run: wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add
 
       - name: Install NodeJS
         run: |

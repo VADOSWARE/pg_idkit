@@ -22,7 +22,7 @@ There are some other projects in the Postgres ecosystem that implement alternati
 
 Here are some you may or may not have heard of:
 
-- [spa25k/uids-postgres](https://github.com/spa5k/uids-postgres)
+- [spa5k/uids-postgres](https://github.com/spa5k/uids-postgres)
 - [`scoville/pgsql-ulid`](https://github.com/scoville/pgsql-ulid)
 - [`pg-xid`](https://github.com/modfin/pg-xid)
 - [`geckoboard/pgulid`](https://github.com/geckoboard/pgulid)

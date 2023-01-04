@@ -14,6 +14,17 @@ fn idkit_uuidv6_generate_text() -> String {
     idkit_uuidv6_generate()
 }
 
+/// Generate a UUID v6, producing a Postgres uuid object
+#[pg_extern]
+fn idkit_uuidv6_generate_uuid() -> pgx::Uuid {
+    let node = Node::new();
+
+    // This depends on PR to rust-uuidv6
+    // see: https://github.com/jedisct1/rust-uuidv6/pull/1
+    pgx::Uuid::from_slice(UUIDv6::new(&node).create_bytes())
+        .unwrap_or_else(|e| error!("{}", format!("failed to generate/parse uuidv6: {}", e)))
+}
+
 //////////
 // Test //
 //////////

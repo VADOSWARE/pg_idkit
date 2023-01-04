@@ -8,6 +8,12 @@ fn idkit_uuidv6_generate() -> String {
     UUIDv6::new(&node).create()
 }
 
+/// Generate a UUID v6, producing a Postgres text object
+#[pg_extern]
+fn idkit_uuidv6_generate_text() -> String {
+    idkit_uuidv6_generate()
+}
+
 //////////
 // Test //
 //////////

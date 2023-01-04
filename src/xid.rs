@@ -7,6 +7,12 @@ fn idkit_xid_generate() -> String {
     generate_xid().to_string()
 }
 
+/// Generate a random xid UUID, producing a Postgres text object
+#[pg_extern]
+fn idkit_xid_generate_text() -> String {
+    idkit_xid_generate()
+}
+
 //////////
 // Test //
 //////////

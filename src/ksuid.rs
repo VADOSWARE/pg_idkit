@@ -7,6 +7,12 @@ fn idkit_ksuid_generate() -> String {
     Ksuid::generate().to_hex()
 }
 
+/// Generate a random KSUID, producing a Postgres text object (HEX-encoded)
+#[pg_extern]
+fn idkit_ksuid_generate_text() -> String {
+    idkit_ksuid_generate()
+}
+
 //////////
 // Test //
 //////////

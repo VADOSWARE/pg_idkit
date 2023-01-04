@@ -13,6 +13,12 @@ fn idkit_timeflake_generate() -> String {
     generated.unwrap().to_string()
 }
 
+/// Generate a random timeflake UUID, producing a Postgres text object
+#[pg_extern]
+fn idkit_timeflake_generate_text() -> String {
+    idkit_timeflake_generate()
+}
+
 //////////
 // Test //
 //////////

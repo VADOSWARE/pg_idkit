@@ -7,6 +7,12 @@ fn idkit_uuidv7_generate() -> String {
     uuid7().to_string()
 }
 
+/// Generate a UUID v7, producing a Postgres text object
+#[pg_extern]
+fn idkit_uuidv7_generate_text() -> String {
+    idkit_uuidv7_generate()
+}
+
 //////////
 // Test //
 //////////

@@ -37,9 +37,13 @@ RUN useradd --user-group --system --create-home --no-log-init idkit && \
 RUN chmod g+w -R /usr/share/postgresql/**/extension && \
     chmod g+w -R /usr/lib/postgresql/**/lib
 
-      ###############
-      # Setup Cargo #
-      ###############
+###############
+# Setup Cargo #
+###############
+
+# Allow writing to cargo cache by idkit (now part of root group)
+RUN chmod g+w -R /usr/local/cargo
+RUN mkdir /usr/local/build && chmod g+w -R /usr/local/build
 
 # Install development/build/testing deps
 RUN su idkit -c "cargo install sccache cargo-cache cargo-pgx"

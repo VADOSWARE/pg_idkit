@@ -95,7 +95,7 @@ IMAGE_NAME_FULL ?= "$(IMAGE_NAME):$(IMAGE_TAG)"
 DOCKERFILE_PATH ?= ./infra/docker/${POSTGRES_IMAGE_TAG}.Dockerfile
 
 CI_DOCKERFILE_PATH ?= ./infra/docker/ci.Dockerfile
-CI_IMAGE_NAME ?= github.com/vadosware/pg_idkit/pg_idkit-builder
+CI_IMAGE_NAME ?= github.com/vadosware/pg_idkit/builder
 CI_IMAGE_TAG ?= 0.x.x
 CI_IMAGE_NAME_FULL ?= "$(IMAGE_NAME):$(IMAGE_TAG)"
 

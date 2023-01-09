@@ -10,102 +10,15 @@ jobs:
     strategy:
       matrix:
         rust_container_version: [ "1.63" ]
-        alpine_postgresql_package: [ "postgresql14" ]
-        alpine_postgresql_version: [ "14.5-r0" ]
 
     container:
-      image: "rust:${{ matrix.rust_container_version }}-bullseye"
+      image: "github.com/vadosware/pg_idkit/builder:0.x.x"
       env:
         CARGO_HOME: /usr/local/cargo
 
     steps:
       # Checkout the repo
       - uses: actions/checkout@v3
-
-      ########################
-      # Install dependencies #
-      ########################
-
-      - name: Add postgres repo
-        run: sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-
-      - name: Add postgresql.org PGP keys
-        run: wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add
-
-      - name: Install NodeJS
-        run: |
-          curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
-
-      # Install dependencies for building postgres, NodeJS, etc
-      - name: Apt dependencies
-        run: |
-          apt-get update && \
-          apt-get install -y --no-install-recommends ca-certificates \
-          git build-essential libpq-dev \
-          postgresql postgresql-server-dev-14 \
-          curl libreadline6-dev zlib1g-dev libclang-dev \
-          pkg-config cmake nodejs
-
-      ####################
-      # Configure system #
-      ####################
-
-      - name: Add postgres user to root group
-        run: |
-          useradd --user-group --system --create-home --no-log-init idkit && \
-          usermod -aG sudo idkit && \
-          chown -R idkit /home/idkit && \
-          addgroup idkit root
-
-      - name: Allow writing to postgres extensions folder
-        run: |
-          chmod g+w -R /usr/share/postgresql/**/extension && \
-          chmod g+w -R /usr/lib/postgresql/**/lib
-
-      ##############################
-      # Install toolchains & cache #
-      ##############################
-
-      # Setup rust toolchain
-      - name: Setup rust toolchain
-        run: |
-          su idkit -c "rustup toolchain install stable --profile minimal"
-
-      - name: Cache CARGO_HOME
-        uses: actions/cache@v2
-        continue-on-error: false
-        with:
-          path: |
-            /usr/local/cargo
-          key: pg_idkit-tests-rust-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}
-
-      - name: Cache apt install
-        uses: actions/cache@v2
-        continue-on-error: false
-        with:
-          path: |
-            /var/cache/apt
-          key: pg_idkit-tests-apt-cache-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}
-
-
-      ###############
-      # Setup Cargo #
-      ###############
-
-      # Install cargo-cache
-      - name: Install cargo bins
-        run: |
-          su idkit -c "cargo install cargo-cache cargo-pgx"
-
-      # Initialize pgx
-      - name: Initialize pgx
-        run: |
-          su idkit -c "cargo pgx init --pg14 $(which pg_config)"
-
-      # https://github.com/actions/runner/issues/2058
-      - name: CHOWN codebase to idkit user
-        run: |
-          chown -R idkit $GITHUB_WORKSPACE
 
       ##############
       # Code Tests #
@@ -125,3 +38,23 @@ jobs:
       - name: Run cargo pgx-test
         run: |
           su idkit -c "cargo pgx test"
+
+      ####################
+      # Post-run Caching #
+      ####################
+
+      - name: Cache CARGO_HOME
+        uses: actions/cache@v2
+        continue-on-error: false
+        with:
+          path: |
+            /usr/local/cargo
+          key: pg_idkit-tests-rust-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}
+
+      - name: Cache apt install
+        uses: actions/cache@v2
+        continue-on-error: false
+        with:
+          path: |
+            /var/cache/apt
+          key: pg_idkit-tests-apt-cache-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}

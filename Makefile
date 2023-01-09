@@ -97,7 +97,7 @@ DOCKERFILE_PATH ?= ./infra/docker/${POSTGRES_IMAGE_TAG}.Dockerfile
 CI_DOCKERFILE_PATH ?= ./infra/docker/ci.Dockerfile
 CI_IMAGE_NAME ?= github.com/vadosware/pg_idkit/builder
 CI_IMAGE_TAG ?= 0.x.x
-CI_IMAGE_NAME_FULL ?= "$(IMAGE_NAME):$(IMAGE_TAG)"
+CI_IMAGE_NAME_FULL ?= "$(CI_IMAGE_NAME):$(CI_IMAGE_TAG)"
 
 image:
 >	$(DOCKER) build -f $(DOCKERFILE_PATH) -t $(IMAGE_NAME_FULL)
@@ -106,4 +106,4 @@ build-ci-image:
 >	$(DOCKER) build -f $(CI_DOCKERFILE_PATH) -t $(CI_IMAGE_NAME_FULL) .
 
 push-ci-image:
->	$(DOCKER) push $(IMAGE_NAME_FULL)
+>	$(DOCKER) push $(CI_IMAGE_NAME_FULL)

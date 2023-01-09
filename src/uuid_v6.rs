@@ -1,5 +1,7 @@
 use pgx::*;
-use uuidv6::{Node, UUIDv6};
+
+mod vendor;
+use vendor::{Node, UUIDv6};
 
 /// Generate a UUID v6
 #[pg_extern]
@@ -21,7 +23,7 @@ fn idkit_uuidv6_generate_uuid() -> pgx::Uuid {
 
     // This depends on PR to rust-uuidv6
     // see: https://github.com/jedisct1/rust-uuidv6/pull/1
-    pgx::Uuid::from_slice(UUIDv6::new(&node).create_bytes())
+    pgx::Uuid::from_slice(&UUIDv6::new(&node).create_bytes())
         .unwrap_or_else(|e| error!("{}", format!("failed to generate/parse uuidv6: {}", e)))
 }
 
@@ -48,6 +50,13 @@ mod tests {
         let c9 = generated.chars().nth(14);
         assert!(c9.is_some());
         assert_eq!(c9.unwrap(), '6');
+    }
+
+    /// Basic length test for bytes
+    #[pg_test]
+    fn test_uuidv6_len() {
+        let generated = crate::uuid_v6::idkit_uuidv6_generate_uuid();
+        assert_eq!(generated.len(), 16);
     }
 
 }

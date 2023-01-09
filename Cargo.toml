@@ -21,7 +21,6 @@ pg_test = []
 
 [dependencies]
 pgx = "=0.4.5"
-uuidv6 = "0.1.1"
 uuid7 = "0.2.6"
 nanoid = "0.4.0"
 ksuid = "0.2.0"
@@ -31,6 +30,7 @@ sonyflake = "0.1.2"
 pushid = "0.0.1"
 xid = "1.0.2"
 cuid = "1.2.0"
+getrandom = "0.2.8"
 
 [dev-dependencies]
 pgx-tests = "=0.4.5"

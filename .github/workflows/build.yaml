@@ -60,7 +60,7 @@ jobs:
         with:
           path: |
             /usr/local/cargo
-          key: pg_idkit-tests-rust-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}
+          key: pg_idkit-tests-rust-${{ matrix.rust_container_version }}-cargo-${{ runner.os }}
 
       - name: Cache apt install
         uses: actions/cache@v2
@@ -68,4 +68,12 @@ jobs:
         with:
           path: |
             /var/cache/apt
-          key: pg_idkit-tests-apt-cache-${{ matrix.rust_container_version }}-pg-${{ matrix.alpine_postgresql_version}}-cargo-${{ runner.os }}
+          key: pg_idkit-tests-apt-cache-${{ matrix.rust_container_version }}-cargo-${{ runner.os }}
+
+      - name: Cache sccache
+        uses: actions/cache@v2
+        continue-on-error: false
+        with:
+          path: |
+            /usr/local/sccache
+          key: pg_idkit-tests-sccache-${{ matrix.rust_container_version }}-cargo-${{ runner.os }}

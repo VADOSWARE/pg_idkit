@@ -30,25 +30,29 @@ jobs:
       # Code Tests #
       ##############
 
+      - name: Add idkit to group
+        run: |
+          chgrp -R idkit $HOME
+
       # Run cargo check
       - name: Run cargo init
         run: |
-          cargo pgx init --pg15 $(which pg_config)
+          su idkit -c  "cargo pgx init --pg15 $(which pg_config)"
 
       # Run cargo check
       - name: Run cargo check
         run: |
-          cargo check
+          su idkit -c "cargo check"
 
       # Run cargo test
       - name: Run cargo test
         run: |
-          cargo test
+          su idkit -c "cargo test"
 
       # Run cargo pgx-text
       - name: Run cargo pgx-test
         run: |
-          cargo pgx test
+          su idkit -c "cargo pgx test"
 
       ####################
       # Post-run Caching #

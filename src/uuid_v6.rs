@@ -54,7 +54,7 @@ mod tests {
 
     /// Basic length test for bytes
     #[pg_test]
-    fn test_uuidv6_len() {
+    fn test_uuidv6_len_uuid() {
         let generated = crate::uuid_v6::idkit_uuidv6_generate_uuid();
         assert_eq!(generated.len(), 16);
     }

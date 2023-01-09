@@ -42,7 +42,7 @@ RUN chmod g+w -R /usr/share/postgresql/**/extension && \
       ###############
 
 # Install development/build/testing deps
-RUN su idkit -c cargo install sccache cargo-cache cargo-pgx
+RUN su idkit -c "cargo install sccache cargo-cache cargo-pgx"
 
 # Initialize pgx
 RUN su idkit -c "cargo pgx init --pg15 $(which pg_config)"

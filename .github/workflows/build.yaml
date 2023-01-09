@@ -32,7 +32,7 @@ jobs:
 
       - name: Add idkit to group
         run: |
-          chgrp -R idkit $HOME
+          chgrp -R idkit $HOME && chgrp -R idkit /__w/pg_idkit
 
       # Run cargo check
       - name: Run cargo init

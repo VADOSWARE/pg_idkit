@@ -12,7 +12,7 @@ jobs:
         rust_container_version: [ "1.63" ]
 
     container:
-      image: "github.com/vadosware/pg_idkit/builder:0.x.x"
+      image: "ghcr.io/vadosware/pg_idkit/builder:0.x.x"
       env:
         CARGO_HOME: /usr/local/cargo
 

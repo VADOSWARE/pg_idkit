@@ -94,7 +94,7 @@ make build-watch
 Note that you can use the `pgx`-documented development flow as well (using `cargo pgx`) as well, for example:
 
 ```console
-cargo pgx run pg15
+cargo pgx run pg14
 ```
 
 ## Run tests

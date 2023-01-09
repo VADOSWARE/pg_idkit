@@ -1,19 +1,27 @@
 FROM rust:1.6.3-slim-bullseye@sha256:4d6b7664f5292cdfbeaa7eb9f1f4eae01aa289a49e4f043cdf6f4f63d0cf8ca8
 
-# Install deps
-RUN apt update && apt install -y libssl-dev git openssh-client pkg-config
-RUN cargo install sccache
-
 ENV CARGO_HOME=/usr/local/cargo
 ENV CARGO_TARGET_DIR=/usr/local/build/target
 ENV SCCACHE_DIR=/usr/local/sccache
+
+# Install deps
+RUN apt update && apt install -y libssl-dev git openssh-client pkg-config curl ca-certificates gnupg
+RUN cargo install sccache
+
 ENV CARGO_BUILD_RUSTC_WRAPPER=/usr/local/cargo/bin/sccache
+
+##################
+# Setup Postgres #
+##################
+
+# Add postgresql.org PGP keys
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add
 
 # Add postgres repo
 RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 
-# Add postgresql.org PGP keys
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add
+# Install pg14
+RUN apt -y update && apt -y upgrade && apt install -y postgresql-14
 
 # Install NodeJS
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
@@ -49,4 +57,4 @@ RUN mkdir /usr/local/build && chmod g+w -R /usr/local/build
 RUN su idkit -c "cargo install sccache cargo-cache cargo-pgx"
 
 # Initialize pgx
-RUN su idkit -c "cargo pgx init --pg15 $(which pg_config)"
+RUN su idkit -c "cargo pgx init --pg14 $(which pg_config)"

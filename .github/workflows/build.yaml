@@ -15,7 +15,7 @@ jobs:
       image: "ghcr.io/vadosware/pg_idkit/builder:0.x.x"
       credentials:
         username: ${{ github.actor }}
-        password: ${{ secrets.github_token }}
+        password: ${{ secrets.DOCKER_BUILDER_IMAGE_PULL_PAT }}
       env:
         CARGO_HOME: /usr/local/cargo
 

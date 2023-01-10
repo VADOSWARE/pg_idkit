@@ -39,7 +39,7 @@ jobs:
       # Run cargo build
       - name: Run cargo test
         run: |
-          su idkit -c "cargo build
+          su idkit -c "cargo build"
 
       # Run cargo check
       - name: Run cargo check

@@ -57,4 +57,4 @@ RUN chmod g+w -R /usr/local/build
 RUN su idkit -c "cargo install sccache cargo-cache cargo-pgx"
 
 # Initialize pgx
-RUN su idkit -c "cargo pgx init --pg14 $(which pg_config)"
+RUN su idkit -c "cargo pgx init --pg14 download"

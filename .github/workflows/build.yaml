@@ -36,10 +36,10 @@ jobs:
           chgrp -R idkit /__w/pg_idkit &&
           chmod g+w -R /__w/pg_idkit
 
-      # Run cargo check
-      - name: Run cargo init
-        run: |
-          su idkit -c  "cargo pgx init --pg14 $(which pg_config)"
+      # # Run cargo check
+      # - name: Run cargo init
+      #   run: |
+      #     su idkit -c  "cargo pgx init --pg14"
 
       # Run cargo check
       - name: Run cargo check

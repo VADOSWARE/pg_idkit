@@ -1,9 +1,8 @@
 # rust:alpine as of 2022/07/31
 FROM sha256:0ebddf3a3a92320ff15b6cd3c5603ad109d71dd241ebfbda5a3c79acd91fa7ef AS build
 
-COPY . .
-
 WORKDIR /app
+COPY . .
 
 RUN make build
 

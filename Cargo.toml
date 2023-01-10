@@ -32,7 +32,7 @@ cuid = "1.2.0"
 getrandom = "0.2.8"
 
 [dev-dependencies]
-pgx-tests = "=0.4.5"
+pgx-tests = "=0.6.1"
 
 [profile.dev]
 panic = "unwind"

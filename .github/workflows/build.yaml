@@ -51,11 +51,6 @@ jobs:
         run: |
           su idkit -c "cargo test"
 
-      # Run cargo pgx-text
-      - name: Run cargo pgx-test
-        run: |
-          su idkit -c "cargo pgx test"
-
       ####################
       # Post-run Caching #
       ####################

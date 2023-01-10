@@ -12,7 +12,6 @@ crate-type = ["cdylib"]
 
 [features]
 default = [ "pg14" ]
-pg10 = [ "pgx/pg10", "pgx-tests/pg10" ]
 pg11 = [ "pgx/pg11", "pgx-tests/pg11" ]
 pg12 = [ "pgx/pg12", "pgx-tests/pg12" ]
 pg13 = [ "pgx/pg13", "pgx-tests/pg13" ]
@@ -20,8 +19,7 @@ pg14 = [ "pgx/pg14", "pgx-tests/pg14" ]
 pg_test = []
 
 [dependencies]
-pgx = "=0.4.5"
-uuidv6 = "0.1.1"
+pgx = "0.6.1"
 uuid7 = "0.2.6"
 nanoid = "0.4.0"
 ksuid = "0.2.0"
@@ -31,9 +29,10 @@ sonyflake = "0.1.2"
 pushid = "0.0.1"
 xid = "1.0.2"
 cuid = "1.2.0"
+getrandom = "0.2.8"
 
 [dev-dependencies]
-pgx-tests = "=0.4.5"
+pgx-tests = "=0.6.1"
 
 [profile.dev]
 panic = "unwind"

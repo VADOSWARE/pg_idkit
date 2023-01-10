@@ -14,6 +14,7 @@ endif
 .RECIPEPREFIX = >
 
 OPENSSL ?= openssl
+DOCKER ?= docker
 
 PULUMI_SECRET_DIR ?= secrets/pulumi
 PULUMI_AWS_ACCESS_KEY_ID_PATH ?= $(PULUMI_SECRET_DIR)/aws-access-key-id.secret
@@ -27,7 +28,8 @@ PULUMI_AWS_SECRET_ACCESS_KEY_PATH ?= $(PULUMI_SECRET_DIR)/aws-secret-access-key.
 >				build build-watch build-test-watch \
 >				package test \
 # Docker
->				image
+>				image \
+>				build-ci-image push-ci-image
 
 CARGO ?= cargo
 CARGO_WATCH ?= cargo-watch
@@ -83,14 +85,25 @@ test:
 # Docker #
 ##########
 
-POSTGRES_IMAGE_VERSION ?= 14.4.0
-POSTGRES_IMAGE_TAG ?= ${POSTGRES_VERSION}-alpine
+POSTGRES_IMAGE_VERSION ?= 15.1.0
+POSTGRES_IMAGE_TAG ?= ${POSTGRES_IMAGE_VERSION}-alpine
 
 IMAGE_NAME ?= postgres
-IMAGE_TAG ?= ${POSTGRES_VERSION}-pg_idkit-${VERSION}
+IMAGE_TAG ?= ${POSTGRES_IMAGE_VERSION}-pg_idkit-${VERSION}
 IMAGE_NAME_FULL ?= "$(IMAGE_NAME):$(IMAGE_TAG)"
 
 DOCKERFILE_PATH ?= ./infra/docker/${POSTGRES_IMAGE_TAG}.Dockerfile
 
+CI_DOCKERFILE_PATH ?= ./infra/docker/ci.Dockerfile
+CI_IMAGE_NAME ?= ghcr.io/vadosware/pg_idkit/builder
+CI_IMAGE_TAG ?= 0.x.x
+CI_IMAGE_NAME_FULL ?= "$(CI_IMAGE_NAME):$(CI_IMAGE_TAG)"
+
 image:
->	$(DOCKERFILE) -f $(DOCKERFILE_PATH) -t $(IMAGE_NAME_FULL)
+>	$(DOCKER) build -f $(DOCKERFILE_PATH) -t $(IMAGE_NAME_FULL)
+
+build-ci-image:
+>	$(DOCKER) build -f $(CI_DOCKERFILE_PATH) -t $(CI_IMAGE_NAME_FULL) .
+
+push-ci-image:
+>	$(DOCKER) push $(CI_IMAGE_NAME_FULL)

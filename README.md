@@ -62,6 +62,19 @@ To work on `pg_idkit`, you'll need the following:
 - (optional) [Docker][docker]
 - (optional) [`cargo-watch`][cargo-watch]
 
+## Setting up local environment
+
+Assuming you are using something like [`direnv`][direnv], use the following `.envrc` file: 
+
+```
+# Use local docker auth file
+export DOCKER_CONFIG=$(realpath infra/docker)
+```
+
+**NOTE**, that is *not* a `.env` file, it is a `.envrc` file, with separate semantics
+
+[direnv]: https://direnv.net
+
 ## Building the project
 
 To build the project:
@@ -117,6 +130,15 @@ You may attach to the local DB with `psql` and execute commands:
 ```console
 make db-local-psql
 ```
+
+## Continuous Integration
+
+To push up images that are used from continuous integration:
+
+1. Get a personal access token from Github
+2. Ensuring `DOCKER_LOGIN` is set (see instructions above), perform a login (`echo $GH_PAT | docker login ghcr.io -u <username> --password-stdin`)
+3. Observe the docker login credentials generated in this local repo directory (`infra/docker/config.json`)
+4. Run `make build-ci-image push-ci-image`
 
 [pgx]: https://github.com/tcdi/pgx
 [github-ai]: https://github.com/ai

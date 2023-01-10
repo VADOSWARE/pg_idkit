@@ -7,6 +7,19 @@ fn idkit_uuidv7_generate() -> String {
     uuid7().to_string()
 }
 
+/// Generate a UUID v7, producing a Postgres text object
+#[pg_extern]
+fn idkit_uuidv7_generate_text() -> String {
+    idkit_uuidv7_generate()
+}
+
+/// Generate a UUID v7, producing a Postgres uuid object
+#[pg_extern]
+fn idkit_uuidv7_generate_uuid() -> pgx::Uuid {
+    pgx::Uuid::from_slice(uuid7().as_bytes())
+        .unwrap_or_else(|e| error!("{}", format!("failed to generate/parse uuidv7: {}", e)))
+}
+
 //////////
 // Test //
 //////////

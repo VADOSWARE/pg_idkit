@@ -10,6 +10,12 @@ fn idkit_cuid_generate() -> String {
     }
 }
 
+/// Generate a random cuid UUID, producing a Postgres text object
+#[pg_extern]
+fn idkit_cuid_generate_text() -> String {
+    idkit_cuid_generate()
+}
+
 //////////
 // Test //
 //////////

@@ -7,6 +7,12 @@ fn idkit_ulid_generate() -> String {
     Ulid::new().to_string()
 }
 
+/// Generate a ULID, producing a Postgres text object
+#[pg_extern]
+fn idkit_ulid_generate_text() -> String {
+    idkit_ulid_generate()
+}
+
 //////////
 // Test //
 //////////

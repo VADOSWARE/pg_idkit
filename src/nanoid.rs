@@ -7,6 +7,12 @@ fn idkit_nanoid_generate() -> String {
     nanoid!()
 }
 
+/// Generate a nanoid, producing a Postgres text object
+#[pg_extern]
+fn idkit_nanoid_generate_text() -> String {
+    idkit_nanoid_generate()
+}
+
 //////////
 // Test //
 //////////

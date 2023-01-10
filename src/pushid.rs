@@ -8,6 +8,12 @@ fn idkit_pushid_generate() -> String {
     PushId::new().get_id()
 }
 
+/// Generate a random PushID UUID, producing a Postgres text object
+#[pg_extern]
+fn idkit_pushid_generate_text() -> String {
+    idkit_pushid_generate()
+}
+
 //////////
 // Test //
 //////////

@@ -6,7 +6,7 @@ ENV CARGO_TARGET_DIR=/usr/local/build/target
 ENV SCCACHE_DIR=/usr/local/sccache
 
 # Install deps
-RUN apt update && apt install -y libssl-dev git openssh-client pkg-config curl ca-certificates gnupg
+RUN apt update && apt install -y libssl-dev git openssh-client pkg-config curl ca-certificates gnupg wget
 RUN cargo install sccache
 
 ENV CARGO_BUILD_RUSTC_WRAPPER=/usr/local/cargo/bin/sccache

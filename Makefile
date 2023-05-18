@@ -29,7 +29,8 @@ PULUMI_AWS_SECRET_ACCESS_KEY_PATH ?= $(PULUMI_SECRET_DIR)/aws-secret-access-key.
 >				package test \
 # Docker
 >				image \
->				build-ci-image push-ci-image
+>				build-ci-image push-ci-image \
+>				docker-login ensure-file
 
 CARGO ?= cargo
 CARGO_WATCH ?= cargo-watch
@@ -98,6 +99,25 @@ CI_DOCKERFILE_PATH ?= ./infra/docker/ci.Dockerfile
 CI_IMAGE_NAME ?= ghcr.io/vadosware/pg_idkit/builder
 CI_IMAGE_TAG ?= 0.x.x
 CI_IMAGE_NAME_FULL ?= "$(CI_IMAGE_NAME):$(CI_IMAGE_TAG)"
+
+DOCKER_PASSWORD_PATH ?= secrets/docker/password.secret
+DOCKER_USERNAME_PATH ?= secrets/docker/username.secret
+DOCKER_IMAGE_REGISTRY ?= ghcr.io/vadosware/pg_idkit
+DOCKER_CONFIG ?= secrets/docker
+
+## Ensure that that a given file is present
+ensure-file:
+> @if [ ! -f "$(FILE)" ]; then \
+	echo "[error] file [$(FILE)] is required, but missing"; \
+	exit 1; \
+	fi;
+
+# Log in with docker using local credentials
+docker-login:
+> $(MAKE) ensure-file FILE=$(DOCKER_PASSWORD_PATH)
+> $(MAKE) ensure-file FILE=$(DOCKER_USERNAME_PATH)
+> cat $(DOCKER_PASSWORD_PATH) | $(DOCKER) login $(DOCKER_IMAGE_REGISTRY) -u `cat $(DOCKER_USERNAME_PATH)` --password-stdin
+>	cp $(DOCKER_CONFIG)/config.json $(DOCKER_CONFIG)/.dockerconfigjson
 
 image:
 >	$(DOCKER) build -f $(DOCKERFILE_PATH) -t $(IMAGE_NAME_FULL)

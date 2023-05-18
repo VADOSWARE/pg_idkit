@@ -59,8 +59,13 @@ To work on `pg_idkit`, you'll need the following:
 
 - [Rust][rust] toolchain ([`rustup`][rustup])
 - [`pgx`][pgx] and it's toolchain (the rust subcommand)
+- (optional) [`git-crypt`][git-crypt] (for working with secrets)
+- (optional) [direnv][direnv]
 - (optional) [Docker][docker]
 - (optional) [`cargo-watch`][cargo-watch]
+
+[direnv]: https://direnv.net
+[git-crypt]: https://github.com/AGWA/git-crypt
 
 ## Setting up local environment
 
@@ -68,7 +73,7 @@ Assuming you are using something like [`direnv`][direnv], use the following `.en
 
 ```
 # Use local docker auth file
-export DOCKER_CONFIG=$(realpath infra/docker)
+export DOCKER_CONFIG=$(realpath secrets/docker)
 ```
 
 **NOTE**, that is *not* a `.env` file, it is a `.envrc` file, with separate semantics

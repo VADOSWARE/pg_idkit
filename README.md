@@ -18,7 +18,7 @@ This Postgres extension is made possible thanks to [`pgx`][pgx].
 
 ## Prior Art
 
-There are some other projects in the Postgres ecosystem that implement alternative UUID generation mechanisms. 
+There are some other projects in the Postgres ecosystem that implement alternative UUID generation mechanisms.
 
 Here are some you may or may not have heard of:
 
@@ -59,25 +59,35 @@ To work on `pg_idkit`, you'll need the following:
 
 - [Rust][rust] toolchain ([`rustup`][rustup])
 - [`pgx`][pgx] and it's toolchain (the rust subcommand)
+- (optional) [`git-crypt`][git-crypt] (for working with secrets)
+- (optional) [direnv][direnv]
 - (optional) [Docker][docker]
 - (optional) [`cargo-watch`][cargo-watch]
 
-## Setting up local environment
+[direnv]: https://direnv.net
+[git-crypt]: https://github.com/AGWA/git-crypt
 
-Assuming you are using something like [`direnv`][direnv], use the following `.envrc` file: 
+## Setting up the local environment
+
+Assuming you are using something like [`direnv`][direnv], use the following `.envrc` file:
 
 ```
 # Use local docker auth file
-export DOCKER_CONFIG=$(realpath infra/docker)
+export DOCKER_CONFIG=$(realpath secrets/docker)
 ```
 
 **NOTE**, that is *not* a `.env` file, it is a `.envrc` file, with separate semantics
 
 [direnv]: https://direnv.net
 
-## Building the project
+## Install `cargo-pgx`
 
-To build the project:
+```console
+cargo install cargo-pgx@0.7.4
+cargo pgx init --pg14 download
+```
+
+## Building the project
 
 ```console
 make build
@@ -136,9 +146,12 @@ make db-local-psql
 To push up images that are used from continuous integration:
 
 1. Get a personal access token from Github
-2. Ensuring `DOCKER_LOGIN` is set (see instructions above), perform a login (`echo $GH_PAT | docker login ghcr.io -u <username> --password-stdin`)
-3. Observe the docker login credentials generated in this local repo directory (`infra/docker/config.json`)
-4. Run `make build-ci-image push-ci-image`
+2. Ensuring `DOCKER_LOGIN` is set (see instructions above)
+3. Perform a login
+   1. Manually via `echo $GH_PAT | docker login ghcr.io -u <username> --password-stdin`
+   2. Automatically, via `make docker-login` which will use the `git-crypt` protected credentials (you must have run `git-crypt` unlock first)
+4. Observe the docker login credentials generated in this local repo directory (`secrets/docker/config.json`)
+5. Run `make build-ci-image push-ci-image`
 
 [pgx]: https://github.com/tcdi/pgx
 [github-ai]: https://github.com/ai

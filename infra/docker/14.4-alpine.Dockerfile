@@ -1,5 +1,5 @@
-# rust:alpine as of 2022/07/31
-FROM sha256:0ebddf3a3a92320ff15b6cd3c5603ad109d71dd241ebfbda5a3c79acd91fa7ef AS build
+# rust:1.69.0-alpine3.17 as of 2023/05/18
+FROM rust:1.69.0-alpine3.17@sha256:3dd0bb6f134635fe40dd9c18bd9603f9d90ce3538ac25ae3e69b9b127137acf2 AS build
 
 WORKDIR /app
 COPY . .

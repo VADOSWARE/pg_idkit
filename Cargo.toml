@@ -5,7 +5,7 @@ edition = "2021"
 authors = [
   "Victor Adossi <vados@vadosware.io>"
 ]
-
+rust-version = "1.69.0"
 
 [lib]
 crate-type = ["cdylib"]

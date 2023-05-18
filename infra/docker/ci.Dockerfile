@@ -55,7 +55,9 @@ RUN chmod g+w -R /usr/local/cargo
 RUN chmod g+w -R /usr/local/build
 
 # Install development/build/testing deps
-RUN su idkit -c "cargo install sccache cargo-cache cargo-pgx"
+# NOTE: version of cargo-pgx must be handled speicfically
+RUN su idkit -c "cargo install sccache cargo-cache cargo-pgx@0.7.4"
 
 # Initialize pgx
+# NOTE: pgx must be reinitialized if cargo-pgx changes
 RUN su idkit -c "cargo pgx init --pg14 download"

@@ -1,1 +1,6 @@
 /target
+
+# Docker (DOCKER_CONFIG local state files)
+secrets/docker/.token_seed
+secrets/docker/.token_seed.lock
+secrets/docker/buildx/

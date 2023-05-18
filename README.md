@@ -18,7 +18,7 @@ This Postgres extension is made possible thanks to [`pgx`][pgx].
 
 ## Prior Art
 
-There are some other projects in the Postgres ecosystem that implement alternative UUID generation mechanisms. 
+There are some other projects in the Postgres ecosystem that implement alternative UUID generation mechanisms.
 
 Here are some you may or may not have heard of:
 
@@ -67,9 +67,9 @@ To work on `pg_idkit`, you'll need the following:
 [direnv]: https://direnv.net
 [git-crypt]: https://github.com/AGWA/git-crypt
 
-## Setting up local environment
+## Setting up the local environment
 
-Assuming you are using something like [`direnv`][direnv], use the following `.envrc` file: 
+Assuming you are using something like [`direnv`][direnv], use the following `.envrc` file:
 
 ```
 # Use local docker auth file
@@ -80,9 +80,14 @@ export DOCKER_CONFIG=$(realpath secrets/docker)
 
 [direnv]: https://direnv.net
 
-## Building the project
+## Install `cargo-pgx`
 
-To build the project:
+```console
+cargo install cargo-pgx@0.7.4
+cargo pgx init --pg14 download
+```
+
+## Building the project
 
 ```console
 make build

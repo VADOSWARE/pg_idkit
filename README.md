@@ -141,9 +141,12 @@ make db-local-psql
 To push up images that are used from continuous integration:
 
 1. Get a personal access token from Github
-2. Ensuring `DOCKER_LOGIN` is set (see instructions above), perform a login (`echo $GH_PAT | docker login ghcr.io -u <username> --password-stdin`)
-3. Observe the docker login credentials generated in this local repo directory (`infra/docker/config.json`)
-4. Run `make build-ci-image push-ci-image`
+2. Ensuring `DOCKER_LOGIN` is set (see instructions above)
+3. Perform a login
+   1. Manually via `echo $GH_PAT | docker login ghcr.io -u <username> --password-stdin`
+   2. Automatically, via `make docker-login` which will use the `git-crypt` protected credentials (you must have run `git-crypt` unlock first)
+4. Observe the docker login credentials generated in this local repo directory (`secrets/docker/config.json`)
+5. Run `make build-ci-image push-ci-image`
 
 [pgx]: https://github.com/tcdi/pgx
 [github-ai]: https://github.com/ai

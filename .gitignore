@@ -1,5 +1,1 @@
 /target
-Cargo.lock
-
-# Docker
-infra/docker/config.json

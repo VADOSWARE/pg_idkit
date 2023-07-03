@@ -1,5 +1,5 @@
-use pgx::*;
 use ksuid::Ksuid;
+use pgrx::*;
 
 /// Generate a random KSUID (HEX-encoded)
 #[pg_extern]
@@ -20,7 +20,7 @@ fn idkit_ksuid_generate_text() -> String {
 #[cfg(any(test, feature = "pg_test"))]
 #[pg_schema]
 mod tests {
-    use pgx::*;
+    use pgrx::*;
 
     /// Basic length test
     #[pg_test]

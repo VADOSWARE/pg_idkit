@@ -1,4 +1,4 @@
-use pgx::*;
+use pgrx::*;
 use pushid::PushId;
 use pushid::PushIdGen;
 
@@ -21,7 +21,7 @@ fn idkit_pushid_generate_text() -> String {
 #[cfg(any(test, feature = "pg_test"))]
 #[pg_schema]
 mod tests {
-    use pgx::*;
+    use pgrx::*;
 
     /// Basic length test
     #[pg_test]

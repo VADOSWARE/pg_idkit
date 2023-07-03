@@ -1,4 +1,4 @@
-use pgx::*;
+use pgrx::*;
 use ulid::Ulid;
 
 /// Generate a ULID
@@ -20,7 +20,7 @@ fn idkit_ulid_generate_text() -> String {
 #[cfg(any(test, feature = "pg_test"))]
 #[pg_schema]
 mod tests {
-    use pgx::*;
+    use pgrx::*;
 
     /// Basic length test
     #[pg_test]

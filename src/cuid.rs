@@ -1,5 +1,5 @@
-use pgx::*;
 use cuid;
+use pgrx::*;
 
 /// Generate a random cuid UUID
 #[pg_extern]
@@ -23,7 +23,7 @@ fn idkit_cuid_generate_text() -> String {
 #[cfg(any(test, feature = "pg_test"))]
 #[pg_schema]
 mod tests {
-    use pgx::*;
+    use pgrx::*;
 
     /// Basic length test
     #[pg_test]

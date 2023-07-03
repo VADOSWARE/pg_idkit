@@ -1,4 +1,4 @@
-use pgx::*;
+use pgrx::*;
 use nanoid::nanoid;
 
 /// Generate a nanoid
@@ -20,7 +20,7 @@ fn idkit_nanoid_generate_text() -> String {
 #[cfg(any(test, feature = "pg_test"))]
 #[pg_schema]
 mod tests {
-    use pgx::*;
+    use pgrx::*;
 
     #[pg_test]
     /// Basic length test

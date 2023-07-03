@@ -8,7 +8,7 @@ mod pushid;
 mod xid;
 mod cuid;
 
-use pgx::*;
+use pgrx::pg_module_magic;
 
 pg_module_magic!();
 

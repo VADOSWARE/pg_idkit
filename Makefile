@@ -76,11 +76,11 @@ build-test-watch: check-tool-cargo check-tool-cargo-watch
 >	$(CARGO_WATCH) -x "test $(CARGO_BUILD_FLAGS)" --watch src
 
 package:
->	$(CARGO) pgx package
+>	$(CARGO) pgrx package
 
 test:
 >	$(CARGO) test
->	$(CARGO) pgx test
+>	$(CARGO) pgrx test
 
 ##########
 # Docker #

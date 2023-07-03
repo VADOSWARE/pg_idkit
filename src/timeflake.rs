@@ -1,4 +1,4 @@
-use pgx::*;
+use pgrx::*;
 use timeflake_rs::Timeflake;
 
 /// Generate a random timeflake UUID
@@ -26,7 +26,7 @@ fn idkit_timeflake_generate_text() -> String {
 #[cfg(any(test, feature = "pg_test"))]
 #[pg_schema]
 mod tests {
-    use pgx::*;
+    use pgrx::*;
 
     /// Basic length test
     #[pg_test]

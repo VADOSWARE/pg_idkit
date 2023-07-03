@@ -14,7 +14,7 @@
 | [xid][xid]             | `idkit_xid_generate`       | [`xid`](https://crates.io/crates/xid)                   | XID                                                      |
 | [cuid][cuid]           | `idkit_cuid_generate`      | [`cuid`](https://crates.io/crates/cuid)                 | CUID                                                     |
 
-This Postgres extension is made possible thanks to [`pgx`][pgx].
+This Postgres extension is made possible thanks to [`pgrx`][pgrx].
 
 ## Prior Art
 
@@ -58,7 +58,7 @@ Here's how to get started working on `pg_idkit` locally.
 To work on `pg_idkit`, you'll need the following:
 
 - [Rust][rust] toolchain ([`rustup`][rustup])
-- [`pgx`][pgx] and it's toolchain (the rust subcommand)
+- [`pgrx`][pgrx] and it's toolchain (the rust subcommand)
 - (optional) [`git-crypt`][git-crypt] (for working with secrets)
 - (optional) [direnv][direnv]
 - (optional) [Docker][docker]
@@ -80,11 +80,11 @@ export DOCKER_CONFIG=$(realpath secrets/docker)
 
 [direnv]: https://direnv.net
 
-## Install `cargo-pgx`
+## Install `cargo-pgrx`
 
 ```console
-cargo install cargo-pgx@0.7.4
-cargo pgx init --pg14 download
+cargo install cargo-pgrx@0.9.7
+cargo pgrx init
 ```
 
 ## Building the project
@@ -99,12 +99,12 @@ To run the build continuously for quicker local development (assuming you have `
 make build-watch
 ```
 
-### `pgx` workflow
+### `pgrx` workflow
 
-Note that you can use the `pgx`-documented development flow as well (using `cargo pgx`) as well, for example:
+Note that you can use the `pgrx`-documented development flow as well (using `cargo pgrx`) as well, for example:
 
 ```console
-cargo pgx run pg14
+cargo pgrx run pg14
 ```
 
 ## Run tests
@@ -153,7 +153,7 @@ To push up images that are used from continuous integration:
 4. Observe the docker login credentials generated in this local repo directory (`secrets/docker/config.json`)
 5. Run `make build-ci-image push-ci-image`
 
-[pgx]: https://github.com/tcdi/pgx
+[pgrx]: https://github.com/tcdi/pgrx
 [github-ai]: https://github.com/ai
 [rfc-4122-update]: https://datatracker.ietf.org/doc/html/draft-peabody-dispatch-new-uuid-format-04
 [cargo-watch]: https://github.com/passcod/cargo-watch
@@ -183,7 +183,6 @@ To push up images that are used from continuous integration:
 [e-elliott]: https://github.com/ericelliott
 [wiki-gregorian]: https://en.wikipedia.org/wiki/Gregorian_calendar
 [rust]: https://rust-lang.org
-[pgx]: https://github.com/tcdi/pgx
 [pg-docs-operator-classes]: https://www.postgresql.org/docs/current/indexes-opclass.html
 [repo]: https://github.com/t3hmrman/pg_idkit
 [oryx-pro]: https://system76.com/laptops/oryx

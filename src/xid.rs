@@ -1,5 +1,5 @@
-use pgx::*;
-use ::xid::{new as generate_xid};
+use ::xid::new as generate_xid;
+use pgrx::*;
 
 /// Generate a random xid UUID
 #[pg_extern]
@@ -20,7 +20,7 @@ fn idkit_xid_generate_text() -> String {
 #[cfg(any(test, feature = "pg_test"))]
 #[pg_schema]
 mod tests {
-    use pgx::*;
+    use pgrx::*;
 
     /// Basic length test
     #[pg_test]

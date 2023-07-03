@@ -1,4 +1,4 @@
-use pgx::*;
+use pgrx::*;
 use uuid7::uuid7;
 
 /// Generate a UUID v7
@@ -15,8 +15,8 @@ fn idkit_uuidv7_generate_text() -> String {
 
 /// Generate a UUID v7, producing a Postgres uuid object
 #[pg_extern]
-fn idkit_uuidv7_generate_uuid() -> pgx::Uuid {
-    pgx::Uuid::from_slice(uuid7().as_bytes())
+fn idkit_uuidv7_generate_uuid() -> pgrx::Uuid {
+    pgrx::Uuid::from_slice(uuid7().as_bytes())
         .unwrap_or_else(|e| error!("{}", format!("failed to generate/parse uuidv7: {}", e)))
 }
 
@@ -27,7 +27,7 @@ fn idkit_uuidv7_generate_uuid() -> pgx::Uuid {
 #[cfg(any(test, feature = "pg_test"))]
 #[pg_schema]
 mod tests {
-    use pgx::*;
+    use pgrx::*;
 
     /// Basic length test
     #[pg_test]

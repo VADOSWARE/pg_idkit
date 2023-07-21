@@ -7,6 +7,7 @@ mod timeflake;
 mod pushid;
 mod xid;
 mod cuid;
+mod cuid2;
 
 use pgrx::pg_module_magic;
 

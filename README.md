@@ -12,7 +12,8 @@
 | [Timeflake][timeflake] | `idkit_timeflake_generate` | [`timeflake-rs`](https://crates.io/crates/timeflake-rs) | Twitter's Snowflake + Instagram's ID + Firebase's PushID |
 | [PushID][pushid]       | `idkit_pushid_generate`    | [`pushid`](https://crates.io/crates/pushid)             | Google Firebase's PushID                                 |
 | [xid][xid]             | `idkit_xid_generate`       | [`xid`](https://crates.io/crates/xid)                   | XID                                                      |
-| [cuid][cuid]           | `idkit_cuid_generate`      | [`cuid`](https://crates.io/crates/cuid)                 | CUID                                                     |
+| [cuid][cuid] (deprecated)           | `idkit_cuid_generate`      | [`cuid`](https://crates.io/crates/cuid)                 | CUID                                                     |
+| [cuid2][cuid2]           | `idkit_cuid2_generate`      | [`cuid2`](https://crates.io/crates/cuid2)                 | CUID                                                     |
 
 This Postgres extension is made possible thanks to [`pgrx`][pgrx].
 
@@ -161,7 +162,8 @@ To push up images that are used from continuous integration:
 [ksuid]: https://github.com/segmentio/ksuid
 [ulid]: https://github.com/ulid/spec
 [pushid]: https://firebase.googleblog.com/2015/02/the-2120-ways-to-ensure-unique_68.html
-[cuid]: https://github.com/ericelliott/cuid
+[cuid]: https://github.com/paralleldrive/cuid
+[cuid2]: https://github.com/paralleldrive/cuid2
 [xid]: https://github.com/rs/xid
 [objectid]: https://www.mongodb.com/docs/manual/reference/method/ObjectId/
 [nanoid]: https://www.npmjs.com/package/nanoid

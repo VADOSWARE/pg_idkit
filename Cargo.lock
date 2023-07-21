@@ -1272,6 +1272,7 @@ name = "pg_idkit"
 version = "0.1.0"
 dependencies = [
  "cuid",
+ "cuid2",
  "getrandom",
  "ksuid",
  "nanoid",

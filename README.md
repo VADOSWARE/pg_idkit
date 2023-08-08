@@ -6,7 +6,7 @@
 |------------------------|----------------------------|---------------------------------------------------------|----------------------------------------------------------|
 | [UUID v6][uuidv6]      | `idkit_uuidv6_generate`    | [`uuidv6`](https://crates.io/crates/uuidv6)             | UUID v6 ([RFC 4122][rfc-4122-update])                    |
 | [UUID v7][uuidv7]      | `idkit_uuidv7_generate`    | [`uuid7`](https://crates.io/crates/uuid7)               | UUID v7 ([RFC 4122][rfc-4122-update])                    |
-| [nanoid][nanoid]       | `idkit_nanoid_generate`    | [`nanoid`](https://crates.io/crates/nanoid)             | NanoID, develepod by [Andrey Sitnik][github-ai]          |
+| [nanoid][nanoid]       | `idkit_nanoid_generate`    | [`nanoid`](https://crates.io/crates/nanoid)             | NanoID, developed by [Andrey Sitnik][github-ai]          |
 | [ksuid][ksuid]         | `idkit_ksuid_generate`     | [`ksuid`](https://crates.io/crates/ksuid)               | developed by [Segment][segment]                          |
 | [ulid][ulid]           | `idkit_ulid_generate`      | [`ulid`](https://crates.io/crates/ulid)                 | unique, lexicographically sortable identifiers           |
 | [Timeflake][timeflake] | `idkit_timeflake_generate` | [`timeflake-rs`](https://crates.io/crates/timeflake-rs) | Twitter's Snowflake + Instagram's ID + Firebase's PushID |
@@ -33,7 +33,7 @@ Here are some you may or may not have heard of:
 
 ## Binary install
 
-If running a custom version of locally/globally manually installed Postgres, you may download (and verify the checksum of) a shared library versionfrom the [releases](/releases), and add it as one of your `shared_preload_libraries` in `postgresql.conf`.
+If running a custom version of locally/globally manually installed Postgres, you may download (and verify the checksum of) a shared library version from the [releases](/releases), and add it as one of your `shared_preload_libraries` in `postgresql.conf`.
 
 Assuming you have downloaded the `pg_idkit-vX.X.X.so` file to `/etc/postgresql/extensions`, you might change the file like this:
 

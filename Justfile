@@ -68,8 +68,8 @@ test:
 # Docker #
 ##########
 
-pg_image_version := env_var_or_default("POSTGRES_IMAGE_VERSION", "15.1.0")
-pg_image_tag := env_var_or_default("POSGRES_IMAGE_VERSION", pg_image_version + "-alpine")
+pg_image_version := env_var_or_default("POSTGRES_IMAGE_VERSION", "15.4")
+pg_image_tag := env_var_or_default("POSGRES_IMAGE_VERSION", pg_image_version + "-alpine3.18")
 
 pgkit_image_name := env_var_or_default("PGKIT_IMAGE_NAME", "postgres")
 pgkit_image_tag := env_var_or_default("PGKIT_IMAGE_TAG", pg_image_version + "-pg_idkit=" + version)
@@ -86,7 +86,7 @@ docker_username_path := env_var_or_default("DOCKER_USERNAME_PATH", "secrets/dock
 docker_image_registry := env_var_or_default("DOCKER_IMAGE_REGISTRY", "ghcr.io/vadosware/pg_idkit")
 docker_config_dir := env_var_or_default("DOCKER_CONFIG", "secrets/docker")
 
-## Ensure that that a given file is present
+# Ensure that that a given file is present
 _ensure-file file:
     #!/usr/bin/env -S bash -euo pipefail
     @if [ ! -f "{{file}}" ]; then
@@ -101,11 +101,14 @@ docker-login:
     cat {{docker_password_path}} | {{docker}} login {{docker_image_registry}} -u `cat {{docker_username_path}}` --password-stdin
     cp {{docker_config_dir}}/config.json {{docker_config_dir}}/.dockerconfigjson
 
+# Build the docker image for pg_idkit
 image:
     {{docker}} build -f {{pgkit_dockerfile_path}} -t {{pgkit_image_name_full}}
 
+# Build the docker image used in CI
 build-ci-image:
     {{docker}} build -f {{ci_dockerfile_path}} -t {{ci_image_name_full}} .
 
+# Push the docker image used in CI (to GitHub Container Registry)
 push-ci-image:
     {{docker}} push {{ci_image_name_full}}

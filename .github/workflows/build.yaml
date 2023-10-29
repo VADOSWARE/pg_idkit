@@ -9,7 +9,10 @@ jobs:
 
     strategy:
       matrix:
-        rust_container_version: [ "1.63" ]
+        # The version(s) of the Rust being used in the CI container
+        # (requires building and pushing via `just build-ci-image push-ci-image`)
+        rust_container_version:
+          - 1.73
 
     container:
       image: "ghcr.io/vadosware/pg_idkit/builder:0.x.x"

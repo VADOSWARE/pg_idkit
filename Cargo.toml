@@ -2,9 +2,7 @@
 name = "pg_idkit"
 version = "0.1.0"
 edition = "2021"
-authors = [
-  "Victor Adossi <vados@vadosware.io>"
-]
+authors = ["Victor Adossi <vados@vadosware.io>"]
 rust-version = "1.73.0"
 description = """
 A Postgres extension for generating UUIDs
@@ -18,17 +16,19 @@ maintenance = { status = "actively-maintained" }
 
 [features]
 default = ["pg15"]
-pg11 = [ "pgrx/pg11", "pgrx-tests/pg11" ]
-pg12 = [ "pgrx/pg12", "pgrx-tests/pg12" ]
-pg13 = [ "pgrx/pg13", "pgrx-tests/pg13" ]
-pg14 = [ "pgrx/pg14", "pgrx-tests/pg14" ]
-pg15 = [ "pgrx/pg15", "pgrx-tests/pg15" ]
+pg11 = ["pgrx/pg11", "pgrx-tests/pg11"]
+pg12 = ["pgrx/pg12", "pgrx-tests/pg12"]
+pg13 = ["pgrx/pg13", "pgrx-tests/pg13"]
+pg14 = ["pgrx/pg14", "pgrx-tests/pg14"]
+pg15 = ["pgrx/pg15", "pgrx-tests/pg15"]
 pg_test = []
 
 [dependencies]
 cuid = "1.3.2"
 cuid2 = "0.1.2"
 getrandom = "0.2.10"
+base36 = "0.0.1"
+chrono = { version = "0.4.31", default-features = false, features = ["clock"] }
 ksuid = "0.2.0"
 nanoid = "0.4.0"
 pgrx = "=0.11.0"
@@ -38,6 +38,7 @@ timeflake-rs = "0.3.0"
 ulid = "1.1.0"
 uuid7 = "0.7.2"
 xid = "1.0.3"
+miette = { version = "5.10.0", features = ["fancy"] }
 
 [dev-dependencies]
 pgrx-tests = "=0.11.0"

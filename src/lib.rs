@@ -1,13 +1,15 @@
-mod uuid_v6;
-mod uuid_v7;
-mod nanoid;
-mod ksuid;
-mod ulid;
-mod timeflake;
-mod pushid;
-mod xid;
+mod common;
+
 mod cuid;
 mod cuid2;
+mod ksuid;
+mod nanoid;
+mod pushid;
+mod timeflake;
+mod ulid;
+mod uuid_v6;
+mod uuid_v7;
+mod xid;
 
 use pgrx::pg_module_magic;
 

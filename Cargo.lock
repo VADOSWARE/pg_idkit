@@ -1329,6 +1329,7 @@ dependencies = [
  "timeflake-rs",
  "ulid",
  "uuid7",
+ "uuidv6",
  "xid",
 ]
 
@@ -2572,6 +2573,15 @@ dependencies = [
  "fstr",
  "rand 0.8.5",
  "rand_chacha",
+]
+
+[[package]]
+name = "uuidv6"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "23e3f2328d4a62d25ebf0795824bb91b00bf7c1c668c368b02aa8768e48d30a8"
+dependencies = [
+ "getrandom",
 ]
 
 [[package]]

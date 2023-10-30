@@ -37,6 +37,7 @@ sonyflake = "0.2.0"
 timeflake-rs = "0.3.0"
 ulid = "1.1.0"
 uuid7 = "0.7.2"
+uuidv6 = "0.1.2"
 xid = "1.0.3"
 miette = { version = "5.10.0", features = ["fancy"] }
 

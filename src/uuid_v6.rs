@@ -1,7 +1,5 @@
 use pgrx::*;
-
-mod vendor;
-use vendor::{Node, UUIDv6};
+use uuidv6::{self, Node, RawUUIDv6, UUIDv6};
 
 /// Generate a UUID v6
 #[pg_extern]
@@ -21,9 +19,7 @@ fn idkit_uuidv6_generate_text() -> String {
 fn idkit_uuidv6_generate_uuid() -> pgrx::Uuid {
     let node = Node::new();
 
-    // This depends on PR to rust-uuidv6
-    // see: https://github.com/jedisct1/rust-uuidv6/pull/1
-    pgrx::Uuid::from_slice(&UUIDv6::new(&node).create_bytes())
+    pgrx::Uuid::from_slice(&RawUUIDv6::new(&node).create())
         .unwrap_or_else(|e| error!("{}", format!("failed to generate/parse uuidv6: {}", e)))
 }
 

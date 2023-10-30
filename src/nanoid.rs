@@ -1,5 +1,5 @@
-use pgrx::*;
 use nanoid::nanoid;
+use pgrx::*;
 
 /// Generate a nanoid
 #[pg_extern]

@@ -1,4 +1,3 @@
-use cuid2;
 use pgrx::*;
 
 /// Generate a random cuid2 UUID

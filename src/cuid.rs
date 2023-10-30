@@ -1,7 +1,6 @@
 use std::io;
 
 use chrono::{Datelike, NaiveDateTime, Timelike};
-use cuid;
 use pgrx::*;
 
 use crate::common::OrPgxError;

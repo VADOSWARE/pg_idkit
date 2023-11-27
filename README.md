@@ -2,18 +2,18 @@
 
 `pg_idkit` is a [Postgres][postgres] extension for generating IDs. It aims to be have just about every ID you'd normally think of using:
 
-| Methodology            | function                   | Crate                                                   | Description                                              |
-|------------------------|----------------------------|---------------------------------------------------------|----------------------------------------------------------|
-| [UUID v6][uuidv6]      | `idkit_uuidv6_generate`    | [`uuidv6`](https://crates.io/crates/uuidv6)             | UUID v6 ([RFC 4122][rfc-4122-update])                    |
-| [UUID v7][uuidv7]      | `idkit_uuidv7_generate`    | [`uuid7`](https://crates.io/crates/uuid7)               | UUID v7 ([RFC 4122][rfc-4122-update])                    |
-| [nanoid][nanoid]       | `idkit_nanoid_generate`    | [`nanoid`](https://crates.io/crates/nanoid)             | NanoID, developed by [Andrey Sitnik][github-ai]          |
-| [ksuid][ksuid]         | `idkit_ksuid_generate`     | [`ksuid`](https://crates.io/crates/ksuid)               | developed by [Segment][segment]                          |
-| [ulid][ulid]           | `idkit_ulid_generate`      | [`ulid`](https://crates.io/crates/ulid)                 | unique, lexicographically sortable identifiers           |
-| [Timeflake][timeflake] | `idkit_timeflake_generate` | [`timeflake-rs`](https://crates.io/crates/timeflake-rs) | Twitter's Snowflake + Instagram's ID + Firebase's PushID |
-| [PushID][pushid]       | `idkit_pushid_generate`    | [`pushid`](https://crates.io/crates/pushid)             | Google Firebase's PushID                                 |
-| [xid][xid]             | `idkit_xid_generate`       | [`xid`](https://crates.io/crates/xid)                   | XID                                                      |
-| [cuid][cuid] (deprecated)           | `idkit_cuid_generate`      | [`cuid`](https://crates.io/crates/cuid)                 | CUID                                                     |
-| [cuid2][cuid2]           | `idkit_cuid2_generate`      | [`cuid2`](https://crates.io/crates/cuid2)                 | CUID                                                     |
+| Methodology               | function                   | Crate                                                   | Description                                              |
+|---------------------------|----------------------------|---------------------------------------------------------|----------------------------------------------------------|
+| [UUID v6][uuidv6]         | `idkit_uuidv6_generate`    | [`uuidv6`](https://crates.io/crates/uuidv6)             | UUID v6 ([RFC 4122][rfc-4122-update])                    |
+| [UUID v7][uuidv7]         | `idkit_uuidv7_generate`    | [`uuid7`](https://crates.io/crates/uuid7)               | UUID v7 ([RFC 4122][rfc-4122-update])                    |
+| [nanoid][nanoid]          | `idkit_nanoid_generate`    | [`nanoid`](https://crates.io/crates/nanoid)             | NanoID, developed by [Andrey Sitnik][github-ai]          |
+| [ksuid][ksuid]            | `idkit_ksuid_generate`     | [`ksuid`](https://crates.io/crates/ksuid)               | developed by [Segment][segment]                          |
+| [ulid][ulid]              | `idkit_ulid_generate`      | [`ulid`](https://crates.io/crates/ulid)                 | unique, lexicographically sortable identifiers           |
+| [Timeflake][timeflake]    | `idkit_timeflake_generate` | [`timeflake-rs`](https://crates.io/crates/timeflake-rs) | Twitter's Snowflake + Instagram's ID + Firebase's PushID |
+| [PushID][pushid]          | `idkit_pushid_generate`    | [`pushid`](https://crates.io/crates/pushid)             | Google Firebase's PushID                                 |
+| [xid][xid]                | `idkit_xid_generate`       | [`xid`](https://crates.io/crates/xid)                   | XID                                                      |
+| [cuid][cuid] (deprecated) | `idkit_cuid_generate`      | [`cuid`](https://crates.io/crates/cuid)                 | CUID                                                     |
+| [cuid2][cuid2]            | `idkit_cuid2_generate`     | [`cuid2`](https://crates.io/crates/cuid2)               | CUID                                                     |
 
 This Postgres extension is made possible thanks to [`pgrx`][pgrx].
 
@@ -44,11 +44,39 @@ shared_preload_libraries = '/etc/postgresql/extensions/pg_idkit-vX.X.X.so'
 
 ### Dockerfile
 
-To build `pg_idkit` into a Postgres instance you can use a `Dockerfile` like the following:
+To use `pg_idkit` easily from a containerized environment, you can use the `pg_idkit` image, built from [`postgres`][docker-postgres]:
 
-```dockerfile
-TODO
+```console
+docker run \
+    --rm \
+    -e POSTGRES_PASSWORD=replace_this \
+    -p 5432 \
+    --name pg_idkit \
+    ghcr.io/vadosware/pg_idkit:0.1.0-pg15.5-alpine3.18-amd64
 ```
+
+From another terminal, you can exec into the `pg_idkit` container and enable `pg_idkit`:
+
+```console
+➜ docker exec -it pg_idkit psql -U postgres
+psql (15.5)
+Type "help" for help.
+
+postgres=# CREATE EXTENSION pg_idkit;
+CREATE EXTENSION
+postgres=# SELECT idkit_uuidv7_generate();
+        idkit_uuidv7_generate
+--------------------------------------
+ 018c106f-9304-79bb-b5be-4483b92b036c
+(1 row)
+```
+
+> [!WARNING]
+> Currently only amd64 (x86_64) images are present/supported (See [`pg_idkit` packages](https://github.com/VADOSWARE/pg_idkit/pkgs/container/pg_idkit)).
+>
+> Work to support more platforms is described in [issue #30](https://github.com/VADOSWARE/pg_idkit/issues/30)
+
+[docker-postgres]: https://hub.docker.com/_/postgres
 
 ## Local Development
 
@@ -76,7 +104,7 @@ cargo install --locked just
 
 #### `cargo-pgrx`
 
-Installing 
+Installing
 
 ```console
 cargo install --locked cargo-pgrx
@@ -179,6 +207,7 @@ export DOCKER_CONFIG=$(realpath secrets/docker)
 [google]: https://google.com
 [instagram]: instagram-engineering.com/
 [it-cabrera]: https://darkghosthunter.medium.com/
+[just]: https://github.com/casey/just
 [ksuid]: https://github.com/segmentio/ksuid
 [mongodb]: https://www.mongodb.com/blog/channel/engineering-blog
 [nanoid]: https://www.npmjs.com/package/nanoid

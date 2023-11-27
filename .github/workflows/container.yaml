@@ -1,0 +1,43 @@
+name: container
+
+on:
+  push:
+    tags:
+      - v[0-9]+\.[0-9]+\.[0-9]+
+
+jobs:
+  build:
+    permissions:
+      contents: read
+      packages: write
+    runs-on: ${{ matrix.config.gh.runner }}
+    strategy:
+      matrix:
+        config:
+          - triple: x86_64-unknown-linux-musl
+            gh:
+              runner: ubuntu-22.04
+            container:
+              arch: amd64
+              pg_version: 15.5
+              os_version: alpine3.18
+    steps:
+      - uses: actions/checkout@v3
+      - uses: docker/setup-qemu-action@v3
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-binstall,cargo-get,just
+
+      - name: registry login
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: build & push container image
+        run: just build-image push-image
+        env:
+          CONTAINER_IMAGE_ARCH: ${{ matrix.config.container.arch }}
+          POSTGRES_IMAGE_VERSION: ${{ matrix.config.container.pg_version }}
+          POSTGRES_OS_IMAGE_VERSION: ${{ matrix.config.container.os_version }}

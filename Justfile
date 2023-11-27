@@ -1,9 +1,16 @@
-cargo := env_var_or_default("CARGO", "cargo")
-cargo_get := env_var_or_default("CARGO_GET", "cargo-get")
-cargo_watch := env_var_or_default("CARGO_WATCH", "cargo-watch")
 docker := env_var_or_default("DOCKER", "docker")
 git := env_var_or_default("GIT", "git")
 just := env_var_or_default("JUST", just_executable())
+
+cargo := env_var_or_default("CARGO", "cargo")
+cargo_get := env_var_or_default("CARGO_GET", "cargo-get")
+cargo_watch := env_var_or_default("CARGO_WATCH", "cargo-watch")
+cargo_profile := env_var_or_default("CARGO_PROFILE", "")
+cargo_profile_arg := if cargo_profile != "" {
+  "--profile " + cargo_profile
+} else {
+  ""
+}
 
 changelog_path := "CHANGELOG"
 
@@ -57,7 +64,7 @@ changelog:
     {{git}} cliff --unreleased --tag=$(VERSION) --prepend=$(CHANGELOG_FILE_PATH)
 
 build:
-    {{cargo}} build
+    {{cargo}} build {{cargo_profile_arg}}
 
 build-watch: _check-tool-cargo _check-tool-cargo-watch
     {{cargo_watch}} -x "build $(CARGO_BUILD_FLAGS)" --watch src
@@ -72,7 +79,7 @@ package:
     {{cargo}} pgrx package --pg-config {{pkg_pg_config_path}}
 
 test:
-    {{cargo}} test
+    {{cargo}} test {{cargo_profile_arg}}
     {{cargo}} pgrx test
 
 ##########

@@ -53,3 +53,7 @@ panic = "unwind"
 opt-level = 3
 lto = "fat"
 codegen-units = 1
+
+[profile.ci]
+inherits = "test"
+incremental = false

@@ -22,39 +22,16 @@ jobs:
         CARGO_TARGET_DIR: /usr/local/build/target
         SCCACHE_DIR: /usr/local/sccache
         CARGO_BUILD_RUSTC_WRAPPER: /usr/local/cargo/bin/sccache
+        CARGO_INCREMENTAL: "0"
+        CARGO_PROFILE: "ci"
 
     steps:
       # Checkout the repo
       - uses: actions/checkout@v3
 
-      ##############
-      # Code Tests #
-      ##############
-
-      - name: Add idkit to group
-        run: |
-          chgrp -R idkit $HOME &&
-          chgrp -R idkit /__w/pg_idkit &&
-          chmod g+w -R /__w/pg_idkit
-
-      # Run cargo build
-      - name: Run cargo test
-        run: |
-          su idkit -c "cargo build"
-
-      # Run cargo check
-      - name: Run cargo check
-        run: |
-          su idkit -c "cargo check"
-
-      # Run cargo test
-      - name: Run cargo test
-        run: |
-          su idkit -c "cargo test"
-
-      ####################
-      # Post-run Caching #
-      ####################
+      #########
+      # Cache #
+      #########
 
       - name: Cache CARGO_HOME
         uses: actions/cache@v2
@@ -79,3 +56,28 @@ jobs:
           path: |
             /usr/local/sccache
           key: pg_idkit-tests-sccache-${{ matrix.rust_container_version }}-cargo-${{ runner.os }}
+
+      ###############
+      # Build/Tests #
+      ###############
+
+      - name: Add idkit to group
+        run: |
+          chgrp -R idkit $HOME &&
+          chgrp -R idkit /__w/pg_idkit &&
+          chmod g+w -R /__w/pg_idkit
+
+      # Run cargo build
+      - name: Run cargo test
+        run: |
+          su idkit -c "cargo build"
+
+      # Run cargo check
+      - name: Run cargo check
+        run: |
+          su idkit -c "cargo check"
+
+      # Run cargo test
+      - name: Run cargo test
+        run: |
+          su idkit -c "cargo test"

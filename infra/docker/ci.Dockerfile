@@ -4,6 +4,8 @@ FROM rust:1.73.0-slim-bullseye@sha256:9f7ad33ce267070d8982f4503ec83fd0d7cd19c7e3
 ENV CARGO_HOME=/usr/local/cargo
 ENV CARGO_TARGET_DIR=/usr/local/build/target
 ENV SCCACHE_DIR=/usr/local/sccache
+# Disable cargo incremental builds since sccache can't support them
+ENV CARGO_INCREMENTAL=0
 
 # Install deps
 RUN apt update && apt install -y libssl-dev git openssh-client pkg-config curl ca-certificates gnupg wget

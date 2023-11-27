@@ -7,7 +7,8 @@ ENV SCCACHE_DIR=/usr/local/sccache
 
 # Install deps
 RUN apt update && apt install -y libssl-dev git openssh-client pkg-config curl ca-certificates gnupg wget
-RUN cargo install sccache
+RUN cargo install cargo-binstall
+RUN cargo binstall -y sccache --locked
 
 ENV CARGO_BUILD_RUSTC_WRAPPER=/usr/local/cargo/bin/sccache
 
@@ -45,7 +46,6 @@ RUN apt-get update && \
     curl libreadline6-dev zlib1g-dev libclang-dev \
     pkg-config cmake nodejs
 
-
 # Add postgres user to root group
 RUN useradd --user-group --system --create-home --no-log-init idkit && \
     usermod -aG sudo idkit && \
@@ -64,10 +64,16 @@ RUN chmod g+w -R /usr/share/postgresql/**/extension && \
 RUN chmod g+w -R /usr/local/cargo
 RUN chmod g+w -R /usr/local/build
 
-# Install development/build/testing deps
-# NOTE: version of cargo-pgrx must be handled speicfically
-RUN su idkit -c "cargo install sccache cargo-cache cargo-pgrx@0.11.0"
+RUN mkdir /usr/local/sccache
+RUN chmod g+w -R /usr/local/sccache
 
-# Initialize pgrx
+# Install development/build/testing deps
+# NOTE: version of cargo-pgrx must be handled specifically
+RUN su idkit -c "cargo install binstall"
+
+# Install & Initialize pgrx
 # NOTE: pgrx must be reinitialized if cargo-pgrx changes
+RUN su idkit -c "cargo install cargo-pgrx@0.11.0"
 RUN su idkit -c "cargo pgrx init --pg15 download"
+
+RUN su idkit -c "cargo binstall -y sccache cargo-cache cargo-get"

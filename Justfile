@@ -1,9 +1,13 @@
+user := env_var('USER')
+
 docker := env_var_or_default("DOCKER", "docker")
 git := env_var_or_default("GIT", "git")
+strip := env_var_or_default("STRIP", "strip")
 just := env_var_or_default("JUST", just_executable())
 
 cargo := env_var_or_default("CARGO", "cargo")
 cargo_get := env_var_or_default("CARGO_GET", "cargo-get")
+cargo_generate_rpm := env_var_or_default("CARGO_GENERATE_RPM", "cargo-generate-rpm")
 cargo_watch := env_var_or_default("CARGO_WATCH", "cargo-watch")
 cargo_profile := env_var_or_default("CARGO_PROFILE", "")
 cargo_profile_arg := if cargo_profile != "" {
@@ -11,8 +15,20 @@ cargo_profile_arg := if cargo_profile != "" {
 } else {
   ""
 }
+cargo_features := env_var_or_default("CARGO_FEATURES", "")
+cargo_features_arg := if cargo_features != "" {
+  "--features " + cargo_features
+} else {
+  ""
+}
 
 changelog_path := "CHANGELOG"
+
+pkg_pg_version := env_var_or_default("PKG_PG_VERSION", "15.5")
+pkg_pg_config_path := env_var_or_default("PKG_PG_CONFIG_PATH", "~/.pgrx/" + pkg_pg_version + "/pgrx-install/bin/pg_config")
+
+pgrx_pg_version := env_var_or_default("PGRX_PG_VERSION", "pg15")
+pgrx_pkg_output_dir := "target" / "release" / "pg_idkit-" + pgrx_pg_version / "home" / user / ".pgrx" / pkg_pg_version / "pgrx-install"
 
 default:
     {{just}} --list
@@ -36,6 +52,12 @@ _check-installed-version tool msg:
 
 @_check-tool-cargo-get:
     {{just}} _check-installed-version {{cargo_get}} "'cargo-get' not available, please install cargo-get (https://crates.io/crates/cargo-get)"
+
+@_check-tool-strip:
+    {{just}} _check-installed-version {{strip}} "'strip' not available, please install strip (https://www.man7.org/linux/man-pages/man1/strip.1.html)"
+
+@_check-tool-cargo-generate-rpm:
+    {{just}} _check-installed-version {{cargo_generate_rpm}} "'cargo-generate-rpm' not available, please install cargo-generate-rpm (https://crates.io/crates/cargo-generate-rpm)"
 
 #########
 # Build #
@@ -64,7 +86,10 @@ changelog:
     {{git}} cliff --unreleased --tag=$(VERSION) --prepend=$(CHANGELOG_FILE_PATH)
 
 build:
-    {{cargo}} build {{cargo_profile_arg}}
+    {{cargo}} build {{cargo_features_arg}} {{cargo_profile_arg}}
+
+build-release:
+    {{cargo}} build --release {{cargo_features_arg}}
 
 build-watch: _check-tool-cargo _check-tool-cargo-watch
     {{cargo_watch}} -x "build $(CARGO_BUILD_FLAGS)" --watch src
@@ -72,11 +97,8 @@ build-watch: _check-tool-cargo _check-tool-cargo-watch
 build-test-watch: _check-tool-cargo _check-tool-cargo-watch
     {{cargo_watch}} -x "test $(CARGO_BUILD_FLAGS)" --watch src
 
-pkg_pg_version := env_var_or_default("PKG_PG_VERSION", "15.5")
-pkg_pg_config_path := env_var_or_default("PKG_PG_CONFIG_PATH", "~/.pgrx/" + pkg_pg_version + "/pgrx-install/bin/pg_config")
-
 package:
-    {{cargo}} pgrx package --pg-config {{pkg_pg_config_path}}
+    PGRX_IGNORE_RUST_VERSIONS=y {{cargo}} pgrx package --pg-config {{pkg_pg_config_path}}
 
 test:
     {{cargo}} test {{cargo_profile_arg}}
@@ -185,3 +207,29 @@ build-image:
 # Push the docker image for pg_idkit
 push-image:
     {{docker}} push {{pgidkit_image_name_full}}
+
+#######
+# RPM #
+#######
+
+rpm_arch := env_var_or_default("RPM_ARCH", "x86_64")
+
+rpm_file_name := env_var_or_default("RPM_OUTPUT_PATH", "pg_idkit-" + version + "-" + pgrx_pg_version + "." + rpm_arch + ".rpm")
+rpm_output_path := "target" / "generate-rpm" / rpm_file_name
+
+# Cargo.toml depends on this file being at the location below.
+rpm_scratch_location := "/tmp/pg_idkit/rpm/scratch"
+
+# Build an RPM distribution for pg_idkit
+build-rpm: _check-tool-strip _check-tool-cargo-generate-rpm
+    CARGO_FEATURES={{pgrx_pg_version}} {{just}} build-release
+    {{strip}} -s {{pgrx_pkg_output_dir}}/lib/postgresql/pg_idkit.so
+    mkdir -p {{rpm_scratch_location}}
+    cp -r {{pgrx_pkg_output_dir}} {{rpm_scratch_location}}
+    {{cargo_generate_rpm}} --variant {{pgrx_pg_version}}
+
+@print-rpm-output-file-name:
+    echo -n {{rpm_file_name}}
+
+@print-rpm-output-path:
+    echo -n {{rpm_output_path}}

@@ -31,18 +31,6 @@ postgres=# SELECT idkit_uuidv7_generate();
 
 This Postgres extension is made possible thanks to [`pgrx`][pgrx].
 
-## Prior Art
-
-There are some other projects in the Postgres ecosystem that implement alternative UUID generation mechanisms.
-
-Here are some you may or may not have heard of:
-
-- [spa5k/uids-postgres](https://github.com/spa5k/uids-postgres)
-- [`scoville/pgsql-ulid`](https://github.com/scoville/pgsql-ulid)
-- [`pg-xid`](https://github.com/modfin/pg-xid)
-- [`geckoboard/pgulid`](https://github.com/geckoboard/pgulid)
-- [this gist by `fabiolimace` for generating UUIDv6](https://gist.github.com/fabiolimace/515a0440e3e40efeb234e12644a6a346)
-
 ## Quickstart
 
 You can try out `pg_idkit` incredibly quickly by using `docker`, and a previously [released package of `pg_idkit`][released-packages]:
@@ -217,6 +205,18 @@ dnf install pg_idkit-0.1.0-pg15.x86_64.rpm
 ```
 
 </details>
+
+## Prior Art
+
+There are some other projects in the Postgres ecosystem that implement alternative UUID generation mechanisms.
+
+Here are some you may or may not have heard of:
+
+- [spa5k/uids-postgres](https://github.com/spa5k/uids-postgres)
+- [`scoville/pgsql-ulid`](https://github.com/scoville/pgsql-ulid)
+- [`pg-xid`](https://github.com/modfin/pg-xid)
+- [`geckoboard/pgulid`](https://github.com/geckoboard/pgulid)
+- [this gist by `fabiolimace` for generating UUIDv6](https://gist.github.com/fabiolimace/515a0440e3e40efeb234e12644a6a346)
 
 ## Setting up for local development
 

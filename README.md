@@ -260,7 +260,6 @@ If you'd like to contribute code, get started by:
 [cuid2]: https://github.com/paralleldrive/cuid2
 [cuid]: https://github.com/paralleldrive/cuid
 [direnv]: https://direnv.net
-[direnv]: https://direnv.net
 [docker]: https://docs.docker.com/get-started/overview/
 [e-elliott]: https://github.com/ericelliott
 [git-crypt]: https://github.com/AGWA/git-crypt

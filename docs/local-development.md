@@ -89,3 +89,13 @@ You may attach to the local DB with `psql` and execute commands:
 ```console
 just db-local-psql
 ```
+
+[rust]: https://rust-lang.org
+[rustup]: https://rust-lang.github.io/rustup
+[cargo-get]: https://crates.io/crates/cargo-get
+[cargo-pgrx]: https://crates.io/crates/cargo-pgrx
+[cargo-watch]: https://github.com/passcod/cargo-watch
+[just]: https://github.com/casey/just
+[git-crypt]: https://github.com/AGWA/git-crypt
+[direnv]: https://direnv.net
+[docker]: https://docs.docker.com/get-started/overview/

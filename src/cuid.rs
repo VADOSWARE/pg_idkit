@@ -1,9 +1,9 @@
 use std::io;
 
-use chrono::{Datelike, NaiveDateTime, Timelike};
+use chrono::NaiveDateTime;
 use pgrx::*;
 
-use crate::common::OrPgxError;
+use crate::common::{naive_datetime_to_pg_timestamptz, OrPgxError};
 
 /// Generate a random cuid UUID
 #[pg_extern]
@@ -27,7 +27,9 @@ fn idkit_cuid_generate_text() -> String {
 
 /// Retrieve a `timestamptz` from a given textual CUID
 ///
-/// If the value is not a valid CUID, this function will throw an error
+/// # Panics
+///
+/// This function panics (with a [`pgrx::error`]) when the timezone can't be created
 #[pg_extern]
 fn idkit_cuid_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
     #[allow(deprecated)]
@@ -55,24 +57,7 @@ fn idkit_cuid_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
         .or_pgrx_error("failed to parse timestamp from millis")
         .and_utc();
 
-    pgrx::TimestampWithTimeZone::with_timezone(
-        now.year(),
-        now.month()
-            .try_into()
-            .or_pgrx_error("failed to convert months"),
-        now.day().try_into().or_pgrx_error("failed to convert days"),
-        now.hour()
-            .try_into()
-            .or_pgrx_error("failed to convert hours"),
-        now.minute()
-            .try_into()
-            .or_pgrx_error("failed to convert minutes"),
-        now.second()
-            .try_into()
-            .or_pgrx_error("failed to convert seconds"),
-        "utc",
-    )
-    .or_pgrx_error("failed to convert timestamp")
+    naive_datetime_to_pg_timestamptz(now, format!("failed to convert timestamp for CUID [{val}]"))
 }
 
 //////////
@@ -89,14 +74,14 @@ mod tests {
 
     /// Ensure generated CUIDs are a well-known length
     #[pg_test]
-    fn test_len() {
+    fn test_cuid_len() {
         let generated = idkit_cuid_generate();
         assert_eq!(generated.len(), 25);
     }
 
     /// Ensure timestamps extracted from CUIDs are valid
     #[pg_test]
-    fn test_extract_timestamptz() {
+    fn test_cuid_extract_timestamptz() {
         let cuid = idkit_cuid_generate();
         let timestamp = idkit_cuid_extract_timestamptz(cuid.clone());
         let parsed: DateTime<Utc> = DateTime::parse_from_rfc3339(&timestamp.to_iso_string())

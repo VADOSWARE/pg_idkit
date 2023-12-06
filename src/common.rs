@@ -1,3 +1,5 @@
+use chrono::{Datelike, Timelike};
+
 /// A trait that encapsulates things that can be converted to some type
 /// or to an error if conversion fails (ex. Result, Option, etc)
 pub(crate) trait OrPgxError<T> {
@@ -25,4 +27,31 @@ impl<T> OrPgxError<T> for Option<T> {
             None => pgrx::error!("{}", prefix.as_ref()),
         }
     }
+}
+
+/// Convert a naive datetime to a Postgres (PGRX) timestamptz
+///
+/// # Panics
+///
+/// This function panics (with a [`pgrx::error`]) when the timezone can't be created
+pub(crate) fn naive_datetime_to_pg_timestamptz(
+    t: impl Datelike + Timelike,
+    msg: impl AsRef<str>,
+) -> pgrx::TimestampWithTimeZone {
+    pgrx::TimestampWithTimeZone::with_timezone(
+        t.year(),
+        t.month()
+            .try_into()
+            .or_pgrx_error("failed to convert months"),
+        t.day().try_into().or_pgrx_error("failed to convert days"),
+        t.hour().try_into().or_pgrx_error("failed to convert hours"),
+        t.minute()
+            .try_into()
+            .or_pgrx_error("failed to convert minutes"),
+        t.second()
+            .try_into()
+            .or_pgrx_error("failed to convert seconds"),
+        "utc",
+    )
+    .or_pgrx_error(msg.as_ref())
 }

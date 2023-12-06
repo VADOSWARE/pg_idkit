@@ -3,6 +3,7 @@ mod common;
 mod cuid;
 mod cuid2;
 mod ksuid;
+mod ksuid_ms;
 mod nanoid;
 mod pushid;
 mod timeflake;

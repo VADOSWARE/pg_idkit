@@ -1,20 +1,23 @@
 use chrono::NaiveDateTime;
 use pgrx::*;
 use std::str::FromStr;
-use svix_ksuid::{Ksuid, KsuidLike};
+use svix_ksuid::{KsuidLike, KsuidMs};
 
 use crate::common::{naive_datetime_to_pg_timestamptz, OrPgxError};
 
 /// Generate a random KSUID (HEX-encoded), with millisecond precision
+///
+/// Millisecond precision is achieved by using a extra byte (taking one from
+/// those used for randomness) for timestamp (see [`svix_ksuid`])
 #[pg_extern]
-fn idkit_ksuid_generate() -> String {
-    Ksuid::new(None, None).to_string()
+fn idkit_ksuidms_generate() -> String {
+    KsuidMs::new(None, None).to_string()
 }
 
 /// Generate a random KSUID, producing a Postgres text object (HEX-encoded)
 #[pg_extern]
-fn idkit_ksuid_generate_text() -> String {
-    idkit_ksuid_generate()
+fn idkit_ksuidms_generate_text() -> String {
+    idkit_ksuidms_generate()
 }
 
 /// Retrieve a `timestamptz` (with millisecond precision) from a given textual KSUID
@@ -23,8 +26,10 @@ fn idkit_ksuid_generate_text() -> String {
 ///
 /// This function panics (with a [`pgrx::error`]) when the timezone can't be created
 #[pg_extern]
-fn idkit_ksuid_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
-    let ksuid = Ksuid::from_str(val.as_ref()).or_pgrx_error(format!("[{val}] is an invalid KSUID"));
+fn idkit_ksuidms_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
+    let ksuid =
+        KsuidMs::from_str(val.as_ref()).or_pgrx_error(format!("[{val}] is an invalid KSUID"));
+
     naive_datetime_to_pg_timestamptz(
         NaiveDateTime::from_timestamp_opt(ksuid.timestamp_seconds(), 0)
             .or_pgrx_error("failed to create timestamp from KSUID [{val}]")
@@ -43,19 +48,19 @@ mod tests {
     use chrono::{DateTime, Utc};
     use pgrx::*;
 
-    use crate::ksuid::idkit_ksuid_extract_timestamptz;
-    use crate::ksuid::idkit_ksuid_generate;
+    use crate::ksuid_ms::idkit_ksuidms_extract_timestamptz;
+    use crate::ksuid_ms::idkit_ksuidms_generate;
 
     /// Basic length test (ksuids are always 27 characters)
     #[pg_test]
-    fn test_ksuid_len() {
-        assert_eq!(idkit_ksuid_generate().len(), 27);
+    fn test_ksuidms_len() {
+        assert_eq!(idkit_ksuidms_generate().len(), 27);
     }
 
     /// Ensure timestamps extracted from CUIDs are valid
     #[pg_test]
-    fn test_ksuid_extract_timestamptz() {
-        let timestamp = idkit_ksuid_extract_timestamptz(idkit_ksuid_generate());
+    fn test_ksuidms_extract_timestamptz() {
+        let timestamp = idkit_ksuidms_extract_timestamptz(idkit_ksuidms_generate());
         let parsed: DateTime<Utc> = DateTime::parse_from_rfc3339(&timestamp.to_iso_string())
             .expect("extracted timestamp as ISO string parsed to UTC DateTime")
             .into();
@@ -67,7 +72,8 @@ mod tests {
 
     /// Ensure an existing, hardcoded timestamp works for extraction
     #[pg_test]
-    fn test_ksuid_extract_timestamptz_existing() {
-        idkit_ksuid_extract_timestamptz("1srOrx2ZWZBpBUvZwXKQmoEYga2".into());
+    fn test_ksuidms_extract_timestamptz_existing() {
+        let result = idkit_ksuidms_extract_timestamptz("1srOrx2ZWZBpBUvZwXKQmoEYga2".into());
+        eprintln!("RESULT: {result:#?}");
     }
 }

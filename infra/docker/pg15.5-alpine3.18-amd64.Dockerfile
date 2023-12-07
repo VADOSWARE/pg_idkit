@@ -4,6 +4,9 @@
 #
 FROM ghcr.io/vadosware/pg_idkit/base-pkg:0.1.x-pg15.5-alpine3.18-amd64 AS builder
 
+ARG USER
+ENV USER=$USER
+
 # Re-run the build with the latest code
 WORKDIR /pg_idkit
 COPY . .

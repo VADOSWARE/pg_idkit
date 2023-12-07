@@ -622,12 +622,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "fstr"
-version = "0.2.10"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b51da7feff6f685a1d467b251d4238c0a284dd5a1eca574500a8bcf16cf6985"
-
-[[package]]
 name = "fuchsia-cprng"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1277,7 +1271,6 @@ dependencies = [
  "timeflake-rs",
  "ulid",
  "uuid",
- "uuid7",
  "xid",
 ]
 
@@ -2473,17 +2466,6 @@ checksum = "5e395fcf16a7a3d8127ec99782007af141946b4795001f876d54fb0d55978560"
 dependencies = [
  "atomic",
  "getrandom",
-]
-
-[[package]]
-name = "uuid7"
-version = "0.7.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fcba843a27a44d6bfbc8852222af425ebd04da999d898df30fd2ed16abe469ac"
-dependencies = [
- "fstr",
- "rand 0.8.5",
- "rand_chacha",
 ]
 
 [[package]]

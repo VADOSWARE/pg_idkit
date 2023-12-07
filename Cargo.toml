@@ -37,8 +37,7 @@ pushid = "0.0.1"
 sonyflake = "0.2"
 timeflake-rs = "0.3"
 ulid = "1.1"
-uuid7 = "0.7"
-uuid = { version = "1.6", features = [ "v6" ] }
+uuid = { version = "1.6", features = [ "v6", "v7" ] }
 xid = "1.0"
 miette = { version = "5.10", features = ["fancy"] }
 time = "0.3"

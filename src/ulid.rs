@@ -1,6 +1,9 @@
+use std::str::FromStr;
+
 use chrono::NaiveDateTime;
 use pgrx::*;
 use ulid::Ulid;
+use uuid::Uuid;
 
 use crate::common::{naive_datetime_to_pg_timestamptz, OrPgrxError};
 
@@ -14,6 +17,20 @@ fn idkit_ulid_generate() -> String {
 #[pg_extern]
 fn idkit_ulid_generate_text() -> String {
     idkit_ulid_generate()
+}
+
+/// Generate a ULID from an existing UUID
+#[pg_extern]
+fn idkit_ulid_from_uuid(uuid: pgrx::Uuid) -> String {
+    let s = uuid.to_string();
+    Ulid::from(Uuid::from_str(&s).or_pgrx_error(format!("failed to parse UUID [{s}]"))).to_string()
+}
+
+/// Generate a ULID from text of an existing UUID
+#[pg_extern]
+fn idkit_ulid_from_uuid_text(uuid: String) -> String {
+    Ulid::from(Uuid::from_str(&uuid).or_pgrx_error(format!("failed to parse UUID text [{uuid}]")))
+        .to_string()
 }
 
 /// Retrieve a `timestamptz` (with millisecond precision) from a given textual ULID
@@ -46,8 +63,12 @@ mod tests {
     use chrono::{DateTime, Utc};
     use pgrx::datum::datetime_support::ToIsoString;
     use pgrx::pg_test;
+    use uuid::Uuid;
 
+    use crate::common::OrPgrxError;
     use crate::ulid::idkit_ulid_extract_timestamptz;
+    use crate::ulid::idkit_ulid_from_uuid;
+    use crate::ulid::idkit_ulid_from_uuid_text;
     use crate::ulid::idkit_ulid_generate_text;
 
     /// Basic length test
@@ -70,9 +91,25 @@ mod tests {
         );
     }
 
-    /// Ensure an existing, hardcoded timestamp works for extraction
+    /// Ensure an existing, hardcoded value works for extraction
     #[pg_test]
     fn test_ulid_extract_timestamptz_existing() {
         idkit_ulid_extract_timestamptz("01ARZ3NDEKTSV4RRFFQ69G5FAV".into());
+    }
+
+    /// Ensure a PG UUID can be turned into a ULID
+    #[pg_test]
+    fn test_ulid_from_uuid() {
+        idkit_ulid_from_uuid(
+            pgrx::Uuid::from_slice(Uuid::now_v7().as_bytes())
+                .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, format!("{e:?}")))
+                .or_pgrx_error("failed to convert"),
+        );
+    }
+
+    /// Ensure a textual UUID can be turned into a ULID
+    #[pg_test]
+    fn test_ulid_from_uuid_text() {
+        idkit_ulid_from_uuid_text(Uuid::now_v7().to_string());
     }
 }

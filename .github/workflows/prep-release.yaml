@@ -1,0 +1,58 @@
+name: release-pr
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to release (ex. `v0.1.0`)
+        required: false
+        type: string
+
+jobs:
+  make-release-pr:
+    permissions:
+      id-token: write
+      pull-requests: write
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      # Set up caching
+      - uses: Swatinem/rust-cache@v2
+      - name: Cache default PGRX_HOME
+        uses: actions/cache@v2
+        continue-on-error: false
+        with:
+          path: |
+            /home/runner/.pgrx
+          key: pg_idkit-pkg-rpm-pgrx-${{ matrix.config.rpm.arch }}-${{ runner.os }}
+
+      # Install deps
+      - uses: chainguard-dev/actions/setup-gitsign@main
+      - name: Install cargo-release
+        uses: taiki-e/install-action@v1
+        with:
+          tool: cargo-release,just,cargo-get,cargo-pgrx,git-cliff
+
+      # Initialize PGRX
+      - name: Initialize cargo-pgrx
+        run: |
+          [[ -d /home/runner/.pgrx ]] || cargo pgrx init
+
+      # Prep the project
+      - name: Determine version
+        id: determine-version
+        env:
+          VERSION: ${{inputs.version}}
+        run: |
+          echo value=$(just print-version) >> $GITHUB_OUTPUT
+      - name: Generate changelog
+        run: |
+          just changelog
+
+      # Create PR for release
+      - uses: cargo-bins/release-pr@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          # TODO: We should configure the PR text
+          version: ${{ steps.determine-version.outputs.value }}

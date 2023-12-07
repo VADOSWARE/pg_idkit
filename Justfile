@@ -22,7 +22,7 @@ cargo_features_arg := if cargo_features != "" {
   ""
 }
 
-changelog_path := "CHANGELOG"
+changelog_file_path := absolute_path(justfile_directory() / "CHANGELOG")
 
 pkg_pg_version := env_var_or_default("PKG_PG_VERSION", "15.5")
 pkg_pg_config_path := env_var_or_default("PKG_PG_CONFIG_PATH", "~/.pgrx/" + pkg_pg_version + "/pgrx-install/bin/pg_config")
@@ -63,8 +63,8 @@ _check-installed-version tool msg:
 # Build #
 #########
 
-version := `cargo get package.version`
-revision := `git rev-parse --short HEAD`
+version := env_var_or_default("VERSION", `cargo get package.version`)
+revision := env_var_or_default("REVISION", `git rev-parse --short HEAD`)
 
 # NOTE: we can't use this as the official version getter until
 # see: https://github.com/nicolaiunrein/cargo-get/issues/14
@@ -83,7 +83,7 @@ print-revision:
     echo -n `{{just}} get-revision`
 
 changelog:
-    {{git}} cliff --unreleased --tag=$(VERSION) --prepend=$(CHANGELOG_FILE_PATH)
+    {{git}} cliff --unreleased --tag={{version}} --prepend={{changelog_file_path}}
 
 lint:
     {{cargo}} clippy {{cargo_features_arg}} {{cargo_profile_arg}} --all-targets

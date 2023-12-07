@@ -14,7 +14,7 @@ postgres=# SELECT idkit_uuidv7_generate();
 
 ## Description
 
-`pg_idkit` is a [Postgres][postgres] extension for generating IDs. It aims to be have just about every ID you'd normally think of using:
+`pg_idkit` is a [Postgres][postgres] extension for generating many popular types of identifiers:
 
 | Methodology               | Function                                    | Crate                                | Description                                              |
 |---------------------------|---------------------------------------------|--------------------------------------|----------------------------------------------------------|

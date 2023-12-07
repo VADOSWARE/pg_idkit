@@ -86,7 +86,7 @@ changelog:
     {{git}} cliff --unreleased --tag=$(VERSION) --prepend=$(CHANGELOG_FILE_PATH)
 
 lint:
-    {{cargo}} clippy --all-features --all-targets
+    {{cargo}} clippy {{cargo_features_arg}} {{cargo_profile_arg}} --all-targets
 
 build:
     {{cargo}} build {{cargo_features_arg}} {{cargo_profile_arg}}

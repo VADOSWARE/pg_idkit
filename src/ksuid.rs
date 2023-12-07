@@ -3,7 +3,7 @@ use pgrx::*;
 use std::str::FromStr;
 use svix_ksuid::{Ksuid, KsuidLike};
 
-use crate::common::{naive_datetime_to_pg_timestamptz, OrPgxError};
+use crate::common::{naive_datetime_to_pg_timestamptz, OrPgrxError};
 
 /// Generate a random KSUID (HEX-encoded), with millisecond precision
 #[pg_extern]

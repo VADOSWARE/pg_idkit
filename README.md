@@ -35,7 +35,7 @@ postgres=# SELECT idkit_uuidv7_generate();
 |                           | `idkit_timeflake_extract_timestamptz(TEXT)` |                                      |                                                          |
 | [PushID][pushid]          | `idkit_pushid_generate()`                   | [`pushid`][crate-pushid]             | Google Firebase's PushID                                 |
 | [xid][xid]                | `idkit_xid_generate()`                      | [`xid`][crate-xid]                   | XID                                                      |
-|                           | `idkit_xid_extract_timestamptz(TEXT)`     |                                      |                                                          |
+|                           | `idkit_xid_extract_timestamptz(TEXT)`       |                                      |                                                          |
 | [cuid][cuid] (deprecated) | `idkit_cuid_generate()`                     | [`cuid`][crate-cuid]                 | CUID                                                     |
 |                           | `idkit_cuid_extract_timestamptz(TEXT)`      |                                      |                                                          |
 | [cuid2][cuid2]            | `idkit_cuid2_generate()`                    | [`cuid2`][crate-cuid2]               | CUID2                                                    |

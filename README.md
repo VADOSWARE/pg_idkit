@@ -16,22 +16,28 @@ postgres=# SELECT idkit_uuidv7_generate();
 
 `pg_idkit` is a [Postgres][postgres] extension for generating IDs. It aims to be have just about every ID you'd normally think of using:
 
-| Methodology               | Function                                  | Crate                                | Description                                              |
-|---------------------------|-------------------------------------------|--------------------------------------|----------------------------------------------------------|
-| [UUID v6][uuidv6]         | `idkit_uuidv6_generate()`                 | [`uuidv6`][crate-uuidv6]             | UUID v6 ([RFC 4122][rfc-4122-update])                    |
-| [UUID v7][uuidv7]         | `idkit_uuidv7_generate()`                 | [`uuid7`][crate-uuid7]               | UUID v7 ([RFC 4122][rfc-4122-update])                    |
-| [nanoid][nanoid]          | `idkit_nanoid_generate()`                 | [`nanoid`][crate-nanoid]             | NanoID, developed by [Andrey Sitnik][github-ai]          |
-| [ksuid][ksuid]            | `idkit_ksuid_generate()`                  | [`svix-ksuid`][crate-svix-ksuid]     | Created by [Segment][segment]                            |
-|                           | `idkit_ksuid_extract_timestamptz(TEXT)`   |                                      |                                                          |
-| [ksuid][ksuid]            | `idkit_ksuidms_generate()`                | [`svix-ksuid`][crate-svix-ksuid]     | Same as `ksuid` but with millisecond precision           |
-|                           | `idkit_ksuidms_extract_timestamptz(TEXT)` |                                      |                                                          |
-| [ulid][ulid]              | `idkit_ulid_generate()`                   | [`ulid`][crate-ulid]                 | Unique, lexicographically sortable identifiers           |
-| [Timeflake][timeflake]    | `idkit_timeflake_generate()`              | [`timeflake-rs`][crate-timeflake-rs] | Twitter's Snowflake + Instagram's ID + Firebase's PushID |
-| [PushID][pushid]          | `idkit_pushid_generate()`                 | [`pushid`][crate-pushid]             | Google Firebase's PushID                                 |
-| [xid][xid]                | `idkit_xid_generate()`                    | [`xid`][crate-xid]                   | XID                                                      |
-| [cuid][cuid] (deprecated) | `idkit_cuid_generate()`                   | [`cuid`][crate-cuid]                 | CUID                                                     |
-|                           | `idkit_cuid_extract_timestamptz(TEXT)`    |                                      |                                                          |
-| [cuid2][cuid2]            | `idkit_cuid2_generate()`                  | [`cuid2`][crate-cuid2]               | CUID2                                                    |
+| Methodology               | Function                                    | Crate                                | Description                                              |
+|---------------------------|---------------------------------------------|--------------------------------------|----------------------------------------------------------|
+| [UUID v6][uuidv6]         | `idkit_uuidv6_generate()`                   | [`uuidv6`][crate-uuidv6]             | UUID v6 ([RFC 4122][rfc-4122-update])                    |
+|                           | `idkit_uuidv6_generate_uuid()`              |                                      |                                                          |
+|                           | `idkit_uuidv6_extract_timestamptz(TEXT)`    |                                      |                                                          |
+| [UUID v7][uuidv7]         | `idkit_uuidv7_generate()`                   | [`uuid7`][crate-uuid7]               | UUID v7 ([RFC 4122][rfc-4122-update])                    |
+|                           | `idkit_uuidv7_generate_uuid()`              |                                      |                                                          |
+|                           | `idkit_uuidv7_extract_timestamptz(TEXT)`    |                                      |                                                          |
+| [nanoid][nanoid]          | `idkit_nanoid_generate()`                   | [`nanoid`][crate-nanoid]             | NanoID, developed by [Andrey Sitnik][github-ai]          |
+| [ksuid][ksuid]            | `idkit_ksuid_generate()`                    | [`svix-ksuid`][crate-svix-ksuid]     | Created by [Segment][segment]                            |
+|                           | `idkit_ksuid_extract_timestamptz(TEXT)`     |                                      |                                                          |
+| [ksuid][ksuid]            | `idkit_ksuidms_generate()`                  | [`svix-ksuid`][crate-svix-ksuid]     | Same as `ksuid` but with millisecond precision           |
+|                           | `idkit_ksuidms_extract_timestamptz(TEXT)`   |                                      |                                                          |
+| [ulid][ulid]              | `idkit_ulid_generate()`                     | [`ulid`][crate-ulid]                 | Unique, lexicographically sortable identifiers           |
+|                           | `idkit_ulid_extract_timestamptz(TEXT)`      |                                      |                                                          |
+| [Timeflake][timeflake]    | `idkit_timeflake_generate()`                | [`timeflake-rs`][crate-timeflake-rs] | Twitter's Snowflake + Instagram's ID + Firebase's PushID |
+|                           | `idkit_timeflake_extract_timestamptz(TEXT)` |                                      |                                                          |
+| [PushID][pushid]          | `idkit_pushid_generate()`                   | [`pushid`][crate-pushid]             | Google Firebase's PushID                                 |
+| [xid][xid]                | `idkit_xid_generate()`                      | [`xid`][crate-xid]                   | XID                                                      |
+| [cuid][cuid] (deprecated) | `idkit_cuid_generate()`                     | [`cuid`][crate-cuid]                 | CUID                                                     |
+|                           | `idkit_cuid_extract_timestamptz(TEXT)`      |                                      |                                                          |
+| [cuid2][cuid2]            | `idkit_cuid2_generate()`                    | [`cuid2`][crate-cuid2]               | CUID2                                                    |
 
 This Postgres extension is made possible thanks to [`pgrx`][pgrx].
 

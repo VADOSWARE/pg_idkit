@@ -3,7 +3,7 @@ use std::io;
 use chrono::NaiveDateTime;
 use pgrx::*;
 
-use crate::common::{naive_datetime_to_pg_timestamptz, OrPgxError};
+use crate::common::{naive_datetime_to_pg_timestamptz, OrPgrxError};
 
 /// Generate a random cuid UUID
 #[pg_extern]

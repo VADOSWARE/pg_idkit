@@ -2,13 +2,13 @@ use chrono::{Datelike, Timelike};
 
 /// A trait that encapsulates things that can be converted to some type
 /// or to an error if conversion fails (ex. Result, Option, etc)
-pub(crate) trait OrPgxError<T> {
+pub(crate) trait OrPgrxError<T> {
     /// Convert the given type to a T, possibly failing
     /// and calling [`pgrx::error`], with a given prefix if an error is returned
     fn or_pgrx_error(self, prefix: impl AsRef<str>) -> T;
 }
 
-impl<T, E> OrPgxError<T> for Result<T, E>
+impl<T, E> OrPgrxError<T> for Result<T, E>
 where
     E: std::error::Error,
 {
@@ -20,7 +20,7 @@ where
     }
 }
 
-impl<T> OrPgxError<T> for Option<T> {
+impl<T> OrPgrxError<T> for Option<T> {
     fn or_pgrx_error(self, prefix: impl AsRef<str>) -> T {
         match self {
             Some(v) => v,

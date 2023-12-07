@@ -41,7 +41,7 @@ fn idkit_ksuid_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
 #[pg_schema]
 mod tests {
     use chrono::{DateTime, Utc};
-    use pgrx::*;
+    use pgrx::pg_test;
 
     use crate::ksuid::idkit_ksuid_extract_timestamptz;
     use crate::ksuid::idkit_ksuid_generate;

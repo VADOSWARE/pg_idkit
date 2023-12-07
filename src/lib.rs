@@ -10,6 +10,7 @@ mod timeflake;
 mod ulid;
 mod uuid_v6;
 mod uuid_v7;
+mod vendor;
 mod xid;
 
 use pgrx::pg_module_magic;

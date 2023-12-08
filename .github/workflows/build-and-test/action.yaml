@@ -70,9 +70,17 @@ runs:
           ${{ inputs.sccache-dir }}
         key: pg_idkit-tests-sccache-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}
 
-    ###############
-    # Build/Tests #
-    ###############
+    - name: Cache pgrx init
+      uses: actions/cache@v3
+      continue-on-error: false
+      with:
+        path: |
+          /home/${{ inputs.user }}/.pgrx
+        key: pg_idkit-tests-pgrx-init-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}
+
+    #########
+    # Setup #
+    #########
 
     - name: Add idkit to group
       shell: bash
@@ -87,6 +95,41 @@ runs:
       run: |
         git config --global --add safe.directory /__w/pg_idkit/pg_idkit
         su idkit -c "git config --global --add safe.directory /__w/pg_idkit/pg_idkit"
+
+
+    - name: Reinstall deps due to GLIBC issue
+      if: ${{ inputs.artifact-upload }}
+      shell: bash
+      env:
+        CARGO_HOME: ${{ inputs.cargo-home-dir }}
+        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
+        SCCACHE_DIR: ${{ inputs.sccache-dir }}
+        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
+        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
+        CARGO_PROFILE: ${{ inputs.cargo-profile }}
+        USER: ${{ inputs.user }}
+        PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
+      run: |
+        su idkit -c "cargo install --force cargo-get cargo-edit"
+
+    ###############
+    # Build/Tests #
+    ###############
+
+    # Initialize cargo-pgrx if necessary
+    - name: Initialize cargo-pgrx
+      shell: bash
+      env:
+        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
+        CARGO_HOME: ${{ inputs.cargo-home-dir }}
+        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
+        CARGO_PROFILE: ${{ inputs.cargo-profile }}
+        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
+        PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
+        SCCACHE_DIR: ${{ inputs.sccache-dir }}
+        USER: ${{ inputs.user }}
+      run: |
+        su idkit -c "just pgrx-init"
 
     # Run cargo check
     - name: Run cargo check
@@ -135,21 +178,6 @@ runs:
     #############
     # Artifacts #
     #############
-
-    - name: Reinstall deps due to GLIBC issue
-      if: ${{ inputs.artifact-upload }}
-      shell: bash
-      env:
-        CARGO_HOME: ${{ inputs.cargo-home-dir }}
-        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
-        SCCACHE_DIR: ${{ inputs.sccache-dir }}
-        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
-        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
-        CARGO_PROFILE: ${{ inputs.cargo-profile }}
-        USER: ${{ inputs.user }}
-        PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
-      run: |
-        su idkit -c "cargo install --force cargo-get cargo-edit"
 
     # Run cargo test
     - name: Build a package

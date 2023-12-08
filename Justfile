@@ -25,10 +25,10 @@ cargo_features_arg := if cargo_features != "" {
 
 changelog_file_path := absolute_path(justfile_directory() / "CHANGELOG")
 
-pkg_pg_version := env_var_or_default("PKG_PG_VERSION", "15.5")
+pkg_pg_version := env_var_or_default("PKG_PG_VERSION", "16.1")
 pkg_pg_config_path := env_var_or_default("PKG_PG_CONFIG_PATH", "~/.pgrx/" + pkg_pg_version + "/pgrx-install/bin/pg_config")
 
-pgrx_pg_version := env_var_or_default("PGRX_PG_VERSION", "pg15")
+pgrx_pg_version := env_var_or_default("PGRX_PG_VERSION", "pg16")
 pgrx_pkg_path_prefix := env_var_or_default("PGRX_PKG_PATH_PREFIX", "target")
 pgrx_pkg_output_dir := pgrx_pkg_path_prefix / "release" / "pg_idkit-" + pgrx_pg_version / "home" / user / ".pgrx" / pkg_pg_version / "pgrx-install"
 
@@ -82,6 +82,9 @@ print-revision:
     #!/usr/bin/env -S bash -euo pipefail
     echo -n `{{just}} get-revision`
 
+print-pkg-output-dir:
+    echo -n {{pgrx_pkg_output_dir}}
+
 changelog:
     {{git}} cliff --unreleased --tag={{version}} --prepend={{changelog_file_path}}
 
@@ -110,12 +113,16 @@ package:
     cp -r $({{just}} print-pkg-output-dir)/* pkg/pg_idkit-$({{just}} print-version)
     {{tar}} -C pkg -cvf pg_idkit-$(just print-version).tar.gz  pg_idkit-$({{just}} print-version)
 
-print-pkg-output-dir:
-    echo -n {{pgrx_pkg_output_dir}}
-
 test:
     {{cargo}} test {{cargo_profile_arg}}
     {{cargo}} pgrx test
+
+pgrx-init:
+    #!/usr/bin/env -S bash -euo pipefail
+    if [ ! -d "{{pkg_pg_config_path}}" ]; then
+      echo "failed to find pgrx init dir [{{pkg_pg_config_path}}], running pgrx init...";
+      {{cargo}} pgrx init
+    fi
 
 ##########
 # Docker #
@@ -123,7 +130,7 @@ test:
 
 container_img_arch := env_var_or_default("CONTAINER_IMAGE_ARCH", "amd64")
 
-pg_image_version := env_var_or_default("POSTGRES_IMAGE_VERSION", "15.5")
+pg_image_version := env_var_or_default("POSTGRES_IMAGE_VERSION", "16.1")
 pg_os_image_version := env_var_or_default("POSTGRES_OS_IMAGE_VERSION", "alpine3.18")
 
 pgidkit_image_name := env_var_or_default("PGIDKIT_IMAGE_NAME", "ghcr.io/vadosware/pg_idkit")

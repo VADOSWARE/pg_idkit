@@ -16,12 +16,13 @@ crate-type = ["cdylib"]
 maintenance = { status = "actively-maintained" }
 
 [features]
-default = ["pg15"]
+default = ["pg16"]
 pg11 = ["pgrx/pg11", "pgrx-tests/pg11"]
 pg12 = ["pgrx/pg12", "pgrx-tests/pg12"]
 pg13 = ["pgrx/pg13", "pgrx-tests/pg13"]
 pg14 = ["pgrx/pg14", "pgrx-tests/pg14"]
 pg15 = ["pgrx/pg15", "pgrx-tests/pg15"]
+pg16 = ["pgrx/pg16", "pgrx-tests/pg16"]
 pg_test = []
 
 [dependencies]
@@ -105,3 +106,12 @@ assets = [
 ]
 requires = { postgresql-server = "> 15", glibc = "*" }
 release = "pg15"
+
+[package.metadata.generate-rpm.variants.pg16]
+assets = [
+  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/lib/postgresql/pg_idkit.so", dest = "/usr/lib64/pgsql/pg_idkit.so", mode = "755" },
+  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit--0.1.0.sql", dest = "/usr/share/pgsql/extension/pg_idkit--0.1.0.sql", mode = "755" },
+  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit.control", dest = "/usr/share/pgsql/extension/pg_idkit.control", mode = "755" },
+]
+requires = { postgresql-server = "> 15", glibc = "*" }
+release = "pg16"

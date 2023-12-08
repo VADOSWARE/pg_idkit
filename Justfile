@@ -17,7 +17,7 @@ cargo_profile_arg := if cargo_profile != "" {
 }
 cargo_features := env_var_or_default("CARGO_FEATURES", "")
 cargo_features_arg := if cargo_features != "" {
-  "--features " + cargo_features
+  "--no-default-features --features " + cargo_features
 } else {
   ""
 }
@@ -160,7 +160,7 @@ ci_image_name_full := env_var_or_default("CI_IMAGE_NAME_FULL", ci_image_name + "
 
 # Build the docker image used in CI
 build-ci-image:
-    {{docker}} build -f {{ci_dockerfile_path}} -t {{ci_image_name_full}} .
+    {{docker}} build --build-arg USER={{user}} -f {{ci_dockerfile_path}} -t {{ci_image_name_full}} .
 
 # Push the docker image used in CI (to GitHub Container Registry)
 push-ci-image:
@@ -175,13 +175,7 @@ push-ci-image:
 #
 
 # Determine the Dockerfile to use when building the packaging utility base image
-base_pkg_dockerfile_path := if pg_os_image_version == "alpine3.18" {
-  "infra/docker/base-pkg-alpine3.18.Dockerfile"
-} else if pg_os_image_version == "bookworm" {
-  "infra/docker/base-pkg-bookworm.Dockerfile"
-} else {
-  error("invalid pg_os_image_version")
-}
+base_pkg_dockerfile_path := "infra/docker/base-pkg-pg" + pkg_pg_version + "-" + pg_os_image_version + "-" + container_img_arch + ".Dockerfile"
 base_pkg_image_name := env_var_or_default("PKG_IMAGE_NAME", "ghcr.io/vadosware/pg_idkit/base-pkg")
 base_pkg_version := env_var_or_default("PKG_IMAGE_NAME", "0.1.x")
 base_pkg_image_tag := env_var_or_default("POSGRES_IMAGE_VERSION", base_pkg_version + "-" + "pg" + pg_image_version + "-" + pg_os_image_version + "-" + container_img_arch)
@@ -189,7 +183,7 @@ base_pkg_image_name_full := env_var_or_default("PKG_IMAGE_NAME_FULL", base_pkg_i
 
 # Build the base image for packaging
 build-base-pkg-image:
-      {{docker}} build -f {{base_pkg_dockerfile_path}} . -t {{base_pkg_image_name_full}};
+      {{docker}} build --build-arg USER={{user}} -f {{base_pkg_dockerfile_path}} . -t {{base_pkg_image_name_full}};
 
 # Push the base image for packaging
 push-base-pkg-image:

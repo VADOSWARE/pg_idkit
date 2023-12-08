@@ -1,7 +1,22 @@
 FROM postgres:15.5-alpine3.18@sha256:a57387207806d947c842f1be9f358e37b05442bf8b5ed19b1a69af281be930e7 AS builder
 
+# Allow for overriding rust toolcahin version
 ARG RUST_TOOLCHAIN_VERSION=1.74
+ENV RUST_TOOLCHAIN_VERSION=$RUST_TOOLCHAIN_VERSION
+
+# Allow for overriding of PGRX PG version that is used
 ARG PGRX_PG_VERSION=pg15
+ENV PGRX_PG_VERSION=$PGRX_PG_VERSION
+
+# Allow overriding features so that this file can be used to build
+# different crate features. By default since this is a 15.5 base package
+# we expect to build with crate feature 'pg15'
+ARG CARGO_FEATURES=pg15
+ENV CARGO_FEATURES=$CARGO_FEATURES
+
+# Allow for overriding unix user
+ARG USER
+ENV USER=$USER
 
 # Install OS deps
 RUN apk add --no-cache \
@@ -22,7 +37,7 @@ RUN cargo binstall -y just cargo-get
 
 # Install pgrx
 # (disabling the static C runtime is required since pgrx requires dynamic linking w/ libssl and libcrypto)
-RUN RUSTFLAGS="-Ctarget-feature=-crt-static" cargo install cargo-pgrx
+RUN RUSTFLAGS="-Ctarget-feature=-crt-static" cargo install --locked cargo-pgrx@0.11.2
 
 # Copy in pg_idkit code
 WORKDIR /pg_idkit

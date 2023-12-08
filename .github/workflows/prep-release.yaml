@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: Version to release (ex. `v0.1.0`)
+        description: Version to release (ex. `0.1.0`)
         required: false
         type: string
 
@@ -43,10 +43,12 @@ jobs:
       - name: Determine version
         id: determine-version
         env:
-          VERSION: ${{inputs.version}}
+          VERSION: ${{ inputs.version }}
         run: |
           echo value=$(just print-version) >> $GITHUB_OUTPUT
       - name: Generate changelog
+        env:
+          VERSION: ${{ steps.determine-version.outputs.value }}
         run: |
           just changelog
 

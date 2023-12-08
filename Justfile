@@ -66,10 +66,8 @@ _check-installed-version tool msg:
 version := env_var_or_default("VERSION", `cargo get package.version`)
 revision := env_var_or_default("REVISION", `git rev-parse --short HEAD`)
 
-# NOTE: we can't use this as the official version getter until
-# see: https://github.com/nicolaiunrein/cargo-get/issues/14
 @get-version: _check-tool-cargo-get
-    cargo get package.version
+    echo -n {{version}}
 
 @get-revision: _check-tool-cargo-get
     echo -n {{revision}}

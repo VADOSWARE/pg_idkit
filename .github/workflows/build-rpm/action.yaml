@@ -21,7 +21,7 @@ inputs:
       Architecture to use while building the RPM
   pgrx-version:
     type: string
-    default: pg15
+    default: pg16
     decription: |
       PGRX version (ex. 'pg15', 'pg16')
 outputs: {}

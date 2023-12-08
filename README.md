@@ -64,7 +64,7 @@ docker run \
     -e POSTGRES_PASSWORD=replace_this \
     -p 5432 \
     --name pg_idkit \
-    ghcr.io/vadosware/pg_idkit:0.1.0-pg15.5-alpine3.18-amd64
+    ghcr.io/vadosware/pg_idkit:0.1.0-pg16.1-alpine3.18-amd64
 ```
 
 > [!WARNING]
@@ -103,10 +103,10 @@ cargo install cargo-get cargo-pgrx just
 just package
 ```
 
-After running these commands you should see the following directory structure in `target/release/pg_idkit-pg15`:
+After running these commands you should see the following directory structure in `target/release/pg_idkit-pg16`:
 
 ```
-target/release/pg_idkit-pg15
+target/release/pg_idkit-pg16
 ├── home
 │   └── <user>
 │       └── .pgrx
@@ -184,7 +184,7 @@ docker run \
     -e POSTGRES_PASSWORD=replace_this \
     -p 5432 \
     --name pg_idkit \
-    ghcr.io/vadosware/pg_idkit:0.1.0-pg15.5-alpine3.18-amd64
+    ghcr.io/vadosware/pg_idkit:0.1.0-pg16.1-alpine3.18-amd64
 ```
 
 From another terminal, you can exec into the `pg_idkit` container and enable `pg_idkit`:
@@ -221,10 +221,10 @@ RPMs are produced upon [every official release](/releases) of `pg_idkit`.
 
 Grab a released version of the RPM (or build one yourself by running `just build-rpm` after [setting up local development][guide-localdev]).
 
-For example, with an RPM named `pg_idkit-0.1.0-pg15.x86_64.rpm`, you should be able to run:
+For example, with an RPM named `pg_idkit-0.1.0-pg16.x86_64.rpm`, you should be able to run:
 
 ```
-dnf install pg_idkit-0.1.0-pg15.x86_64.rpm
+dnf install pg_idkit-0.1.0-pg16.x86_64.rpm
 ```
 
 </details>

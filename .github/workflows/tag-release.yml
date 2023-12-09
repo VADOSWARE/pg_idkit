@@ -1,0 +1,31 @@
+name: tag-release
+
+on:
+  pull_request:
+    closed:
+
+jobs:
+  ## Tag a release (if the commit looks like one)
+  tag-release:
+    runs-on: ubuntu-latest
+    if: startsWith(github.event.pull_request.title, 'release:')
+    permissions:
+      contents: write
+    steps:
+      # Checkout the repository
+      - uses: actions/checkout@v3
+
+      # Install deps
+      - uses: Swatinem/rust-cache@v2
+      - name: Install cargo-release
+        uses: taiki-e/install-action@v1
+        with:
+          tool: just
+
+      # Tag the commit as a release
+      - name: Detect release
+        run: |
+          if [[ $(git show HEAD -s --oneline --pretty=format:"%s") == "release: "* ]] ; then
+            git tag v$(just print-version);
+            git push --follow-tags;
+          fi

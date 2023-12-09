@@ -1,6 +1,12 @@
 name: rpm
 
 on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        type: string
+        description: |
+          Desired artifact name (will replace the natural name)
   push:
     tags:
       - v[0-9]+\.[0-9]+\.[0-9]+

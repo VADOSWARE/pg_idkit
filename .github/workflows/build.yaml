@@ -1,6 +1,12 @@
 name: build
 
 on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        type: string
+        description: |
+          Desired artifact name (will replace the natural name)
   push:
 
 jobs:
@@ -81,3 +87,24 @@ jobs:
       - name: Run cargo test
         run: |
           su idkit -c "cargo test"
+
+      #############
+      # Artifacts #
+      #############
+
+      # Run cargo test
+      - name: Build a package
+        id: package
+        if: ${{ github.event_name == 'workflow_call' }}
+        run: |
+          su idkit -c "just package"
+          tar -cvf pg_idkit-$(just print-version).zip $(just print-pkg-output-dir)
+          echo filename=pg_idkit-$(just print-version).zip >> $GITHUB_OUTPUT
+
+      # Upload artifact
+      - name: Upload artifact
+        if: ${{ github.event_name == 'workflow_call' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.artifact-name || steps.package.outputs.filename }}
+          path: ${{ steps.package.outputs.filename }}

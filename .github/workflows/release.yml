@@ -1,0 +1,100 @@
+name: release
+
+on:
+  workflow_call:
+  push:
+    branches:
+      # Run on auto-generated release PRs
+      - release/pg_idkit/*
+    tags:
+      # Run on released tags (created by automated post-merge release-tagging), to generate the actual release
+      - v[0-9]+\.[0-9]+\.[0-9]+
+
+jobs:
+  build-rpm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get version
+        id: detect-version
+        run: |
+          echo value=$(just print-version) >> $GITHUB_OUTPUT
+
+      - name: Build the RPM (reuse workflow)
+        uses: ./.github/workflows/rpm
+        with:
+          artifact-name: pg_idkit-v${{ steps.version.outputs.value }}.rpm
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: my-artifact
+          path: path/to/artifact/world.txt
+            pg_idkit-v${{ steps.detect-version.outputs.value }}.rpm
+
+  build-zip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get version
+        id: detect-version
+        run: |
+          echo value=$(just print-version) >> $GITHUB_OUTPUT
+
+      - name: Build the package (reuse workflow)
+        uses: ./.github/workflows/build
+        with:
+          artifact-name: pg_idkit-v${{ steps.version.outputs.value }}.zip
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: my-artifact
+          path: path/to/artifact/world.txt
+            pg_idkit-${{ steps.detect-version.outputs.value }}.zip
+
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs:
+      - build-rpm
+      - build-zip
+    steps:
+      # Checkout the repository
+      - uses: actions/checkout@v3
+
+      # Install deps
+      - uses: Swatinem/rust-cache@v2
+      - name: Install cargo-release
+        uses: taiki-e/install-action@v1
+        with:
+          tool: just
+
+      # Detect version
+      - name: Detect version
+        id: detect-version
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          echo value=$(just print-version) >> $GITHUB_OUTPUT
+
+      # Download artifacts
+      - uses: actions/download-artifact@v3
+        with:
+          name: pg_idkit-${{ steps.detect-version.outputs.value }}.rpm
+      - uses: actions/download-artifact@v3
+        with:
+          name: pg_idkit-${{ steps.detect-version.outputs.value }}.zip
+
+      # Create release
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: CHANGELOG.md
+          prerelease: ${{ startsWith(github.ref, "refs/heads/releases/pg_idkit/" }}
+          draft: true
+          generate_release_notes: true
+          files: |
+            pg_idkit-${{ steps.detect-version.outputs.value }}.rpm
+            pg_idkit-${{ steps.detect-version.outputs.value }}.zip

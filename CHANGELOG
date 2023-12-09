@@ -1,0 +1,92 @@
+# Changelog
+All notable changes to this project will be documented in this file.
+
+## [0.1.0] - 2023-12-09
+
+### Bug Fixes
+
+- Remove unimplemented modules
+- Test setup
+- Add missing trait for pushid
+- Len test for pushid
+- Remove sonyflake
+- Typo "sonyflake" -> "cuid" (#1)
+- Remove unused extra test
+- Small errors
+- Fix links in local dev guide & README
+- Building local docker image with USER
+- Version generation script
+- Use peter-evans/create-pull-request
+- Configuration for release pr action
+- Action name
+- Fetch depth for original pull
+- Fix set-version Justfile target
+- Run release generation on prep-release branches
+- Use taiki-e/cache-cargo-install-action to cache installs
+- Use PAT for creating release PR
+- Separate crates for taiki-e/cache-cargo-install-action
+- Use assignees instead of reviewers for auto PR
+
+### Documentation
+
+- Update README with crate links
+- Update README
+- Update README
+- Fix links in README
+- Fix more links in the README
+- Add note about using the pgx workflow
+- Update link to RFC 4122
+- Add prior art section in README
+- Fix typo in name of spa5k/uids-postgres repo
+- Add timestamp extraction fns to README
+- Update function list
+- Add manually created benchmarks
+
+### Features
+
+- Add v6,v7
+- Add nanoid
+- Add ksuid
+- Add ulid
+- Implement timeflake
+- Add sonyflake
+- Add pushid
+- Add xid
+- Add cuid
+- Embed outputs in fn names, update pgx, fix ci (#12)
+- Update versions for uuid libs, pgrx
+- Add idkit_cuid2_generate
+- Add timestamp extraction fn for cuid
+- Remove vendored uuidv6 dep
+- Add Dockerfile for build
+- Add RPM package
+- Add function for extracting timestamp
+- Add support for extracting timestamps
+- Add support for extracting timestamps
+- Add timestamp extraction
+- Add timestamp extraction
+- Add ability to convert UUIDs to ULIDs
+- Add timestamp extraction
+- Build more automated release flow
+
+### Miscellaneous Tasks
+
+- Cargo pgx init
+- Add gitattributes
+- Add LICENSE (#17)
+- Convert Makefile to Justfile
+- Update pgrx and other deps
+- Disable incremental builds
+- Update to actions/cache@v3
+
+### Operations
+
+- Add automated release workflow
+
+### Refactor
+
+- Comments
+- Rework README
+- Move prior art section
+- Dockerfile building
+

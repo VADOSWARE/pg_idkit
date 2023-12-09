@@ -29,11 +29,9 @@ RUN apk add --no-cache \
     rustup
 
 # Install Rust & related deps
-RUN rustup-init -y --profile minimal --default-toolchain $RUST_TOOLCHAIN_VERSION \
-    && source "$HOME/.cargo/env" \
-    && cargo install cargo-binstall
+RUN rustup-init -y --profile minimal --default-toolchain $RUST_TOOLCHAIN_VERSION
 ENV PATH="/root/.cargo/bin:${PATH}"
-RUN cargo binstall -y just cargo-get
+RUN cargo install just cargo-get
 
 # Install pgrx
 # (disabling the static C runtime is required since pgrx requires dynamic linking w/ libssl and libcrypto)

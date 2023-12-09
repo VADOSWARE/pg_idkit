@@ -1,0 +1,158 @@
+name: build-and-test
+description: Build and test pg_idkit (meant to run inside pg_idkit/builder container)
+inputs:
+  artifact-upload:
+    type: boolean
+    default: false
+    description: |
+      Desired artifact name (will replace the natural name)
+  artifact-name:
+    type: string
+    description: |
+      Desired artifact name (will replace the natural name)
+  rust-container-version:
+    type: string
+    default: 1.73
+    description: |
+      Version of rust to use in the container
+  apt-cache-dir:
+    type: string
+    default: /var/cache/apt
+  cargo-home-dir:
+    type: string
+    default: /usr/local/cargo
+  cargo-target-dir:
+    type: string
+    default: /usr/local/build/target
+  sccache-dir:
+    type: string
+    default: /usr/local/sccache
+  cargo-build-rustc-wrapper:
+    type: string
+    default: /usr/local/cargo/bin/sccache
+  cargo-env-incremental:
+    type: string
+    default: "0"
+  cargo-env-profile:
+    type: string
+    default: ci
+outputs: {}
+runs:
+  using: "composite"
+  steps:
+    # Checkout the repo
+    - uses: actions/checkout@v3
+
+    #########
+    # Cache #
+    #########
+
+    - name: Cache CARGO_HOME
+      uses: actions/cache@v3
+      continue-on-error: false
+      with:
+        path: |
+          ${{ inputs.cargo-home-dir }}
+        key: pg_idkit-tests-rust-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}
+
+    - name: Cache apt install
+      uses: actions/cache@v3
+      continue-on-error: false
+      with:
+        path: |
+          ${{ inputs.apt-cache-dir }}
+        key: pg_idkit-tests-apt-cache-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}
+
+    - name: Cache sccache
+      uses: actions/cache@v3
+      continue-on-error: false
+      with:
+        path: |
+          ${{ inputs.sccache-dir }}
+        key: pg_idkit-tests-sccache-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}
+
+    ###############
+    # Build/Tests #
+    ###############
+
+    - name: Add idkit to group
+      shell: bash
+      run: |
+        chgrp -R idkit $HOME &&
+        chgrp -R idkit /__w/pg_idkit &&
+        chmod g+w -R /__w/pg_idkit
+
+    # Add directory used by worker as safe dir for git
+    - name: Add git safe dir
+      shell: bash
+      run: |
+        su idkit -c "git config --global --add safe.directory /__w/pg_idkit/pg_idkit"
+
+    # Run cargo build
+    - name: Run cargo test
+      shell: bash
+      env:
+        CARGO_HOME: ${{ inputs.cargo-home-dir }}
+        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
+        SCCACHE_DIR: ${{ inputs.sccache-dir }}
+        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
+        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
+        CARGO_PROFILE: ${{ inputs.cargo-profile }}
+      run: |
+        su idkit -c "cargo build"
+
+    # Run cargo check
+    - name: Run cargo check
+      shell: bash
+      env:
+        CARGO_HOME: ${{ inputs.cargo-home-dir }}
+        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
+        SCCACHE_DIR: ${{ inputs.sccache-dir }}
+        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
+        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
+        CARGO_PROFILE: ${{ inputs.cargo-profile }}
+      run: |
+        su idkit -c "cargo check"
+
+    # Run cargo test
+    - name: Run cargo test
+      shell: bash
+      env:
+        CARGO_HOME: ${{ inputs.cargo-home-dir }}
+        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
+        SCCACHE_DIR: ${{ inputs.sccache-dir }}
+        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
+        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
+        CARGO_PROFILE: ${{ inputs.cargo-profile }}
+      run: |
+        su idkit -c "cargo test"
+
+    #############
+    # Artifacts #
+    #############
+
+    # Run cargo test
+    - name: Build a package
+      if: ${{ inputs.artifact-upload }}
+      id: package
+      shell: bash
+      env:
+        CARGO_HOME: ${{ inputs.cargo-home-dir }}
+        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
+        SCCACHE_DIR: ${{ inputs.sccache-dir }}
+        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
+        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
+        CARGO_PROFILE: ${{ inputs.cargo-profile }}
+      run: |
+        su idkit -c "cargo install --force just cargo-get"
+        su idkit -c "just package"
+        tar -cvf pg_idkit-$(just print-version).zip $(just print-pkg-output-dir)
+        echo filename=pg_idkit-v$(just print-version).zip >> $GITHUB_OUTPUT
+
+    # Upload artifact
+    - name: Upload artifact
+      if: ${{ inputs.artifact-upload }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.artifact-name || steps.package.outputs.filename }}
+        path: ${{ steps.package.outputs.filename }}

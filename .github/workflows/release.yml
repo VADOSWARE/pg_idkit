@@ -1,7 +1,6 @@
 name: release
 
 on:
-  workflow_call:
   push:
     branches:
       # Run on auto-generated release PRs
@@ -22,18 +21,15 @@ jobs:
           echo value=$(just print-version) >> $GITHUB_OUTPUT
 
       - name: Build the RPM (reuse workflow)
-        uses: ./.github/workflows/rpm
+        uses: ./.github/workflows/build-rpm
         with:
-          artifact-name: pg_idkit-v${{ steps.version.outputs.value }}.rpm
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: my-artifact
-          path: path/to/artifact/world.txt
-            pg_idkit-v${{ steps.detect-version.outputs.value }}.rpm
+          artifact-upload: true
+          artifact-name: pg_idkit-v${{ steps.detect-version.outputs.value }}.rpm
 
   build-zip:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/vadosware/pg_idkit/builder:0.1.x
     steps:
       - uses: actions/checkout@v3
 
@@ -43,15 +39,10 @@ jobs:
           echo value=$(just print-version) >> $GITHUB_OUTPUT
 
       - name: Build the package (reuse workflow)
-        uses: ./.github/workflows/build
+        uses: ./.github/workflows/build-and-test
         with:
-          artifact-name: pg_idkit-v${{ steps.version.outputs.value }}.zip
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: my-artifact
-          path: path/to/artifact/world.txt
-            pg_idkit-${{ steps.detect-version.outputs.value }}.zip
+          artifact-upload: true
+          artifact-name: pg_idkit-v${{ steps.detect-version.outputs.value }}.zip
 
   release:
     runs-on: ubuntu-latest
@@ -87,12 +78,12 @@ jobs:
         with:
           name: pg_idkit-${{ steps.detect-version.outputs.value }}.zip
 
-      # Create release
+      # Create release (pre-release if we're prepping)
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           body_path: CHANGELOG.md
-          prerelease: ${{ startsWith(github.ref, "refs/heads/releases/pg_idkit/" }}
+          prerelease: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}
           draft: true
           generate_release_notes: true
           files: |

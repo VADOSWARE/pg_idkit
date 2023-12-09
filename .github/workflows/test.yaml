@@ -1,0 +1,23 @@
+name: test
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        - config:
+            rpm:
+              arch: x86_64
+            pgrx:
+              version: pg15
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build & test the project
+        uses: ./.github/workflows/build-and-test
+        with:
+          rpm-arch: ${{ matrix.config.rpm.arch }}
+          pgrx-version: ${{ matrix.config.pgrx.version }}

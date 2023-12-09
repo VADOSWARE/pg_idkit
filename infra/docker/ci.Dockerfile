@@ -9,8 +9,7 @@ ENV CARGO_INCREMENTAL=0
 
 # Install deps
 RUN apt update && apt install -y libssl-dev git openssh-client pkg-config curl ca-certificates gnupg wget
-RUN cargo install cargo-binstall
-RUN cargo binstall -y sccache --locked
+RUN cargo install sccache --locked
 
 ENV CARGO_BUILD_RUSTC_WRAPPER=/usr/local/cargo/bin/sccache
 
@@ -69,13 +68,10 @@ RUN chmod g+w -R /usr/local/build
 RUN mkdir /usr/local/sccache
 RUN chmod g+w -R /usr/local/sccache
 
-# Install development/build/testing deps
-# NOTE: version of cargo-pgrx must be handled specifically
-RUN su idkit -c "cargo install binstall"
-
 # Install & Initialize pgrx
 # NOTE: pgrx must be reinitialized if cargo-pgrx changes
 RUN su idkit -c "cargo install cargo-pgrx@0.11.0"
 RUN su idkit -c "cargo pgrx init --pg15 download"
 
-RUN su idkit -c "cargo binstall -y sccache cargo-cache cargo-get"
+# Install development/build/testing deps
+RUN su idkit -c "cargo install just sccache cargo-cache cargo-get cargo-edit"

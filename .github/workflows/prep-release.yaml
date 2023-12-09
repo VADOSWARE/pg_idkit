@@ -1,4 +1,4 @@
-name: release-pr
+name: create-release-pr
 on:
   workflow_dispatch:
     inputs:
@@ -8,14 +8,17 @@ on:
         type: string
 
 jobs:
-  make-release-pr:
+  create-release-pr:
     permissions:
       id-token: write
       pull-requests: write
       contents: write
     runs-on: ubuntu-latest
     steps:
+      # Checkout the full repository history
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       # Set up caching
       - uses: Swatinem/rust-cache@v2
@@ -40,15 +43,15 @@ jobs:
           [[ -d /home/runner/.pgrx ]] || cargo pgrx init
 
       # Prep the project
-      - name: Determine version
-        id: determine-version
+      - name: Detect version
+        id: detect-version
         env:
           VERSION: ${{ inputs.version }}
         run: |
           echo value=$(just print-version) >> $GITHUB_OUTPUT
       - name: Generate changelog
         env:
-          VERSION: ${{ steps.determine-version.outputs.value }}
+          VERSION: ${{ steps.detect-version.outputs.value }}
         run: |
           just changelog
 
@@ -56,5 +59,8 @@ jobs:
       - uses: cargo-bins/release-pr@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          # TODO: We should configure the PR text
-          version: ${{ steps.determine-version.outputs.value }}
+          version: ${{ steps.detect-version.outputs.value }}
+          pr-label: release-pr
+          pr-merge-strategy: rebase
+          pr-release-notes: true
+          pr-meta-comment: true

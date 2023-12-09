@@ -101,6 +101,9 @@ build-test-watch: _check-tool-cargo _check-tool-cargo-watch
 package:
     PGRX_IGNORE_RUST_VERSIONS=y {{cargo}} pgrx package --pg-config {{pkg_pg_config_path}}
 
+print-pkg-output-dir:
+    echo -n {{pgrx_pkg_output_dir}}
+
 test:
     {{cargo}} test {{cargo_profile_arg}}
     {{cargo}} pgrx test

@@ -97,6 +97,6 @@ jobs:
             See CHANGELOG for changes made to this release before it goes out.
           labels: |
             release-pr
-          reviewers: |
+          assignees: |
             t3hmrman
           branch: prep-release-v${{ steps.detect-version.outputs.value }}

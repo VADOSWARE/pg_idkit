@@ -79,3 +79,4 @@ jobs:
             release-pr
           reviewers: |
             t3hmrman
+          branch: prep-release-v${{ steps.detect-version.outputs.value }}

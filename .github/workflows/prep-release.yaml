@@ -73,7 +73,7 @@ jobs:
             Upon merging, this branch will cause a tag to be placed on the commit in `main`. After the tag has been placed, a build will run that generates artifacts and publishes a release.
 
             See CHANGELOG for changes made to this release before it goes out.
-        labels: |
-          release-pr
-        reviewers: |
-          t3hmrman
+          labels: |
+            release-pr
+          reviewers: |
+            t3hmrman

@@ -83,6 +83,10 @@ print-revision:
 changelog:
     {{git}} cliff --unreleased --tag={{version}} --prepend={{changelog_file_path}}
 
+# Set the version on the package
+set-version version:
+    {{cargo}} set-version {{version}}
+
 lint:
     {{cargo}} clippy {{cargo_features_arg}} {{cargo_profile_arg}} --all-targets
 

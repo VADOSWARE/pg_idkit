@@ -40,7 +40,7 @@ jobs:
       #########
 
       - name: Cache CARGO_HOME
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         continue-on-error: false
         with:
           path: |
@@ -48,7 +48,7 @@ jobs:
           key: pg_idkit-tests-rust-${{ matrix.rust_container_version }}-cargo-${{ runner.os }}
 
       - name: Cache apt install
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         continue-on-error: false
         with:
           path: |
@@ -56,7 +56,7 @@ jobs:
           key: pg_idkit-tests-apt-cache-${{ matrix.rust_container_version }}-cargo-${{ runner.os }}
 
       - name: Cache sccache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         continue-on-error: false
         with:
           path: |

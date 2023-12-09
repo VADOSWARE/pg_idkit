@@ -34,7 +34,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
 
       - name: Cache default PGRX_HOME
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         continue-on-error: false
         with:
           path: |

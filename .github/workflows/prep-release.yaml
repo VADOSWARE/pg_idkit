@@ -17,8 +17,6 @@ jobs:
     steps:
       # Checkout the full repository history
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
       # Set up caching
       - uses: Swatinem/rust-cache@v2
@@ -43,24 +41,39 @@ jobs:
           [[ -d /home/runner/.pgrx ]] || cargo pgrx init
 
       # Prep the project
-      - name: Detect version
+      - name: Detect version (current or input)
         id: detect-version
         env:
           VERSION: ${{ inputs.version }}
         run: |
           echo value=$(just print-version) >> $GITHUB_OUTPUT
-      - name: Generate changelog
+      - name: Set version
+        env:
+          VERSION: ${{ steps.detect-version.outputs.value }}
+        run: |
+          just set-version $VERSION
+      - name: Generate Changelog
         env:
           VERSION: ${{ steps.detect-version.outputs.value }}
         run: |
           just changelog
 
       # Create PR for release
-      - uses: cargo-bins/release-pr@v2
+      - uses: peter-evants/create-pr@v2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: ${{ steps.detect-version.outputs.value }}
-          pr-label: release-pr
-          pr-merge-strategy: rebase
-          pr-release-notes: true
-          pr-meta-comment: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          signoff: true
+          commit-message: |
+            release: pg_idkit ${{ steps.detect-version.outputs.value }}
+          title: |
+            Release pg_idkit v${{ steps.detect-version.outputs.value }}
+          body: |
+            This is a release prep branch for `pg_idkit` release v${{ steps.detect-version.outputs.value }}.
+
+            Upon merging, this branch will cause a tag to be placed on the commit in `main`. After the tag has been placed, a build will run that generates artifacts and publishes a release.
+
+            See CHANGELOG for changes made to this release before it goes out.
+        labels: |
+          release-pr
+        reviewers: |
+          t3hmrman

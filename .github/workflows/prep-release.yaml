@@ -63,7 +63,7 @@ jobs:
       # Create PR for release
       - uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_PR_PAT }}
           signoff: true
           commit-message: |
             release: pg_idkit ${{ steps.detect-version.outputs.value }}

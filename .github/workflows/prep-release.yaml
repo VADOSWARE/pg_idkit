@@ -35,7 +35,27 @@ jobs:
       - name: Install cargo-release
         uses: taiki-e/cache-cargo-install-action@v1
         with:
-          tool: cargo-release,just,cargo-get,cargo-pgrx,git-cliff,cargo-edit
+          tool: cargo-release
+      - name: Install just
+        uses: taiki-e/cache-cargo-install-action@v1
+        with:
+          tool: just
+      - name: Install cargo-get
+        uses: taiki-e/cache-cargo-install-action@v1
+        with:
+          tool: cargo-get
+      - name: Install cargo-pgrx
+        uses: taiki-e/cache-cargo-install-action@v1
+        with:
+          tool: cargo-pgrx
+      - name: Install git-cliff
+        uses: taiki-e/cache-cargo-install-action@v1
+        with:
+          tool: git-cliff
+      - name: Install cargo-edit
+        uses: taiki-e/cache-cargo-install-action@v1
+        with:
+          tool: cargo-edit
 
       # Initialize PGRX
       - name: Initialize cargo-pgrx

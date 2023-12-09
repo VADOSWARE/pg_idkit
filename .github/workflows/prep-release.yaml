@@ -59,7 +59,7 @@ jobs:
           just changelog
 
       # Create PR for release
-      - uses: peter-evants/create-pr@v2
+      - uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           signoff: true

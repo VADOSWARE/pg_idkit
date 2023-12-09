@@ -33,7 +33,7 @@ jobs:
       # Install deps
       - uses: chainguard-dev/actions/setup-gitsign@main
       - name: Install cargo-release
-        uses: taiki-e/install-action@v1
+        uses: taiki-e/cache-cargo-install-action@v1
         with:
           tool: cargo-release,just,cargo-get,cargo-pgrx,git-cliff,cargo-edit
 

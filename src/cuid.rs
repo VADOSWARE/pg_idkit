@@ -1,5 +1,3 @@
-use std::io;
-
 use chrono::NaiveDateTime;
 use pgrx::*;
 
@@ -37,23 +35,13 @@ fn idkit_cuid_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
         pgrx::error!("value provided is not a valid CUID");
     }
 
-    // Get the base64 epoch milliseconds
-    let epoch_millis = base36::decode(&val[1..9])
-        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("{e:?}")))
-        .or_pgrx_error("failed to base64 decode cuid timestamp");
-    let epoch_millis_len = epoch_millis.len();
-
-    if epoch_millis_len > 8 {
-        pgrx::error!("unexpected length of bytes [{}]", epoch_millis.len());
-    };
-
-    // Copy in bytes from epoch conversion, copy to i64
-    let mut be_bytes = [0; 8];
-    be_bytes[8 - epoch_millis_len..].copy_from_slice(&epoch_millis);
-    let millis_i64 = i64::from_be_bytes(be_bytes);
+    let millis: i64 = u128::from_str_radix(&val[1..9], 36)
+        .or_pgrx_error("failed to base36 decode timestamp")
+        .try_into()
+        .or_pgrx_error("failed to convert u128 timestamp to i64");
 
     // Convert to a UTC timestamp
-    let now = NaiveDateTime::from_timestamp_millis(millis_i64)
+    let now = NaiveDateTime::from_timestamp_millis(millis)
         .or_pgrx_error("failed to parse timestamp from millis")
         .and_utc();
 
@@ -87,9 +75,10 @@ mod tests {
         let parsed: DateTime<Utc> = DateTime::parse_from_rfc3339(&timestamp.to_iso_string())
             .expect("extracted timestamp as ISO string parsed to UTC DateTime")
             .into();
-        assert!(
-            Utc::now().signed_duration_since(parsed).num_seconds() < 3,
-            "extracted, printed & re-parsed cuid timestamp is from recent past (within 3s)"
+        assert_eq!(
+            Utc::now().signed_duration_since(parsed).num_seconds(),
+            0,
+            "extracted, printed & re-parsed cuid timestamp is from recent past (within the same second)"
         );
     }
 }

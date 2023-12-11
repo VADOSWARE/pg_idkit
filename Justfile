@@ -2,6 +2,7 @@ user := env_var('USER')
 
 docker := env_var_or_default("DOCKER", "docker")
 git := env_var_or_default("GIT", "git")
+tar := env_var_or_default("TAR", "tar")
 strip := env_var_or_default("STRIP", "strip")
 just := env_var_or_default("JUST", just_executable())
 
@@ -28,7 +29,8 @@ pkg_pg_version := env_var_or_default("PKG_PG_VERSION", "15.5")
 pkg_pg_config_path := env_var_or_default("PKG_PG_CONFIG_PATH", "~/.pgrx/" + pkg_pg_version + "/pgrx-install/bin/pg_config")
 
 pgrx_pg_version := env_var_or_default("PGRX_PG_VERSION", "pg15")
-pgrx_pkg_output_dir := "target" / "release" / "pg_idkit-" + pgrx_pg_version / "home" / user / ".pgrx" / pkg_pg_version / "pgrx-install"
+pgrx_pkg_path_prefix := env_var_or_default("PGRX_PKG_PATH_PREFIX", "target")
+pgrx_pkg_output_dir := pgrx_pkg_path_prefix / "release" / "pg_idkit-" + pgrx_pg_version / "home" / user / ".pgrx" / pkg_pg_version / "pgrx-install"
 
 default:
     {{just}} --list
@@ -104,6 +106,9 @@ build-test-watch: _check-tool-cargo _check-tool-cargo-watch
 
 package:
     PGRX_IGNORE_RUST_VERSIONS=y {{cargo}} pgrx package --pg-config {{pkg_pg_config_path}}
+    mkdir -p pkg/pg_idkit-$({{just}} print-version)
+    cp -r $({{just}} print-pkg-output-dir)/* pkg/pg_idkit-$({{just}} print-version)
+    {{tar}} -C pkg -cvf pg_idkit-$(just print-version).tar.gz  pg_idkit-$({{just}} print-version)
 
 print-pkg-output-dir:
     echo -n {{pgrx_pkg_output_dir}}

@@ -6,10 +6,6 @@ inputs:
     default: false
     description: |
       Desired artifact name (will replace the natural name)
-  artifact-name:
-    type: string
-    description: |
-      Desired artifact name (will replace the natural name)
   rust-container-version:
     type: string
     default: 1.73
@@ -36,6 +32,9 @@ inputs:
   cargo-env-profile:
     type: string
     default: ci
+  user:
+    type: string
+    default: idkit
 outputs: {}
 runs:
   using: "composite"
@@ -86,33 +85,38 @@ runs:
     - name: Add git safe dir
       shell: bash
       run: |
+        git config --global --add safe.directory /__w/pg_idkit/pg_idkit
         su idkit -c "git config --global --add safe.directory /__w/pg_idkit/pg_idkit"
-
-    # Run cargo build
-    - name: Run cargo test
-      shell: bash
-      env:
-        CARGO_HOME: ${{ inputs.cargo-home-dir }}
-        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
-        SCCACHE_DIR: ${{ inputs.sccache-dir }}
-        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
-        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
-        CARGO_PROFILE: ${{ inputs.cargo-profile }}
-      run: |
-        su idkit -c "cargo build"
 
     # Run cargo check
     - name: Run cargo check
       shell: bash
       env:
-        CARGO_HOME: ${{ inputs.cargo-home-dir }}
-        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
-        SCCACHE_DIR: ${{ inputs.sccache-dir }}
         CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
+        CARGO_HOME: ${{ inputs.cargo-home-dir }}
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
+        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
+        PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
+        SCCACHE_DIR: ${{ inputs.sccache-dir }}
+        USER: ${{ inputs.user }}
       run: |
         su idkit -c "cargo check"
+
+    # Run cargo build
+    - name: Run cargo test
+      shell: bash
+      env:
+        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
+        CARGO_HOME: ${{ inputs.cargo-home-dir }}
+        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
+        CARGO_PROFILE: ${{ inputs.cargo-profile }}
+        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
+        PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
+        SCCACHE_DIR: ${{ inputs.sccache-dir }}
+        USER: ${{ inputs.user }}
+      run: |
+        su idkit -c "cargo build"
 
     # Run cargo test
     - name: Run cargo test
@@ -124,6 +128,7 @@ runs:
         CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
+        USER: ${{ inputs.user }}
       run: |
         su idkit -c "cargo test"
 
@@ -131,10 +136,8 @@ runs:
     # Artifacts #
     #############
 
-    # Run cargo test
-    - name: Build a package
+    - name: Reinstall deps due to GLIBC issue
       if: ${{ inputs.artifact-upload }}
-      id: package
       shell: bash
       env:
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
@@ -143,16 +146,30 @@ runs:
         CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
+        USER: ${{ inputs.user }}
+        PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
       run: |
-        su idkit -c "cargo install --force just cargo-get"
+        su idkit -c "cargo install --force cargo-get cargo-edit"
+
+    # Run cargo test
+    - name: Build a package
+      if: ${{ inputs.artifact-upload }}
+      shell: bash
+      env:
+        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
+        CARGO_HOME: ${{ inputs.cargo-home-dir }}
+        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
+        CARGO_PROFILE: ${{ inputs.cargo-profile }}
+        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
+        PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
+        SCCACHE_DIR: ${{ inputs.sccache-dir }}
+        USER: ${{ inputs.user }}
+      run: |
         su idkit -c "just package"
-        tar -cvf pg_idkit-$(just print-version).zip $(just print-pkg-output-dir)
-        echo filename=pg_idkit-v$(just print-version).zip >> $GITHUB_OUTPUT
 
     # Upload artifact
     - name: Upload artifact
       if: ${{ inputs.artifact-upload }}
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ inputs.artifact-name || steps.package.outputs.filename }}
-        path: ${{ steps.package.outputs.filename }}
+        path: pg_idkit-*.tar.gz

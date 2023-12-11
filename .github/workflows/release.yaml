@@ -15,16 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Get version
-        id: detect-version
-        run: |
-          echo value=$(just print-version) >> $GITHUB_OUTPUT
-
       - name: Build the RPM (reuse workflow)
         uses: ./.github/workflows/build-rpm
         with:
           artifact-upload: true
-          artifact-name: pg_idkit-v${{ steps.detect-version.outputs.value }}.rpm
 
   build-zip:
     runs-on: ubuntu-latest
@@ -33,16 +27,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Get version
-        id: detect-version
-        run: |
-          echo value=$(just print-version) >> $GITHUB_OUTPUT
-
       - name: Build the package (reuse workflow)
         uses: ./.github/workflows/build-and-test
         with:
           artifact-upload: true
-          artifact-name: pg_idkit-v${{ steps.detect-version.outputs.value }}.zip
 
   release:
     runs-on: ubuntu-latest
@@ -55,37 +43,18 @@ jobs:
       # Checkout the repository
       - uses: actions/checkout@v3
 
-      # Install deps
-      - uses: Swatinem/rust-cache@v2
-      - name: Install cargo-release
-        uses: taiki-e/install-action@v1
-        with:
-          tool: just
-
-      # Detect version
-      - name: Detect version
-        id: detect-version
-        env:
-          VERSION: ${{ inputs.version }}
-        run: |
-          echo value=$(just print-version) >> $GITHUB_OUTPUT
-
-      # Download artifacts
+      # Download all artifacts
       - uses: actions/download-artifact@v3
         with:
-          name: pg_idkit-${{ steps.detect-version.outputs.value }}.rpm
-      - uses: actions/download-artifact@v3
-        with:
-          name: pg_idkit-${{ steps.detect-version.outputs.value }}.zip
+          path: artifacts
 
       # Create release (pre-release if we're prepping)
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: CHANGELOG.md
+          body_path: CHANGELOG
           prerelease: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}
           draft: true
           generate_release_notes: true
           files: |
-            pg_idkit-${{ steps.detect-version.outputs.value }}.rpm
-            pg_idkit-${{ steps.detect-version.outputs.value }}.zip
+            ./artifacts/*/*

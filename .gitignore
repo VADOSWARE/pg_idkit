@@ -4,3 +4,6 @@
 secrets/docker/.token_seed
 secrets/docker/.token_seed.lock
 secrets/docker/buildx/
+
+# Releases
+/pkg

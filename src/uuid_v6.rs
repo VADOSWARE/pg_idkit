@@ -104,8 +104,9 @@ mod tests {
         let parsed: DateTime<Utc> = DateTime::parse_from_rfc3339(&timestamp.to_iso_string())
             .expect("extracted timestamp as ISO string parsed to UTC DateTime")
             .into();
-        assert!(
-            Utc::now().signed_duration_since(parsed).num_seconds() < 1,
+        assert_eq!(
+            Utc::now().signed_duration_since(parsed).num_seconds(),
+            0,
             "extracted, printed & re-parsed uuidv6 timestamp is from recent past (within 1s)"
         );
     }

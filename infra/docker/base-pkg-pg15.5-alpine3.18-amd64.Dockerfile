@@ -24,6 +24,7 @@ RUN apk add --no-cache \
     clang \
     clang-dev \
     clang-libs \
+    coreutils \
     musl-dev \
     openssl-dev \
     rustup

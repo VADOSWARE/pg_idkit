@@ -20,6 +20,7 @@ ENV USER=$USER
 # Install OS deps
 RUN apk add --no-cache \
     alpine-sdk \
+    coreutils \
     clang \
     clang-dev \
     clang-libs \

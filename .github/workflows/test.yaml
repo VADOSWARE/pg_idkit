@@ -8,11 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        - config:
-            rpm:
-              arch: x86_64
-            pgrx:
-              version: pg15
+        config:
+        - rpm:
+            arch: x86_64
+          pgrx:
+            version: pg15
     steps:
       - uses: actions/checkout@v3
 

@@ -136,7 +136,7 @@ docker_username_path := env_var_or_default("DOCKER_USERNAME_PATH", "secrets/dock
 docker_image_registry := env_var_or_default("DOCKER_IMAGE_REGISTRY", "ghcr.io/vadosware/pg_idkit")
 docker_config_dir := env_var_or_default("DOCKER_CONFIG", "secrets/docker")
 
-img_dockerfile_path := "infra" / "docker" / "pgidkt_pg" + pg_image_version + "-" + pg_os_image_version + "-" + container_img_arch + ".Dockerfile"
+img_dockerfile_path := "infra" / "docker" / "pg_idkit-pg" + pg_image_version + "-" + pg_os_image_version + "-" + container_img_arch + ".Dockerfile"
 
 # Ensure that that a given file is present
 _ensure-file file:

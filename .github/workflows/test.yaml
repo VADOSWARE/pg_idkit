@@ -18,6 +18,3 @@ jobs:
 
       - name: Build & test the project
         uses: ./.github/workflows/build-and-test
-        with:
-          rpm-arch: ${{ matrix.config.rpm.arch }}
-          pgrx-version: ${{ matrix.config.pgrx.version }}

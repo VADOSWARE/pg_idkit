@@ -103,8 +103,8 @@ mod tests {
             .expect("extracted timestamp as ISO string parsed to UTC DateTime")
             .into();
         assert!(
-            Utc::now().signed_duration_since(parsed).num_seconds() < 3,
-            "extracted, printed & re-parsed uuidv7 timestamp is from recent past (within 3s)"
+            Utc::now().signed_duration_since(parsed).num_seconds() < 1,
+            "extracted, printed & re-parsed uuidv7 timestamp is from recent past (within 1s)"
         );
     }
 

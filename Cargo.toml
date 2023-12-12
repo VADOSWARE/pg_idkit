@@ -1,6 +1,6 @@
 [package]
 name = "pg_idkit"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 authors = ["Victor Adossi <vados@vadosware.io>"]
 license = "MIT"
@@ -65,7 +65,7 @@ assets = []
 [package.metadata.generate-rpm.variants.pg11]
 assets = [
   { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/lib/postgresql/pg_idkit.so", dest = "/usr/lib64/pgsql/pg_idkit.so", mode = "755" },
-  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit--0.1.0.sql", dest = "/usr/share/pgsql/extension/pg_idkit--0.1.0.sql", mode = "755" },
+  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit--0.2.0.sql", dest = "/usr/share/pgsql/extension/pg_idkit--0.2.0.sql", mode = "755" },
   { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit.control", dest = "/usr/share/pgsql/extension/pg_idkit.control", mode = "755" },
 ]
 requires = { postgresql-server = "> 11", glibc = "*" }
@@ -74,7 +74,7 @@ release = "pg11"
 [package.metadata.generate-rpm.variants.pg12]
 assets = [
   { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/lib/postgresql/pg_idkit.so", dest = "/usr/lib64/pgsql/pg_idkit.so", mode = "755" },
-  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit--0.1.0.sql", dest = "/usr/share/pgsql/extension/pg_idkit--0.1.0.sql", mode = "755" },
+  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit--0.2.0.sql", dest = "/usr/share/pgsql/extension/pg_idkit--0.2.0.sql", mode = "755" },
   { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit.control", dest = "/usr/share/pgsql/extension/pg_idkit.control", mode = "755" },
 ]
 requires = { postgresql-server = "> 12", glibc = "*" }
@@ -83,7 +83,7 @@ release = "pg12"
 [package.metadata.generate-rpm.variants.pg13]
 assets = [
   { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/lib/postgresql/pg_idkit.so", dest = "/usr/lib64/pgsql/pg_idkit.so", mode = "755" },
-  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit--0.1.0.sql", dest = "/usr/share/pgsql/extension/pg_idkit--0.1.0.sql", mode = "755" },
+  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit--0.2.0.sql", dest = "/usr/share/pgsql/extension/pg_idkit--0.2.0.sql", mode = "755" },
   { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit.control", dest = "/usr/share/pgsql/extension/pg_idkit.control", mode = "755" },
 ]
 requires = { postgresql-server = "> 13", glibc = "*" }
@@ -92,7 +92,7 @@ release = "pg13"
 [package.metadata.generate-rpm.variants.pg14]
 assets = [
   { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/lib/postgresql/pg_idkit.so", dest = "/usr/lib64/pgsql/pg_idkit.so", mode = "755" },
-  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit--0.1.0.sql", dest = "/usr/share/pgsql/extension/pg_idkit--0.1.0.sql", mode = "755" },
+  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit--0.2.0.sql", dest = "/usr/share/pgsql/extension/pg_idkit--0.2.0.sql", mode = "755" },
   { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit.control", dest = "/usr/share/pgsql/extension/pg_idkit.control", mode = "755" },
 ]
 requires = { postgresql-server = "> 14", glibc = "*" }
@@ -101,7 +101,7 @@ release = "pg14"
 [package.metadata.generate-rpm.variants.pg15]
 assets = [
   { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/lib/postgresql/pg_idkit.so", dest = "/usr/lib64/pgsql/pg_idkit.so", mode = "755" },
-  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit--0.1.0.sql", dest = "/usr/share/pgsql/extension/pg_idkit--0.1.0.sql", mode = "755" },
+  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit--0.2.0.sql", dest = "/usr/share/pgsql/extension/pg_idkit--0.2.0.sql", mode = "755" },
   { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit.control", dest = "/usr/share/pgsql/extension/pg_idkit.control", mode = "755" },
 ]
 requires = { postgresql-server = "> 15", glibc = "*" }
@@ -110,8 +110,8 @@ release = "pg15"
 [package.metadata.generate-rpm.variants.pg16]
 assets = [
   { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/lib/postgresql/pg_idkit.so", dest = "/usr/lib64/pgsql/pg_idkit.so", mode = "755" },
-  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit--0.1.0.sql", dest = "/usr/share/pgsql/extension/pg_idkit--0.1.0.sql", mode = "755" },
+  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit--0.2.0.sql", dest = "/usr/share/pgsql/extension/pg_idkit--0.2.0.sql", mode = "755" },
   { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit.control", dest = "/usr/share/pgsql/extension/pg_idkit.control", mode = "755" },
 ]
-requires = { postgresql-server = "> 15", glibc = "*" }
+requires = { postgresql-server = "> 16", glibc = "*" }
 release = "pg16"

@@ -27,6 +27,7 @@ changelog_file_path := absolute_path(justfile_directory() / "CHANGELOG")
 
 pkg_pg_version := env_var_or_default("PKG_PG_VERSION", "16.1")
 pkg_pg_config_path := env_var_or_default("PKG_PG_CONFIG_PATH", "~/.pgrx/" + pkg_pg_version + "/pgrx-install/bin/pg_config")
+pkg_tarball_suffix := env_var_or_default("PKG_TARBALL_SUFFIX", "-gnu")
 
 pgrx_pg_version := env_var_or_default("PGRX_PG_VERSION", "pg16")
 pgrx_pkg_path_prefix := env_var_or_default("PGRX_PKG_PATH_PREFIX", "target")
@@ -111,7 +112,7 @@ package:
     PGRX_IGNORE_RUST_VERSIONS=y {{cargo}} pgrx package --pg-config {{pkg_pg_config_path}}
     mkdir -p pkg/pg_idkit-$({{just}} print-version)
     cp -r $({{just}} print-pkg-output-dir)/* pkg/pg_idkit-$({{just}} print-version)
-    {{tar}} -C pkg -cvf pg_idkit-$(just print-version).tar.gz  pg_idkit-$({{just}} print-version)
+    {{tar}} -C pkg -cvf pg_idkit-$(just print-version){{pkg_tarball_suffix}}.tar.gz  pg_idkit-$({{just}} print-version)
 
 test:
     {{cargo}} test {{cargo_profile_arg}}
@@ -163,25 +164,34 @@ docker-login:
 docker_platform_arg := env_var_or_default("DOCKER_PLATFORM_ARG", "")
 docker_progress_arg := env_var_or_default("DOCKER_PROGRESS_ARG", "")
 
-#####################
-# Docker Image - ci #
-#####################
+##########################
+# Docker Image - builder #
+##########################
 #
-# This image is used as a cache for speeding up CI builds
+# This image is used as a cache for speeding up CI builds,
+# and for performing builds when building release artifacts
 #
 
-ci_dockerfile_path := env_var_or_default("CI_DOCKERFILE_PATH", "infra" / "docker" / "ci.Dockerfile")
-ci_image_name := env_var_or_default("CI_IMAGE_NAME", "ghcr.io/vadosware/pg_idkit/builder")
-ci_image_tag := env_var_or_default("CI_IMAGE_TAG", "0.1.x")
-ci_image_name_full := env_var_or_default("CI_IMAGE_NAME_FULL", ci_image_name + ":" + ci_image_tag)
+builder_gnu_dockerfile_path := env_var_or_default("BUILDER_DOCKERFILE_PATH", "infra" / "docker" / "builder-gnu.Dockerfile")
+builder_gnu_image_name := env_var_or_default("BUILDER_IMAGE_NAME", "ghcr.io/vadosware/pg_idkit/builder-gnu")
+builder_gnu_image_tag := env_var_or_default("BUILDER_IMAGE_TAG", "0.1.x")
+builder_gnu_image_name_full := env_var_or_default("BUILDER_IMAGE_NAME_FULL", builder_gnu_image_name + ":" + builder_gnu_image_tag)
 
-# Build the docker image used in CI
-build-ci-image:
-    {{docker}} build --build-arg USER={{user}} -f {{ci_dockerfile_path}} -t {{ci_image_name_full}} .
+## TODO: uncomment and edit build-builder-image once musl machinery is available
+## https://github.com/VADOSWARE/pg_idkit/issues/55
+#
+# builder_musl_dockerfile_path := env_var_or_default("BUILDER_DOCKERFILE_PATH", "infra" / "docker" / "builder-musl.Dockerfile")
+# builder_musl_image_name := env_var_or_default("BUILDER_IMAGE_NAME", "ghcr.io/vadosware/pg_idkit/builder-musl")
+# builder_musl_image_tag := env_var_or_default("BUILDER_IMAGE_TAG", "0.1.x")
+# builder_musl_image_name_full := env_var_or_default("BUILDER_IMAGE_NAME_FULL", builder_musl_image_name + ":" + builder_musl_image_tag)
 
-# Push the docker image used in CI (to GitHub Container Registry)
-push-ci-image:
-    {{docker}} push {{ci_image_name_full}}
+# Build the docker image used in BUILDER
+build-builder-image:
+    {{docker}} build --build-arg USER={{user}} -f {{builder_gnu_dockerfile_path}} -t {{builder_gnu_image_name_full}} .
+
+# Push the docker image used in BUILDER (to GitHub Container Registry)
+push-builder-image:
+    {{docker}} push {{builder_gnu_image_name_full}}
 
 ###########################
 # Docker Image - base-pkg #

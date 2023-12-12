@@ -6,6 +6,11 @@ inputs:
     default: false
     description: |
       Desired artifact name (will replace the natural name)
+  artifact-tarball-suffix:
+    type: string
+    default: "gnu"
+    description: |
+      Suffix that will be used on the tarball artifact (ex. '-gnu')
   rust-container-version:
     type: string
     default: 1.73
@@ -35,6 +40,16 @@ inputs:
   user:
     type: string
     default: idkit
+  pgrx-version:
+    type: string
+    default: pg16
+    decription: |
+      PGRX version (ex. 'pg15', 'pg16')
+  pg-version:
+    type: string
+    default: 16.1
+    decription: |
+      Postgres version (ex. '15.5, '16.1')
 outputs: {}
 runs:
   using: "composite"
@@ -101,14 +116,16 @@ runs:
       if: ${{ inputs.artifact-upload }}
       shell: bash
       env:
-        CARGO_HOME: ${{ inputs.cargo-home-dir }}
-        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
-        SCCACHE_DIR: ${{ inputs.sccache-dir }}
         CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
+        CARGO_HOME: ${{ inputs.cargo-home-dir }}
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
-        USER: ${{ inputs.user }}
+        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
+        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
+        PKG_PG_VERSION: ${{ inputs.pg-version }}
+        SCCACHE_DIR: ${{ inputs.sccache-dir }}
+        USER: ${{ inputs.user }}
       run: |
         su idkit -c "cargo install --force cargo-get cargo-edit"
 
@@ -125,7 +142,9 @@ runs:
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
+        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
+        PKG_PG_VERSION: ${{ inputs.pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         USER: ${{ inputs.user }}
       run: |
@@ -140,7 +159,9 @@ runs:
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
+        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
+        PKG_PG_VERSION: ${{ inputs.pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         USER: ${{ inputs.user }}
       run: |
@@ -155,7 +176,9 @@ runs:
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
+        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
+        PKG_PG_VERSION: ${{ inputs.pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         USER: ${{ inputs.user }}
       run: |
@@ -165,12 +188,14 @@ runs:
     - name: Run cargo test
       shell: bash
       env:
-        CARGO_HOME: ${{ inputs.cargo-home-dir }}
-        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
-        SCCACHE_DIR: ${{ inputs.sccache-dir }}
         CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
+        CARGO_HOME: ${{ inputs.cargo-home-dir }}
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
+        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
+        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
+        PKG_PG_VERSION: ${{ inputs.pg-version }}
+        SCCACHE_DIR: ${{ inputs.sccache-dir }}
         USER: ${{ inputs.user }}
       run: |
         su idkit -c "cargo test"
@@ -189,7 +214,10 @@ runs:
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
+        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
+        PKG_PG_VERSION: ${{ inputs.pg-version }}
+        PKG_TARBALL_SUFFIX: ${{ inputs.artifact-tarball-suffix }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         USER: ${{ inputs.user }}
       run: |

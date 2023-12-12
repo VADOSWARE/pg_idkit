@@ -1,4 +1,4 @@
-name: build-rpm 
+name: build-rpm
 description: Build an RPM for pg_idkit
 inputs:
   artifact-upload:
@@ -24,6 +24,11 @@ inputs:
     default: pg16
     decription: |
       PGRX version (ex. 'pg15', 'pg16')
+  pg-version:
+    type: string
+    default: 16.1
+    decription: |
+      Postgres version (ex. '15.5, '16.1')
 outputs: {}
 runs:
   using: "composite"
@@ -47,16 +52,25 @@ runs:
 
     - name: Initialize cargo-pgrx
       shell: bash
+      env:
+        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
+        PKG_PG_VERSION: ${{ inputs.pg-version }}
       run: |
         [[ -d /home/runner/.pgrx ]] || cargo pgrx init
 
     - name: Build RPM
       shell: bash
+      env:
+        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
+        PKG_PG_VERSION: ${{ inputs.pg-version }}
       run: just package build-rpm
 
     - name: Get RPM output path
       id: rpm-output
       shell: bash
+      env:
+        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
+        PKG_PG_VERSION: ${{ inputs.pg-version }}
       run: |
         echo path=$(just print-rpm-output-path) >> $GITHUB_OUTPUT
         echo filename=$(just print-rpm-output-file-name) >> $GITHUB_OUTPUT

@@ -12,6 +12,17 @@ on:
 jobs:
   build-rpm:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        config:
+          - pgrx:
+              version: pg15
+            pg:
+              version: 15.5
+          - pgrx:
+              version: pg16
+            pg:
+              version: 16.1
     steps:
       - uses: actions/checkout@v3
 
@@ -19,18 +30,34 @@ jobs:
         uses: ./.github/workflows/build-rpm
         with:
           artifact-upload: true
+          pgrx-version: ${{ matrix.config.pgrx.version }}
+          pg-version: ${{ matrix.config.pg.version }}
 
-  build-zip:
+  build-zip-gnu:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/vadosware/pg_idkit/builder:0.1.x
+      image: ghcr.io/vadosware/pg_idkit/builder-gnu:0.1.x
+    strategy:
+      matrix:
+        config:
+          - pgrx:
+              version: pg15
+            pg:
+              version: 15.5
+          - pgrx:
+              version: pg16
+            pg:
+              version: 16.1
     steps:
       - uses: actions/checkout@v3
 
       - name: Build the package (reuse workflow)
-        uses: ./.github/workflows/build-and-test
+        uses: ./.github/workflows/build-and-test-gnu
         with:
           artifact-upload: true
+          artifact-tarball-suffix: "-${{ matrix.config.pgrx.version }}-gnu"
+          pgrx-version: ${{ matrix.config.pgrx.version }}
+          pg-version: ${{ matrix.config.pg.version }}
 
   release:
     runs-on: ubuntu-latest
@@ -38,7 +65,7 @@ jobs:
       contents: write
     needs:
       - build-rpm
-      - build-zip
+      - build-zip-gnu
     steps:
       # Checkout the repository
       - uses: actions/checkout@v3
@@ -52,9 +79,10 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: CHANGELOG
           prerelease: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}
           draft: true
+          # NOTE: while we have the CHANGELOG file, it always contains *all* changes,
+          # so we will use the generated GitHub commits for now
           generate_release_notes: true
           files: |
             ./artifacts/*/*

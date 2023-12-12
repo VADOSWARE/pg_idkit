@@ -23,4 +23,4 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Build & test the project
-        uses: ./.github/workflows/build-and-test
+        uses: ./.github/workflows/build-and-test-gnu

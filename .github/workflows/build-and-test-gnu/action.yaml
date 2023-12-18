@@ -40,7 +40,7 @@ inputs:
   user:
     type: string
     default: idkit
-  pgrx-version:
+  pgrx-pg-version:
     type: string
     default: pg16
     decription: |
@@ -121,7 +121,7 @@ runs:
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
-        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
+        PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
         PKG_PG_VERSION: ${{ inputs.pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
@@ -142,7 +142,7 @@ runs:
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
-        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
+        PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
         PKG_PG_VERSION: ${{ inputs.pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
@@ -159,7 +159,7 @@ runs:
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
-        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
+        PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
         PKG_PG_VERSION: ${{ inputs.pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
@@ -176,7 +176,7 @@ runs:
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
-        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
+        PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
         PKG_PG_VERSION: ${{ inputs.pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
@@ -193,7 +193,7 @@ runs:
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
-        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
+        PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         USER: ${{ inputs.user }}
@@ -214,7 +214,7 @@ runs:
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
-        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
+        PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
         PKG_PG_VERSION: ${{ inputs.pg-version }}
         PKG_TARBALL_SUFFIX: ${{ inputs.artifact-tarball-suffix }}

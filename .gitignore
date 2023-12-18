@@ -7,3 +7,4 @@ secrets/docker/buildx/
 
 # Releases
 /pkg
+/pg_idkit-*-gnu.tar.gz

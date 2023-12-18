@@ -2,6 +2,10 @@ name: container
 
 on:
   push:
+    branches:
+      - fix/infra/container-generation-and-workflows # TODO: remove
+      # Run on auto-generated release PRs
+      - prep-release-v[0-9]+\.[0-9]+\.[0-9]+
     tags:
       - v[0-9]+\.[0-9]+\.[0-9]+
 
@@ -21,6 +25,13 @@ jobs:
               arch: amd64
               pg_version: 15.5
               os_version: alpine3.18
+          - triple: x86_64-unknown-linux-musl
+            gh:
+              runner: ubuntu-22.04
+            container:
+              arch: amd64
+              pg_version: 16.1
+              os_version: alpine3.18
     steps:
       - uses: actions/checkout@v3
       - uses: docker/setup-qemu-action@v3
@@ -28,16 +39,25 @@ jobs:
         with:
           tool: cargo-get,just
 
-      - name: registry login
+      - name: Registry login
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: build & push container image
-        run: just build-image push-image
+      - name: Build container image
+        run: just build-image
         env:
           CONTAINER_IMAGE_ARCH: ${{ matrix.config.container.arch }}
+          PGRX_PG_VERSION: ${{ matrix.config.container.pg_version }}
           POSTGRES_IMAGE_VERSION: ${{ matrix.config.container.pg_version }}
           POSTGRES_OS_IMAGE_VERSION: ${{ matrix.config.container.os_version }}
+
+      - name: Push pre-release image
+        if: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}
+        run: just push-image-preprelease
+
+      - name: Push release image
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+        run: just push-image

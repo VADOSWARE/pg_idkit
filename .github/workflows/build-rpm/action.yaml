@@ -19,7 +19,7 @@ inputs:
     default: x86_64
     decription: |
       Architecture to use while building the RPM
-  pgrx-version:
+  pgrx-pg-version:
     type: string
     default: pg16
     decription: |
@@ -53,7 +53,7 @@ runs:
     - name: Initialize cargo-pgrx
       shell: bash
       env:
-        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
+        PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pg-version }}
       run: |
         [[ -d /home/runner/.pgrx ]] || cargo pgrx init
@@ -61,7 +61,7 @@ runs:
     - name: Build RPM
       shell: bash
       env:
-        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
+        PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pg-version }}
       run: just package build-rpm
 
@@ -69,7 +69,7 @@ runs:
       id: rpm-output
       shell: bash
       env:
-        PGRX_PG_VERSION: ${{ inputs.pgrx-version }}
+        PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pg-version }}
       run: |
         echo path=$(just print-rpm-output-path) >> $GITHUB_OUTPUT

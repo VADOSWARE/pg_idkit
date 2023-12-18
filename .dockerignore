@@ -1,1 +1,3 @@
 target
+infra/docker
+secrets

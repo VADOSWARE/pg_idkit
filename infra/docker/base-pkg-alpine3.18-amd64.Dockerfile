@@ -1,4 +1,4 @@
-FROM postgres:16.1-alpine3.18@sha256:b788d196db04847b17df664f4ae18062e712328d225b9ff75d4d7cd91a16c374 AS builder
+FROM alpine:3.19.0@sha256:13b7e62e8df80264dbb747995705a986aa530415763a6c58f84a3ca8af9a5bcd AS builder
 
 # Allow for overriding rust toolcahin version
 ARG RUST_TOOLCHAIN_VERSION=1.74
@@ -14,19 +14,25 @@ ENV PGRX_PG_VERSION=$PGRX_PG_VERSION
 ARG CARGO_FEATURES=pg16
 ENV CARGO_FEATURES=$CARGO_FEATURES
 
-ARG USER
-ENV USER=$USER
-
 # Install OS deps
 RUN apk add --no-cache \
     alpine-sdk \
-    coreutils \
+    bash \
+    bison \
     clang \
     clang-dev \
     clang-libs \
+    coreutils \
+    flex \
+    icu-dev \
+    linux-headers \
     musl-dev \
     openssl-dev \
-    rustup
+    perl \
+    readline \
+    readline-dev \
+    rustup \
+    zlib-dev
 
 # Install Rust & related deps
 RUN rustup-init -y --profile minimal --default-toolchain $RUST_TOOLCHAIN_VERSION
@@ -43,8 +49,7 @@ COPY . .
 
 # Initialize pgrx
 ENV PGRX_IGNORE_RUST_VERSIONS=y
-ENV PKG_PG_CONFIG_PATH=/usr/local/bin/pg_config
-RUN cargo pgrx init --pg16=$PKG_PG_CONFIG_PATH
+RUN just pgrx-init
 
 # Build the package
 RUN RUSTFLAGS="-Ctarget-feature=-crt-static" just build package

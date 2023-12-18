@@ -1,5 +1,3 @@
-user := env_var('USER')
-
 docker := env_var_or_default("DOCKER", "docker")
 git := env_var_or_default("GIT", "git")
 tar := env_var_or_default("TAR", "tar")
@@ -27,11 +25,15 @@ changelog_file_path := absolute_path(justfile_directory() / "CHANGELOG")
 
 pkg_pg_version := env_var_or_default("PKG_PG_VERSION", "16.1")
 pkg_pg_config_path := env_var_or_default("PKG_PG_CONFIG_PATH", "~/.pgrx/" + pkg_pg_version + "/pgrx-install/bin/pg_config")
-pkg_tarball_suffix := env_var_or_default("PKG_TARBALL_SUFFIX", "-gnu")
+pkg_tarball_suffix := env_var_or_default("PKG_TARBALL_SUFFIX", "")
 
 pgrx_pg_version := env_var_or_default("PGRX_PG_VERSION", "pg16")
 pgrx_pkg_path_prefix := env_var_or_default("PGRX_PKG_PATH_PREFIX", "target")
-pgrx_pkg_output_dir := pgrx_pkg_path_prefix / "release" / "pg_idkit-" + pgrx_pg_version / "home" / user / ".pgrx" / pkg_pg_version / "pgrx-install"
+# If /root, 'home' does not appear in the generated prefix
+pkg_user_dir_prefix := if docker_build_user == "root" { docker_build_user } else { "home/" + docker_build_user }
+pgrx_pkg_output_dir := pgrx_pkg_path_prefix / "release" / "pg_idkit-" + pgrx_pg_version / pkg_user_dir_prefix / ".pgrx" / pkg_pg_version / "pgrx-install"
+
+docker_build_user := env_var_or_default('DOCKER_BUILD_USER', "root")
 
 default:
     {{just}} --list
@@ -108,8 +110,10 @@ build-watch: _check-tool-cargo _check-tool-cargo-watch
 build-test-watch: _check-tool-cargo _check-tool-cargo-watch
     {{cargo_watch}} -x "test $(CARGO_BUILD_FLAGS)" --watch src
 
-package:
+build-package:
     PGRX_IGNORE_RUST_VERSIONS=y {{cargo}} pgrx package --pg-config {{pkg_pg_config_path}}
+
+package: build-package
     mkdir -p pkg/pg_idkit-$({{just}} print-version)
     cp -r $({{just}} print-pkg-output-dir)/* pkg/pg_idkit-$({{just}} print-version)
     {{tar}} -C pkg -cvf pg_idkit-$(just print-version){{pkg_tarball_suffix}}.tar.gz  pg_idkit-$({{just}} print-version)
@@ -187,7 +191,7 @@ builder_gnu_image_name_full := env_var_or_default("BUILDER_IMAGE_NAME_FULL", bui
 
 # Build the docker image used in BUILDER
 build-builder-image:
-    {{docker}} build --build-arg USER={{user}} -f {{builder_gnu_dockerfile_path}} -t {{builder_gnu_image_name_full}} .
+    {{docker}} build -f {{builder_gnu_dockerfile_path}} -t {{builder_gnu_image_name_full}} .
 
 # Push the docker image used in BUILDER (to GitHub Container Registry)
 push-builder-image:
@@ -202,15 +206,15 @@ push-builder-image:
 #
 
 # Determine the Dockerfile to use when building the packaging utility base image
-base_pkg_dockerfile_path := "infra/docker/base-pkg-pg" + pkg_pg_version + "-" + pg_os_image_version + "-" + container_img_arch + ".Dockerfile"
+base_pkg_dockerfile_path := "infra/docker/base-pkg-" + pg_os_image_version + "-" + container_img_arch + ".Dockerfile"
 base_pkg_image_name := env_var_or_default("PKG_IMAGE_NAME", "ghcr.io/vadosware/pg_idkit/base-pkg")
 base_pkg_version := env_var_or_default("PKG_IMAGE_NAME", "0.1.x")
-base_pkg_image_tag := env_var_or_default("POSGRES_IMAGE_VERSION", base_pkg_version + "-" + "pg" + pg_image_version + "-" + pg_os_image_version + "-" + container_img_arch)
+base_pkg_image_tag := env_var_or_default("POSGRES_IMAGE_VERSION", base_pkg_version + "-" + pg_os_image_version + "-" + container_img_arch)
 base_pkg_image_name_full := env_var_or_default("PKG_IMAGE_NAME_FULL", base_pkg_image_name + ":" + base_pkg_image_tag)
 
 # Build the base image for packaging
 build-base-pkg-image:
-      {{docker}} build --build-arg USER={{user}} -f {{base_pkg_dockerfile_path}} . -t {{base_pkg_image_name_full}};
+      {{docker}} build --build-arg USER={{docker_build_user}} -f {{base_pkg_dockerfile_path}} . -t {{base_pkg_image_name_full}};
 
 # Push the base image for packaging
 push-base-pkg-image:
@@ -226,7 +230,11 @@ push-base-pkg-image:
 
 # Build the docker image for pg_idkit
 build-image:
-    {{docker}} build {{docker_platform_arg}} {{docker_progress_arg}} -f {{img_dockerfile_path}} -t {{pgidkit_image_name_full}} --build-arg USER={{user}} --build-arg PGIDKIT_REVISION={{revision}} --build-arg PGIDKIT_VERSION={{pgidkit_image_tag}} .
+    {{docker}} build {{docker_platform_arg}} {{docker_progress_arg}} -f {{img_dockerfile_path}} -t {{pgidkit_image_name_full}} --build-arg USER={{docker_build_user}} --build-arg PGIDKIT_REVISION={{revision}} --build-arg PGIDKIT_VERSION={{pgidkit_image_tag}} .
+
+# Push the pre-release docker image for pg_idkit
+push-image-prerelease:
+    {{docker}} push {{pgidkit_image_name_full}}-prerelease
 
 # Push the docker image for pg_idkit
 push-image:
@@ -246,7 +254,7 @@ rpm_scratch_location := "/tmp/pg_idkit/rpm/scratch"
 
 # Build an RPM distribution for pg_idkit
 build-rpm: _check-tool-strip _check-tool-cargo-generate-rpm
-    CARGO_FEATURES={{pgrx_pg_version}} {{just}} build-release
+    CARGO_FEATURES={{pgrx_pg_version}} {{just}} package
     {{strip}} -s {{pgrx_pkg_output_dir}}/lib/postgresql/pg_idkit.so
     mkdir -p {{rpm_scratch_location}}
     cp -r {{pgrx_pkg_output_dir}} {{rpm_scratch_location}}

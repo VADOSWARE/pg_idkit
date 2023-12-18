@@ -16,11 +16,11 @@ jobs:
       matrix:
         config:
           - pgrx:
-              version: pg15
+              pg-version: pg15
             pg:
               version: 15.5
           - pgrx:
-              version: pg16
+              pg-version: pg16
             pg:
               version: 16.1
     steps:
@@ -30,7 +30,7 @@ jobs:
         uses: ./.github/workflows/build-rpm
         with:
           artifact-upload: true
-          pgrx-version: ${{ matrix.config.pgrx.version }}
+          pgrx-pg-version: ${{ matrix.config.pgrx.pg-version }}
           pg-version: ${{ matrix.config.pg.version }}
 
   build-zip-gnu:
@@ -41,11 +41,11 @@ jobs:
       matrix:
         config:
           - pgrx:
-              version: pg15
+              pg-version: pg15
             pg:
               version: 15.5
           - pgrx:
-              version: pg16
+              pg-version: pg16
             pg:
               version: 16.1
     steps:
@@ -55,8 +55,8 @@ jobs:
         uses: ./.github/workflows/build-and-test-gnu
         with:
           artifact-upload: true
-          artifact-tarball-suffix: "-${{ matrix.config.pgrx.version }}-gnu"
-          pgrx-version: ${{ matrix.config.pgrx.version }}
+          artifact-tarball-suffix: "-${{ matrix.config.pgrx.pg-version }}-gnu"
+          pgrx-pg-version: ${{ matrix.config.pgrx.pg-version }}
           pg-version: ${{ matrix.config.pg.version }}
 
   release:
@@ -80,7 +80,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           prerelease: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}
-          draft: true
+          draft: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}
           # NOTE: while we have the CHANGELOG file, it always contains *all* changes,
           # so we will use the generated GitHub commits for now
           generate_release_notes: true

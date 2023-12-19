@@ -125,7 +125,7 @@ runs:
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
         PKG_PG_VERSION: ${{ inputs.pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
-        USER: ${{ inputs.user }}
+        DOCKER_BUILD_USER: ${{ inputs.user }}
       run: |
         su idkit -c "cargo install --force cargo-get cargo-edit"
 
@@ -146,7 +146,7 @@ runs:
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
         PKG_PG_VERSION: ${{ inputs.pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
-        USER: ${{ inputs.user }}
+        DOCKER_BUILD_USER: ${{ inputs.user }}
       run: |
         su idkit -c "just pgrx-init"
 
@@ -163,7 +163,7 @@ runs:
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
         PKG_PG_VERSION: ${{ inputs.pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
-        USER: ${{ inputs.user }}
+        DOCKER_BUILD_USER: ${{ inputs.user }}
       run: |
         su idkit -c "cargo check"
 
@@ -180,7 +180,7 @@ runs:
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
         PKG_PG_VERSION: ${{ inputs.pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
-        USER: ${{ inputs.user }}
+        DOCKER_BUILD_USER: ${{ inputs.user }}
       run: |
         su idkit -c "cargo build"
 
@@ -196,7 +196,7 @@ runs:
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
-        USER: ${{ inputs.user }}
+        DOCKER_BUILD_USER: ${{ inputs.user }}
       run: |
         su idkit -c "cargo test"
 
@@ -219,7 +219,7 @@ runs:
         PKG_PG_VERSION: ${{ inputs.pg-version }}
         PKG_TARBALL_SUFFIX: ${{ inputs.artifact-tarball-suffix }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
-        USER: ${{ inputs.user }}
+        DOCKER_BUILD_USER: ${{ inputs.user }}
       run: |
         su idkit -c "just package"
 

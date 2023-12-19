@@ -22,10 +22,7 @@ jobs:
         with:
           tool: just
 
-      # Tag the commit as a release
-      - name: Detect release
+      - name: Push new tag
         run: |
-          if [[ $(git show HEAD -s --oneline --pretty=format:"%s") == "release: "* ]] ; then
-            git tag v$(just print-version);
-            git push --follow-tags;
-          fi
+          git tag v$(just print-version);
+          git push --follow-tags;

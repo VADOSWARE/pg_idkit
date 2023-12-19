@@ -15,7 +15,7 @@ Explain the issue you have encountered while using `pg_idkit`. Under what condit
 | Context            | Value         |
 |--------------------|---------------|
 | Postgres version   | (ex. `14.5`)  |
-| `pg_idkit` version | (ex. `0.2.0`) |
+| `pg_idkit` version | (ex. `0.2.1`) |
 
 Please explain as much context as possible around the bug in addition to the information above.
 

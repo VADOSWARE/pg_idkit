@@ -29,6 +29,9 @@ inputs:
     default: 16.1
     decription: |
       Postgres version (ex. '15.5, '16.1')
+  user:
+    type: string
+    default: runner
 outputs: {}
 runs:
   using: "composite"
@@ -61,6 +64,7 @@ runs:
     - name: Build RPM
       shell: bash
       env:
+        DOCKER_BUILD_USER: ${{ inputs.user }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pg-version }}
       run: just package build-rpm
@@ -69,6 +73,7 @@ runs:
       id: rpm-output
       shell: bash
       env:
+        DOCKER_BUILD_USER: ${{ inputs.user }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pg-version }}
       run: |

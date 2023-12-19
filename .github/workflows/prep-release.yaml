@@ -94,6 +94,10 @@ jobs:
 
             Upon merging, this branch will cause a tag to be placed on the commit in `main`. After the tag has been placed, a build will run that generates artifacts and publishes a release.
 
+            Before this release is ready, here is the checklist:
+              - [ ] Update the examples in `README.md` to use the newest version
+              - [ ] Update `generate-rpm` configuration in `Cargo.toml` version references (ex. `--0.2.0.sql` -> `--0.2.1.sql`)
+
             See CHANGELOG for changes made to this release before it goes out.
           labels: |
             release-pr

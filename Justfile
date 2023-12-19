@@ -140,7 +140,8 @@ pg_os_image_version := env_var_or_default("POSTGRES_OS_IMAGE_VERSION", "alpine3.
 
 pgidkit_image_name := env_var_or_default("PGIDKIT_IMAGE_NAME", "ghcr.io/vadosware/pg_idkit")
 pgidkit_image_tag := env_var_or_default("POSGRES_IMAGE_VERSION", version + "-" + "pg" + pg_image_version + "-" + pg_os_image_version + "-" + container_img_arch)
-pgidkit_image_name_full := env_var_or_default("PGIDKIT_IMAGE_NAME_FULL", pgidkit_image_name + ":" + pgidkit_image_tag)
+pgidkit_image_tag_suffix := env_var_or_default("PGIDKIT_IMAGE_TAG_SUFFIX", "")
+pgidkit_image_name_full := env_var_or_default("PGIDKIT_IMAGE_NAME_FULL", pgidkit_image_name + ":" + pgidkit_image_tag + pgidkit_image_tag_suffix)
 pgidkit_dockerfile_path := env_var_or_default("PGIDKIT_DOCKERFILE_PATH", "infra" / "docker" / pgidkit_image_tag + ".Dockerfile")
 
 docker_password_path := env_var_or_default("DOCKER_PASSWORD_PATH", "secrets/docker/password.secret")
@@ -231,10 +232,6 @@ push-base-pkg-image:
 # Build the docker image for pg_idkit
 build-image:
     {{docker}} build {{docker_platform_arg}} {{docker_progress_arg}} -f {{img_dockerfile_path}} -t {{pgidkit_image_name_full}} --build-arg USER={{docker_build_user}} --build-arg PGIDKIT_REVISION={{revision}} --build-arg PGIDKIT_VERSION={{pgidkit_image_tag}} .
-
-# Push the pre-release docker image for pg_idkit
-push-image-prerelease:
-    {{docker}} push {{pgidkit_image_name_full}}-prerelease
 
 # Push the docker image for pg_idkit
 push-image:

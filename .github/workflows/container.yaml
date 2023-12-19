@@ -46,18 +46,22 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Build container image (prerelease)
+        if: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}
+        run: just build-image push-image
+        env:
+          CONTAINER_IMAGE_ARCH: ${{ matrix.config.container.arch }}
+          PGRX_PG_VERSION: ${{ matrix.config.container.pg_version }}
+          POSTGRES_IMAGE_VERSION: ${{ matrix.config.container.pg_version }}
+          POSTGRES_OS_IMAGE_VERSION: ${{ matrix.config.container.os_version }}
+          PGIDKIT_IMAGE_TAG_SUFFIX: "-prerelease"
+
       - name: Build container image
-        run: just build-image
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+        run: just build-image push-image
         env:
           CONTAINER_IMAGE_ARCH: ${{ matrix.config.container.arch }}
           PGRX_PG_VERSION: ${{ matrix.config.container.pg_version }}
           POSTGRES_IMAGE_VERSION: ${{ matrix.config.container.pg_version }}
           POSTGRES_OS_IMAGE_VERSION: ${{ matrix.config.container.os_version }}
 
-      - name: Push pre-release image
-        if: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}
-        run: just push-image-preprelease
-
-      - name: Push release image
-        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
-        run: just push-image

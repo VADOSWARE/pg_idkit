@@ -1,6 +1,24 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.2.2] - 2024-01-30
+
+### Bug Fixes
+
+- Push new tag on merges of release commit
+- Consistent sections for id generation methods
+
+### Features
+
+- Add customizable nanoid generation
+
+### Miscellaneous Tasks
+
+- Update version in docs to 0.2.1
+- Update pgrx to 0.11.3
+- Update base pkg image to use cargo-pgrx 0.11.3
+- Fix docker login, update secrets
+
 ## [0.2.1] - 2023-12-19
 
 ### Bug Fixes

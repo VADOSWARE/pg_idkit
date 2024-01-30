@@ -14,13 +14,16 @@ jobs:
     steps:
       # Checkout the repository
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
 
       # Install deps
       - uses: Swatinem/rust-cache@v2
       - name: Install cargo-release
         uses: taiki-e/install-action@v1
         with:
-          tool: just
+          tool: just,cargo-get
 
       - name: Push new tag
         run: |

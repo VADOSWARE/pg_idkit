@@ -153,16 +153,16 @@ img_dockerfile_path := "infra" / "docker" / "pg_idkit-pg" + pg_image_version + "
 
 # Ensure that that a given file is present
 _ensure-file file:
-    #!/usr/bin/env -S bash -euo pipefail
-    @if [ ! -f "{{file}}" ]; then
+    #!/usr/bin/bash
+    if [ ! -f "{{file}}" ] ; then
       echo "[error] file [{{file}}] is required, but missing";
       exit 1;
     fi;
 
 # Log in with docker using local credentials
 docker-login:
-    {{just}} ensure-file {{docker_password_path}}
-    {{just}} ensure-file {{docker_username_path}}
+    {{just}} _ensure-file {{docker_password_path}}
+    {{just}} _ensure-file {{docker_username_path}}
     cat {{docker_password_path}} | {{docker}} login {{docker_image_registry}} -u `cat {{docker_username_path}}` --password-stdin
     cp {{docker_config_dir}}/config.json {{docker_config_dir}}/.dockerconfigjson
 

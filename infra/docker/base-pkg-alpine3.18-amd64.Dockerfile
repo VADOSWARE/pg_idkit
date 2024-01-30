@@ -41,7 +41,7 @@ RUN cargo install just cargo-get
 
 # Install pgrx
 # (disabling the static C runtime is required since pgrx requires dynamic linking w/ libssl and libcrypto)
-RUN RUSTFLAGS="-Ctarget-feature=-crt-static" cargo install --locked cargo-pgrx@0.11.2
+RUN RUSTFLAGS="-Ctarget-feature=-crt-static" cargo install --locked cargo-pgrx@0.11.3
 
 # Copy in pg_idkit code
 WORKDIR /pg_idkit

@@ -25,10 +25,10 @@ postgres=# SELECT idkit_uuidv7_generate();
 |                           | `idkit_uuidv7_generate_uuid()`              |                                      |                                                          |
 |                           | `idkit_uuidv7_extract_timestamptz(TEXT)`    |                                      |                                                          |
 | [nanoid][nanoid]          | `idkit_nanoid_generate()`                   | [`nanoid`][crate-nanoid]             | NanoID, developed by [Andrey Sitnik][github-ai]          |
-| [nanoid][nanoid]          | `idkit_nanoid_custom_generate_text()`       | [`nanoid`][crate-nanoid]             | NanoID with a custom length and alphabet                 |
+|                           | `idkit_nanoid_custom_generate_text()`       | [`nanoid`][crate-nanoid]             | NanoID with a custom length and alphabet                 |
 | [ksuid][ksuid]            | `idkit_ksuid_generate()`                    | [`svix-ksuid`][crate-svix-ksuid]     | Created by [Segment][segment]                            |
 |                           | `idkit_ksuid_extract_timestamptz(TEXT)`     |                                      |                                                          |
-| [ksuid][ksuid]            | `idkit_ksuidms_generate()`                  | [`svix-ksuid`][crate-svix-ksuid]     | Same as `ksuid` but with millisecond precision           |
+|                           | `idkit_ksuidms_generate()`                  | [`svix-ksuid`][crate-svix-ksuid]     | Same as `ksuid` but with millisecond precision           |
 |                           | `idkit_ksuidms_extract_timestamptz(TEXT)`   |                                      |                                                          |
 | [ulid][ulid]              | `idkit_ulid_generate()`                     | [`ulid`][crate-ulid]                 | Unique, lexicographically sortable identifiers           |
 |                           | `idkit_ulid_extract_timestamptz(TEXT)`      |                                      |                                                          |

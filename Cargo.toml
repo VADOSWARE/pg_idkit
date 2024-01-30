@@ -33,7 +33,7 @@ base36 = "0.0.1"
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 svix-ksuid = "0.7"
 nanoid = "0.4"
-pgrx = "=0.11.2"
+pgrx = "=0.11.3"
 pushid = "0.0.1"
 sonyflake = "0.2"
 timeflake-rs = "0.3"
@@ -44,7 +44,7 @@ miette = { version = "5.10", features = ["fancy"] }
 time = "0.3"
 
 [dev-dependencies]
-pgrx-tests = "=0.11.2"
+pgrx-tests = "=0.11.3"
 
 [profile.dev]
 panic = "unwind"

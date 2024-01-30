@@ -30,7 +30,7 @@ The PGRX project is the magic behind this extension, exposing an easy-to-program
 To install it:
 
 ```console
-cargo install --locked cargo-pgrx@0.11.2
+cargo install --locked cargo-pgrx@0.11.3
 cargo pgrx init
 ```
 

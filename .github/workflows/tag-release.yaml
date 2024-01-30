@@ -8,7 +8,7 @@ jobs:
   ## Tag a release (if the commit looks like one)
   tag-release:
     runs-on: ubuntu-latest
-    if: startsWith(github.event.pull_request.title, 'release:')
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'release:')
     permissions:
       contents: write
     steps:

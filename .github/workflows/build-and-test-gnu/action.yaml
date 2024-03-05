@@ -13,7 +13,7 @@ inputs:
       Suffix that will be used on the tarball artifact (ex. '-gnu')
   rust-container-version:
     type: string
-    default: 1.73
+    default: 1.76
     description: |
       Version of rust to use in the container
   apt-cache-dir:

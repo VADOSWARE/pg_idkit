@@ -1,5 +1,5 @@
-# rust:1.73.0-slim-bullseye as of 2023/10/29
-FROM rust:1.73.0-slim-bullseye@sha256:9f7ad33ce267070d8982f4503ec83fd0d7cd19c7e30baaa5eb4ac5e26ba23ae1
+# rust:1.76.0-slim-bullseye as of 2024/03/06
+FROM rust:1.76.0-slim-bullseye@sha256:3c7ded076f5046502b978ef23b3867467aa9c24d56397e5d6bdffd55ee3763de
 
 ENV CARGO_HOME=/usr/local/cargo
 ENV CARGO_TARGET_DIR=/usr/local/build/target

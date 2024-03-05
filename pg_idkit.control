@@ -2,4 +2,4 @@ comment = 'multi-tool for generating new/niche universally unique identifiers (e
 default_version = '@CARGO_VERSION@'
 module_pathname = '$libdir/pg_idkit'
 relocatable = false
-superuser = false
+superuser = true

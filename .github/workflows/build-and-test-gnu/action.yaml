@@ -127,7 +127,7 @@ runs:
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
       run: |
-        su idkit -c "cargo install --force cargo-get cargo-edit"
+        su idkit -c "cargo install --locked --force cargo-get cargo-edit"
 
     ###############
     # Build/Tests #

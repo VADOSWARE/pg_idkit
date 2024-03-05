@@ -23,7 +23,7 @@ jobs:
               runner: ubuntu-22.04
             container:
               arch: amd64
-              pg_version: 15.5
+              pg_version: 15.6
               os_version: alpine3.18
           - triple: x86_64-unknown-linux-musl
             gh:

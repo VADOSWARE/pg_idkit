@@ -114,7 +114,7 @@ build-test-watch: _check-tool-cargo _check-tool-cargo-watch
     {{cargo_watch}} -x "test $(CARGO_BUILD_FLAGS)" --watch src
 
 build-package:
-    PGRX_IGNORE_RUST_VERSIONS=y {{cargo}} pgrx package --pg-config {{pkg_pg_config_path}}
+    PGRX_IGNORE_RUST_VERSIONS=y {{cargo}} pgrx package --pg-config {{pkg_pg_config_path}} -vvv
 
 package: build-package
     mkdir -p pkg/pg_idkit-$({{just}} print-version)

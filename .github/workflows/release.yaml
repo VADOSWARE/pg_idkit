@@ -18,7 +18,7 @@ jobs:
           - pgrx:
               pg-version: pg15
             pg:
-              version: 15.5
+              version: 15.6
           - pgrx:
               pg-version: pg16
             pg:
@@ -43,7 +43,7 @@ jobs:
           - pgrx:
               pg-version: pg15
             pg:
-              version: 15.5
+              version: 15.6
           - pgrx:
               pg-version: pg16
             pg:

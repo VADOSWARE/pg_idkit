@@ -28,7 +28,12 @@ inputs:
     type: string
     default: 16.2
     decription: |
-      Postgres version (ex. '15.5, '16.2')
+      Postgres version (ex. '15.6, '16.2')
+  cargo-pgrx-version:
+    type: string
+    default: 0.11.3
+    decription: |
+      cargo-pgrx version (ex. '0.11.3')
   user:
     type: string
     default: runner
@@ -51,7 +56,7 @@ runs:
     - name: Install Rust deps
       uses: taiki-e/install-action@v2
       with:
-        tool: cargo-get,just,cargo-generate-rpm,cargo-pgrx@0.11.0
+        tool: cargo-get,just,cargo-generate-rpm,cargo-pgrx@${{ inputs.cargo-pgrx-version }}
 
     - name: Initialize cargo-pgrx
       shell: bash

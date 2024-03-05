@@ -1,6 +1,26 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.2.3] - 2024-03-06
+
+### Bug Fixes
+
+- Release tagging upon merge
+- Use --locked for cargo install
+- Use zsh for better cross-platform support
+- More zsh usage
+- Use builder-gnu image from CI
+- Cross platform shell usage by platform
+
+### Features
+
+- Require superuser in pg_idkit.control ("Ability to install the extension for non-root users")
+
+### Miscellaneous Tasks
+
+- Update Rust to 1.76.0
+- Update postgres 16 to v16.2
+
 ## [0.2.2] - 2024-01-30
 
 ### Bug Fixes

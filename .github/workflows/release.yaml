@@ -1,24 +1,35 @@
 name: release
 
 on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to release (ex. `0.1.0`)
+        required: false
+        type: string
+
   push:
     branches:
+      # Run on all commits to main, because GitHub somehow doesn't support only specifying tag patterns
+      # (filtering must be done at the per-job level with an `if`)
+      - main
       # Run on auto-generated release PRs
-      - prep-release-v[0-9]+\.[0-9]+\.[0-9]+
+      - 'prep-release-v[0-9]+.[0-9]+.[0-9]+'
     tags:
       # Run on released tags (created by automated post-merge release-tagging), to generate the actual release
-      - v[0-9]+\.[0-9]+\.[0-9]+
+      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   build-rpm:
     runs-on: ubuntu-latest
+    if: ${{ startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/tags/prep-release-v')  }}
     strategy:
       matrix:
         config:
           - pgrx:
               pg-version: pg15
             pg:
-              version: 15.5
+              version: 15.6
           - pgrx:
               pg-version: pg16
             pg:
@@ -35,6 +46,7 @@ jobs:
 
   build-zip-gnu:
     runs-on: ubuntu-latest
+    if: ${{ startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/tags/prep-release-v')  }}
     container:
       image: ghcr.io/vadosware/pg_idkit/builder-gnu:0.1.x
     strategy:
@@ -43,7 +55,7 @@ jobs:
           - pgrx:
               pg-version: pg15
             pg:
-              version: 15.5
+              version: 15.6
           - pgrx:
               pg-version: pg16
             pg:
@@ -61,6 +73,7 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
+    if: ${{ startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/tags/prep-release-v')  }}
     permissions:
       contents: write
     needs:
@@ -81,6 +94,7 @@ jobs:
         with:
           prerelease: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}
           draft: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}
+          tag_name: ${{ github.ref || inputs.version }}
           # NOTE: while we have the CHANGELOG file, it always contains *all* changes,
           # so we will use the generated GitHub commits for now
           generate_release_notes: true

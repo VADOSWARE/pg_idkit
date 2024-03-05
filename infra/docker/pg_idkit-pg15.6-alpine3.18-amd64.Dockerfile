@@ -22,9 +22,9 @@ WORKDIR /pg_idkit
 COPY . .
 RUN RUSTFLAGS="-Ctarget-feature=-crt-static" just build package
 
-FROM postgres:15.5-alpine3.18@sha256:a57387207806d947c842f1be9f358e37b05442bf8b5ed19b1a69af281be930e7
+FROM postgres:15.6-alpine3.18@sha256:cee29a99808ad95f0e23685b84e641c4a0ab40278b09ee0c98883e24c4c89459
 
-# NOTE: PGRX_PG_VERSION is defined via base-pkg:pg15.5-alpine3.18-amd64
+# NOTE: PGRX_PG_VERSION is defined via base-pkg:pg15.6-alpine3.18-amd64
 ARG PGRX_PG_VERSION=pg15
 ARG PGIDKIT_VERSION
 ARG PGIDKIT_REVISION

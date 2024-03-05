@@ -49,7 +49,7 @@ inputs:
     type: string
     default: 16.2
     decription: |
-      Postgres version (ex. '15.5, '16.2')
+      Postgres version (ex. '15.6, '16.2')
 outputs: {}
 runs:
   using: "composite"

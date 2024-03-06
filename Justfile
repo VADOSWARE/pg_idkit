@@ -153,7 +153,7 @@ img_dockerfile_path := "infra" / "docker" / "pg_idkit-pg" + pg_image_version + "
 
 # Ensure that that a given file is present
 _ensure-file file:
-    #!/usr/bin/bash
+    #!/usr/bin/env -S zsh
     if [ ! -f "{{file}}" ] ; then
       echo "[error] file [{{file}}] is required, but missing";
       exit 1;

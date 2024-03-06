@@ -9,7 +9,7 @@ ARG PGRX_PG_VERSION=pg16
 ENV PGRX_PG_VERSION=$PGRX_PG_VERSION
 
 # Allow overriding features so that this file can be used to build
-# different crate features. By default since this is a 16.1 base package
+# different crate features. By default since this is a 16.2 base package
 # we expect to build with crate feature 'pg16'
 ARG CARGO_FEATURES=pg16
 ENV CARGO_FEATURES=$CARGO_FEATURES

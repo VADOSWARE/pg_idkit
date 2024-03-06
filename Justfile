@@ -1,3 +1,6 @@
+# Choose sell based on platform
+shell := if os() == "macos" { "zsh" } else { "bash" }
+
 docker := env_var_or_default("DOCKER", "docker")
 git := env_var_or_default("GIT", "git")
 tar := env_var_or_default("TAR", "tar")
@@ -43,7 +46,7 @@ default:
 ###########
 
 _check-installed-version tool msg:
-    #!/usr/bin/env -S zsh -euo pipefail
+    #!/usr/bin/env -S {{shell}} -euo pipefail
     if [ -z "$(command -v {{tool}})" ]; then
       echo "{{msg}}";
       exit 1;
@@ -78,11 +81,11 @@ revision := env_var_or_default("REVISION", `git rev-parse --short HEAD`)
     echo -n {{revision}}
 
 print-version:
-    #!/usr/bin/env -S zsh -euo pipefail
+    #!/usr/bin/env -S {{shell}} -euo pipefail
     echo -n `{{just}} get-version`
 
 print-revision:
-    #!/usr/bin/env -S zsh -euo pipefail
+    #!/usr/bin/env -S {{shell}} -euo pipefail
     echo -n `{{just}} get-revision`
 
 print-pkg-output-dir:
@@ -123,7 +126,7 @@ test:
     {{cargo}} pgrx test
 
 pgrx-init:
-    #!/usr/bin/env -S zsh -euo pipefail
+    #!/usr/bin/env -S {{shell}} -euo pipefail
     if [ ! -d "{{pkg_pg_config_path}}" ]; then
       echo "failed to find pgrx init dir [{{pkg_pg_config_path}}], running pgrx init...";
       {{cargo}} pgrx init
@@ -153,7 +156,7 @@ img_dockerfile_path := "infra" / "docker" / "pg_idkit-pg" + pg_image_version + "
 
 # Ensure that that a given file is present
 _ensure-file file:
-    #!/usr/bin/env -S zsh
+    #!/usr/bin/env -S {{shell}} -euo pipefail
     if [ ! -f "{{file}}" ] ; then
       echo "[error] file [{{file}}] is required, but missing";
       exit 1;

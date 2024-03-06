@@ -26,9 +26,9 @@ inputs:
       PGRX version (ex. 'pg15', 'pg16')
   pg-version:
     type: string
-    default: 16.1
+    default: 16.2
     decription: |
-      Postgres version (ex. '15.5, '16.1')
+      Postgres version (ex. '15.5, '16.2')
   user:
     type: string
     default: runner

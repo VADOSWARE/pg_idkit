@@ -43,7 +43,7 @@ default:
 ###########
 
 _check-installed-version tool msg:
-    #!/usr/bin/env -S bash -euo pipefail
+    #!/usr/bin/env -S zsh -euo pipefail
     if [ -z "$(command -v {{tool}})" ]; then
       echo "{{msg}}";
       exit 1;
@@ -78,11 +78,11 @@ revision := env_var_or_default("REVISION", `git rev-parse --short HEAD`)
     echo -n {{revision}}
 
 print-version:
-    #!/usr/bin/env -S bash -euo pipefail
+    #!/usr/bin/env -S zsh -euo pipefail
     echo -n `{{just}} get-version`
 
 print-revision:
-    #!/usr/bin/env -S bash -euo pipefail
+    #!/usr/bin/env -S zsh -euo pipefail
     echo -n `{{just}} get-revision`
 
 print-pkg-output-dir:
@@ -123,7 +123,7 @@ test:
     {{cargo}} pgrx test
 
 pgrx-init:
-    #!/usr/bin/env -S bash -euo pipefail
+    #!/usr/bin/env -S zsh -euo pipefail
     if [ ! -d "{{pkg_pg_config_path}}" ]; then
       echo "failed to find pgrx init dir [{{pkg_pg_config_path}}], running pgrx init...";
       {{cargo}} pgrx init

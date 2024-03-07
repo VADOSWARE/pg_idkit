@@ -3,7 +3,6 @@ name: container
 on:
   push:
     branches:
-      - fix/infra/container-generation-and-workflows # TODO: remove
       # Run on auto-generated release PRs
       - prep-release-v[0-9]+\.[0-9]+\.[0-9]+
     tags:

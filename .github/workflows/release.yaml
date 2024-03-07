@@ -14,10 +14,10 @@ on:
       # (filtering must be done at the per-job level with an `if`)
       - main
       # Run on auto-generated release PRs
-      - 'prep-release-v[0-9]+.[0-9]+.[0-9]+'
+      - prep-release-v[0-9]+\.[0-9]+\.[0-9]+
     tags:
       # Run on released tags (created by automated post-merge release-tagging), to generate the actual release
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - v[0-9]+\.[0-9]+\.[0-9]+
 
 jobs:
   build-rpm:

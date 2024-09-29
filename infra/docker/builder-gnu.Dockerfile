@@ -89,4 +89,4 @@ RUN su idkit -c "cargo install just sccache cargo-cache cargo-get cargo-edit car
 #
 # NOTE: pgrx shoudl be reinitialized if cargo-pgrx or the default pg version changes
 # at the project level
-RUN su idkit -c "cargo pgrx init --pg16 download"
+RUN su idkit -c "cargo pgrx init --pg17 download"

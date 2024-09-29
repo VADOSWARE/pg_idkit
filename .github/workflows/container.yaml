@@ -31,6 +31,13 @@ jobs:
               arch: amd64
               pg_version: 16.4
               os_version: alpine3.20.3
+          - triple: x86_64-unknown-linux-musl
+            gh:
+              runner: ubuntu-22.04
+            container:
+              arch: amd64
+              pg_version: 17.0
+              os_version: alpine3.20.3
     steps:
       - uses: actions/checkout@v3
       - uses: docker/setup-qemu-action@v3
@@ -63,4 +70,3 @@ jobs:
           PGRX_PG_VERSION: ${{ matrix.config.container.pg_version }}
           POSTGRES_IMAGE_VERSION: ${{ matrix.config.container.pg_version }}
           POSTGRES_OS_IMAGE_VERSION: ${{ matrix.config.container.os_version }}
-

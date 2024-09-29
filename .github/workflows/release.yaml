@@ -34,6 +34,10 @@ jobs:
               pg-version: pg16
             pg:
               version: 16.4
+          - pgrx:
+              pg-version: pg17
+            pg:
+              version: 17.0
     steps:
       - uses: actions/checkout@v3
 
@@ -60,6 +64,10 @@ jobs:
               pg-version: pg16
             pg:
               version: 16.4
+          - pgrx:
+              pg-version: pg17
+            pg:
+              version: 17.0
     steps:
       - uses: actions/checkout@v3
 

@@ -1,4 +1,4 @@
-use chrono::NaiveDateTime;
+use chrono::DateTime;
 use pgrx::*;
 use std::str::FromStr;
 use svix_ksuid::{Ksuid, KsuidLike};
@@ -26,9 +26,8 @@ fn idkit_ksuid_generate_text() -> String {
 fn idkit_ksuid_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
     let ksuid = Ksuid::from_str(val.as_ref()).or_pgrx_error(format!("[{val}] is an invalid KSUID"));
     naive_datetime_to_pg_timestamptz(
-        NaiveDateTime::from_timestamp_opt(ksuid.timestamp_seconds(), 0)
-            .or_pgrx_error("failed to create timestamp from KSUID [{val}]")
-            .and_utc(),
+        DateTime::from_timestamp(ksuid.timestamp_seconds(), 0)
+            .or_pgrx_error("failed to create timestamp from KSUID [{val}]"),
         format!("failed to convert timestamp for KSUID [{val}]"),
     )
 }

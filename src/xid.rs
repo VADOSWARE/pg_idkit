@@ -1,6 +1,6 @@
 use std::{str::FromStr, time::UNIX_EPOCH};
 
-use chrono::NaiveDateTime;
+use chrono::DateTime;
 use pgrx::pg_extern;
 use xid::{new as generate_xid, Id as Xid};
 
@@ -27,7 +27,7 @@ fn idkit_xid_generate_text() -> String {
 fn idkit_xid_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
     let xid = Xid::from_str(val.as_ref()).or_pgrx_error(format!("[{val}] is an invalid XID"));
     naive_datetime_to_pg_timestamptz(
-        NaiveDateTime::from_timestamp_millis(
+        DateTime::from_timestamp_millis(
             xid.time()
                 .duration_since(UNIX_EPOCH)
                 .or_pgrx_error("failed to convert XID type to timestamp milliseconds")
@@ -35,8 +35,7 @@ fn idkit_xid_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
                 .try_into()
                 .or_pgrx_error("failed to convert unix timestamp milliseconds"),
         )
-        .or_pgrx_error("failed to create timestamp from XID [{val}]")
-        .and_utc(),
+        .or_pgrx_error("failed to create timestamp from XID [{val}]"),
         format!("failed to convert timestamp for XID [{val}]"),
     )
 }

@@ -1,6 +1,7 @@
 use std::str::FromStr;
 
 use chrono::DateTime;
+use pgrx::datum::TimestampWithTimeZone;
 use pgrx::*;
 use ulid::Ulid;
 use uuid::Uuid;
@@ -39,7 +40,7 @@ fn idkit_ulid_from_uuid_text(uuid: String) -> String {
 ///
 /// This function panics (with a [`pgrx::error`]) when the timezone can't be created
 #[pg_extern]
-fn idkit_ulid_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
+fn idkit_ulid_extract_timestamptz(val: String) -> TimestampWithTimeZone {
     let ulid = Ulid::from_string(val.as_ref()).or_pgrx_error(format!("[{val}] is an invalid ULID"));
     naive_datetime_to_pg_timestamptz(
         DateTime::from_timestamp_millis(

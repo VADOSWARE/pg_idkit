@@ -1,6 +1,8 @@
-use chrono::DateTime;
-use pgrx::pg_extern;
 use std::io::{Error as IoError, ErrorKind};
+
+use chrono::DateTime;
+use pgrx::datum::TimestampWithTimeZone;
+use pgrx::pg_extern;
 use timeflake_rs::Timeflake;
 
 use crate::common::{naive_datetime_to_pg_timestamptz, OrPgrxError};
@@ -38,7 +40,7 @@ fn idkit_timeflake_generate_uuid() -> pgrx::Uuid {
 ///
 /// This function panics (with a [`pgrx::error`]) when the timezone can't be created
 #[pg_extern]
-fn idkit_timeflake_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
+fn idkit_timeflake_extract_timestamptz(val: String) -> TimestampWithTimeZone {
     let timeflake =
         Timeflake::parse(val.as_ref()).or_pgrx_error(format!("[{val}] is an invalid Timeflake"));
     naive_datetime_to_pg_timestamptz(
@@ -102,6 +104,7 @@ mod tests {
     #[pg_test]
     fn test_timeflake_extract_timestamptz_existing() {
         idkit_timeflake_extract_timestamptz("0004fbc6872f70fc9e27355a499e8b6d".into()); // base62
-        idkit_timeflake_extract_timestamptz("016fa936bff0997a0a3c428548fee8c9".into()); // hex
+        idkit_timeflake_extract_timestamptz("016fa936bff0997a0a3c428548fee8c9".into());
+        // hex
     }
 }

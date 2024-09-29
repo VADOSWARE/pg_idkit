@@ -1,6 +1,8 @@
-use chrono::DateTime;
-use pgrx::*;
 use std::str::FromStr;
+
+use chrono::DateTime;
+use pgrx::datum::TimestampWithTimeZone;
+use pgrx::*;
 use svix_ksuid::{Ksuid, KsuidLike};
 
 use crate::common::{naive_datetime_to_pg_timestamptz, OrPgrxError};
@@ -23,7 +25,7 @@ fn idkit_ksuid_generate_text() -> String {
 ///
 /// This function panics (with a [`pgrx::error`]) when the timezone can't be created
 #[pg_extern]
-fn idkit_ksuid_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
+fn idkit_ksuid_extract_timestamptz(val: String) -> TimestampWithTimeZone {
     let ksuid = Ksuid::from_str(val.as_ref()).or_pgrx_error(format!("[{val}] is an invalid KSUID"));
     naive_datetime_to_pg_timestamptz(
         DateTime::from_timestamp(ksuid.timestamp_seconds(), 0)
@@ -40,6 +42,7 @@ fn idkit_ksuid_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
 #[pg_schema]
 mod tests {
     use chrono::{DateTime, Utc};
+    use pgrx::prelude::ToIsoString;
     use pgrx::*;
 
     use crate::ksuid::idkit_ksuid_extract_timestamptz;

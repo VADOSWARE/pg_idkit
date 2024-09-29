@@ -2,6 +2,7 @@ use std::io::{Error as IoError, ErrorKind};
 use std::str::FromStr;
 
 use chrono::DateTime;
+use pgrx::datum::TimestampWithTimeZone;
 use pgrx::pg_extern;
 use uuid::Uuid;
 
@@ -38,7 +39,7 @@ fn idkit_uuidv7_generate_uuid() -> pgrx::Uuid {
 ///
 /// This function panics (with a [`pgrx::error`]) when the timezone can't be created
 #[pg_extern]
-fn idkit_uuidv7_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
+fn idkit_uuidv7_extract_timestamptz(val: String) -> TimestampWithTimeZone {
     let (secs, nanos) = Uuid::from_str(val.as_str())
         .or_pgrx_error(format!("[{val}] is an invalid UUIDv7"))
         .get_timestamp()

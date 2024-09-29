@@ -1,7 +1,7 @@
 use std::io::{Error as IoError, ErrorKind};
 use std::str::FromStr;
 
-use chrono::NaiveDateTime;
+use chrono::DateTime;
 use getrandom::getrandom;
 use pgrx::pg_extern;
 use uuid::Uuid;
@@ -54,9 +54,8 @@ fn idkit_uuidv6_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone 
         );
     }
     naive_datetime_to_pg_timestamptz(
-        NaiveDateTime::from_timestamp_opt(secs as i64, nanos)
-            .or_pgrx_error("failed to create timestamp from UUIDV6 [{val}]")
-            .and_utc(),
+        DateTime::from_timestamp(secs as i64, nanos)
+            .or_pgrx_error("failed to create timestamp from UUIDV6 [{val}]"),
         format!("failed to convert timestamp for UUIDV6 [{val}]"),
     )
 }

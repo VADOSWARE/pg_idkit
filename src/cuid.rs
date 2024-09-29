@@ -1,4 +1,4 @@
-use chrono::NaiveDateTime;
+use chrono::DateTime;
 use pgrx::*;
 
 use crate::common::{naive_datetime_to_pg_timestamptz, OrPgrxError};
@@ -41,9 +41,8 @@ fn idkit_cuid_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
         .or_pgrx_error("failed to convert u128 timestamp to i64");
 
     // Convert to a UTC timestamp
-    let now = NaiveDateTime::from_timestamp_millis(millis)
-        .or_pgrx_error("failed to parse timestamp from millis")
-        .and_utc();
+    let now = DateTime::from_timestamp_millis(millis)
+        .or_pgrx_error("failed to parse timestamp from millis");
 
     naive_datetime_to_pg_timestamptz(now, format!("failed to convert timestamp for CUID [{val}]"))
 }

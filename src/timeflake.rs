@@ -1,4 +1,4 @@
-use chrono::NaiveDateTime;
+use chrono::DateTime;
 use pgrx::pg_extern;
 use std::io::{Error as IoError, ErrorKind};
 use timeflake_rs::Timeflake;
@@ -42,15 +42,14 @@ fn idkit_timeflake_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZo
     let timeflake =
         Timeflake::parse(val.as_ref()).or_pgrx_error(format!("[{val}] is an invalid Timeflake"));
     naive_datetime_to_pg_timestamptz(
-        NaiveDateTime::from_timestamp_millis(
+        DateTime::from_timestamp_millis(
             timeflake
                 .timestamp
                 .as_millis()
                 .try_into()
                 .or_pgrx_error("failed to convert timeflake timestamp milliseconds"),
         )
-        .or_pgrx_error("failed to create timestamp from Timeflake [{val}]")
-        .and_utc(),
+        .or_pgrx_error("failed to create timestamp from Timeflake [{val}]"),
         format!("failed to convert timestamp for Timeflake [{val}]"),
     )
 }

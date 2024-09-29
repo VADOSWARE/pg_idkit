@@ -1,6 +1,7 @@
-use chrono::DateTime;
-use pgrx::*;
 use std::str::FromStr;
+
+use chrono::DateTime;
+use pgrx::datum::TimestampWithTimeZone;
 use svix_ksuid::{KsuidLike, KsuidMs};
 
 use crate::common::{naive_datetime_to_pg_timestamptz, OrPgrxError};
@@ -9,13 +10,13 @@ use crate::common::{naive_datetime_to_pg_timestamptz, OrPgrxError};
 ///
 /// Millisecond precision is achieved by using a extra byte (taking one from
 /// those used for randomness) for timestamp (see [`svix_ksuid`])
-#[pg_extern]
+#[pgrx::pg_extern]
 fn idkit_ksuidms_generate() -> String {
     KsuidMs::new(None, None).to_string()
 }
 
 /// Generate a random KSUID, producing a Postgres text object (HEX-encoded)
-#[pg_extern]
+#[pgrx::pg_extern]
 fn idkit_ksuidms_generate_text() -> String {
     idkit_ksuidms_generate()
 }
@@ -25,8 +26,8 @@ fn idkit_ksuidms_generate_text() -> String {
 /// # Panics
 ///
 /// This function panics (with a [`pgrx::error`]) when the timezone can't be created
-#[pg_extern]
-fn idkit_ksuidms_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
+#[pgrx::pg_extern]
+fn idkit_ksuidms_extract_timestamptz(val: String) -> TimestampWithTimeZone {
     let ksuid =
         KsuidMs::from_str(val.as_ref()).or_pgrx_error(format!("[{val}] is an invalid KSUID"));
 
@@ -42,9 +43,11 @@ fn idkit_ksuidms_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone
 //////////
 
 #[cfg(any(test, feature = "pg_test"))]
-#[pg_schema]
+#[pgrx::pg_schema]
 mod tests {
     use chrono::{DateTime, Utc};
+    use pgrx::prelude::ToIsoString;
+
     use pgrx::*;
 
     use crate::ksuid_ms::idkit_ksuidms_extract_timestamptz;

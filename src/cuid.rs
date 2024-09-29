@@ -1,4 +1,5 @@
 use chrono::DateTime;
+use pgrx::datum::TimestampWithTimeZone;
 use pgrx::*;
 
 use crate::common::{naive_datetime_to_pg_timestamptz, OrPgrxError};
@@ -29,7 +30,7 @@ fn idkit_cuid_generate_text() -> String {
 ///
 /// This function panics (with a [`pgrx::error`]) when the timezone can't be created
 #[pg_extern]
-fn idkit_cuid_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
+fn idkit_cuid_extract_timestamptz(val: String) -> TimestampWithTimeZone {
     #[allow(deprecated)]
     if !cuid::is_cuid(&val) {
         pgrx::error!("value provided is not a valid CUID");
@@ -55,6 +56,7 @@ fn idkit_cuid_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
 #[pg_schema]
 mod tests {
     use chrono::{DateTime, Utc};
+    use pgrx::prelude::ToIsoString;
     use pgrx::*;
 
     use crate::cuid::{idkit_cuid_extract_timestamptz, idkit_cuid_generate};

@@ -1,6 +1,8 @@
-use std::{str::FromStr, time::UNIX_EPOCH};
+use std::str::FromStr;
+use std::time::UNIX_EPOCH;
 
 use chrono::DateTime;
+use pgrx::datum::TimestampWithTimeZone;
 use pgrx::pg_extern;
 use xid::{new as generate_xid, Id as Xid};
 
@@ -24,7 +26,7 @@ fn idkit_xid_generate_text() -> String {
 ///
 /// This function panics (with a [`pgrx::error`]) when the timezone can't be created
 #[pg_extern]
-fn idkit_xid_extract_timestamptz(val: String) -> pgrx::TimestampWithTimeZone {
+fn idkit_xid_extract_timestamptz(val: String) -> TimestampWithTimeZone {
     let xid = Xid::from_str(val.as_ref()).or_pgrx_error(format!("[{val}] is an invalid XID"));
     naive_datetime_to_pg_timestamptz(
         DateTime::from_timestamp_millis(

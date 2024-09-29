@@ -47,9 +47,9 @@ inputs:
       PGRX version (ex. 'pg15', 'pg16')
   pg-version:
     type: string
-    default: 16.2
+    default: 16.4
     decription: |
-      Postgres version (ex. '15.6, '16.2')
+      Postgres version (ex. '15.8', '16.4')
 outputs: {}
 runs:
   using: "composite"

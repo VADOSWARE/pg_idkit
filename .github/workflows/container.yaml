@@ -29,8 +29,8 @@ jobs:
               runner: ubuntu-22.04
             container:
               arch: amd64
-              pg_version: 16.2
-              os_version: alpine3.18
+              pg_version: 16.4
+              os_version: alpine3.20.3
     steps:
       - uses: actions/checkout@v3
       - uses: docker/setup-qemu-action@v3

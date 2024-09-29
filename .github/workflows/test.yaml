@@ -14,11 +14,23 @@ jobs:
         - rpm:
             arch: x86_64
           pgrx:
+            version: pg12
+        - rpm:
+            arch: x86_64
+          pgrx:
+            version: pg13
+        - rpm:
+            arch: x86_64
+          pgrx:
             version: pg15
         - rpm:
             arch: x86_64
           pgrx:
             version: pg16
+        - rpm:
+            arch: x86_64
+          pgrx:
+            version: pg17
     steps:
       - uses: actions/checkout@v3
 

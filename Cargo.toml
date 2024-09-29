@@ -9,11 +9,15 @@ description = """
 A Postgres extension for generating UUIDs
 """
 
-[lib]
-crate-type = ["cdylib"]
-
 [badges]
 maintenance = { status = "actively-maintained" }
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[[bin]]
+name = "pgrx_embed_pg_idkit"
+path = "src/bin/pgrx_embed.rs"
 
 [features]
 default = ["pg16"]

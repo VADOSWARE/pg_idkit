@@ -8,7 +8,20 @@ ENV SCCACHE_DIR=/usr/local/sccache
 ENV CARGO_INCREMENTAL=0
 
 # Install deps
-RUN apt update && apt install -y libssl-dev git openssh-client pkg-config curl ca-certificates gnupg wget
+#
+# NOTE: some deps are used by cargo-pgrx at build/test time (ex. bison)
+RUN apt update && \
+    apt install -y \
+    libssl-dev \
+    git \
+    openssh-client \
+    pkg-config \
+    curl \
+    ca-certificates \
+    gnupg \
+    wget \
+    bison \
+    flex
 RUN cargo install sccache --locked
 
 ENV CARGO_BUILD_RUSTC_WRAPPER=/usr/local/cargo/bin/sccache
@@ -69,9 +82,11 @@ RUN mkdir /usr/local/sccache
 RUN chmod g+w -R /usr/local/sccache
 
 # Install & Initialize pgrx
-# NOTE: pgrx must be reinitialized if cargo-pgrx changes
-RUN su idkit -c "cargo install cargo-pgrx@0.12.5"
-RUN su idkit -c "cargo pgrx init --pg16 download"
-
 # Install development/build/testing deps
-RUN su idkit -c "cargo install just sccache cargo-cache cargo-get cargo-edit"
+RUN su idkit -c "cargo install just sccache cargo-cache cargo-get cargo-edit cargo-pgrx@0.12.5"
+
+# Initialize cargo pgrx
+#
+# NOTE: pgrx shoudl be reinitialized if cargo-pgrx or the default pg version changes
+# at the project level
+RUN su idkit -c "cargo pgrx init --pg16 download"

@@ -71,7 +71,7 @@ RUN chmod g+w -R /usr/local/sccache
 # Install & Initialize pgrx
 # NOTE: pgrx must be reinitialized if cargo-pgrx changes
 RUN su idkit -c "cargo install cargo-pgrx@0.12.5"
-RUN su idkit -c "cargo pgrx init --pg15 download"
+RUN su idkit -c "cargo pgrx init --pg16 download"
 
 # Install development/build/testing deps
 RUN su idkit -c "cargo install just sccache cargo-cache cargo-get cargo-edit"

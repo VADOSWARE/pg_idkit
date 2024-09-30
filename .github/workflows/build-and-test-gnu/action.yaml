@@ -148,6 +148,7 @@ runs:
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
       run: |
+        cargo pgrx --version
         su idkit -c "just pgrx-init"
 
     # Run cargo check

@@ -4,7 +4,7 @@ version = "0.2.3"
 edition = "2021"
 authors = ["Victor Adossi <vados@vadosware.io>"]
 license = "MIT"
-rust-version = "1.76.0"
+rust-version = "1.81.0"
 description = """
 A Postgres extension for generating UUIDs
 """

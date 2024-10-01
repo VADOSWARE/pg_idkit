@@ -14,14 +14,6 @@ jobs:
         - rpm:
             arch: x86_64
           pgrx:
-            version: pg12
-        - rpm:
-            arch: x86_64
-          pgrx:
-            version: pg13
-        - rpm:
-            arch: x86_64
-          pgrx:
             version: pg15
         - rpm:
             arch: x86_64

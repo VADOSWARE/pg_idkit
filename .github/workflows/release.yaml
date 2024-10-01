@@ -29,15 +29,15 @@ jobs:
           - pgrx:
               pg-version: pg15
             pg:
-              version: 15.8
+              version: "15.8"
           - pgrx:
               pg-version: pg16
             pg:
-              version: 16.4
+              version: "16.4"
           - pgrx:
               pg-version: pg17
             pg:
-              version: 17.0
+              version: "17.0"
     steps:
       - uses: actions/checkout@v3
 
@@ -59,15 +59,15 @@ jobs:
           - pgrx:
               pg-version: pg15
             pg:
-              version: 15.8
+              version: "15.8"
           - pgrx:
               pg-version: pg16
             pg:
-              version: 16.4
+              version: "16.4"
           - pgrx:
               pg-version: pg17
             pg:
-              version: 17.0
+              version: "17.0"
     steps:
       - uses: actions/checkout@v3
 

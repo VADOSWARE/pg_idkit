@@ -1,6 +1,32 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.2.4] - 2024-10-01
+
+### Bug Fixes
+
+- Trigger settings
+- Add explicit pgrx_embed bin
+
+### Features
+
+- Add note to docs about CI issues
+- Add postgres 17
+
+### Miscellaneous Tasks
+
+- Update deps
+- Pg 15.6 -> 15.8
+- Pg 16.2 -> 16.4
+- Pgrx 0.11.3 -> 0.12.5
+- Update rust version
+- Update pgrx init version, print pgrx version
+- Remove automated PR testing for pg12/pg13
+
+### Refactor
+
+- Update chrono usage
+
 ## [0.2.3] - 2024-03-06
 
 ### Bug Fixes

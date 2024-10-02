@@ -102,7 +102,7 @@ jobs:
         with:
           prerelease: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}
           draft: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}
-          tag_name: ${{ github.ref || inputs.version }}
+          tag_name: ${{ github.ref_name || inputs.version }}
           # NOTE: while we have the CHANGELOG file, it always contains *all* changes,
           # so we will use the generated GitHub commits for now
           generate_release_notes: true

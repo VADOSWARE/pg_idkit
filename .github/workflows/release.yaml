@@ -39,7 +39,7 @@ jobs:
             pg:
               version: "17.0"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Build the RPM (reuse workflow)
         uses: ./.github/workflows/build-rpm
@@ -69,7 +69,7 @@ jobs:
             pg:
               version: "17.0"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Build the package (reuse workflow)
         uses: ./.github/workflows/build-and-test-gnu
@@ -89,7 +89,7 @@ jobs:
       - build-zip-gnu
     steps:
       # Checkout the repository
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # Download all artifacts
       - uses: actions/download-artifact@v3

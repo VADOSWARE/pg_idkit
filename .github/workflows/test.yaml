@@ -24,7 +24,7 @@ jobs:
           pgrx:
             version: pg17
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Build & test the project
         uses: ./.github/workflows/build-and-test-gnu

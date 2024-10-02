@@ -1,15 +1,22 @@
 name: tag-release
 
 on:
-  workflow_dispatch:
   pull_request:
     types:
       - closed
     branches:
       - 'prep-release-v**'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: |
+          Github ref ('branch', 'tag-v1.0.0', '6d2db71')
+        required: false
+        default: ''
+        type: string
 
 jobs:
-  ## Tag a release (if the commit looks like one)
+  ## Tag a release
   tag-release:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.pull_request.merged }}
@@ -17,11 +24,11 @@ jobs:
       contents: write
     steps:
       # Checkout the repository
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           token: ${{ secrets.RELEASE_PR_PAT }}
           fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.inputs.ref || github.event.pull_request.head.ref }}
 
       # Install deps
       - uses: Swatinem/rust-cache@v2
@@ -29,7 +36,7 @@ jobs:
       - uses: cargo-bins/cargo-binstall@main
       - name: install cargo deps
         run: |
-          cargo binstall just cargo-get
+          cargo binstall -y --locked just cargo-get
 
       - name: Create and push new tag
         run: |

@@ -10,7 +10,7 @@ on:
     inputs:
       ref:
         description: |
-          Github ref ('branch', 'tag-v1.0.0', '6d2db71')
+          Github ref (e.x. 'branch', 'tag-v1.0.0', '<long SHA>')
         required: false
         default: ''
         type: string
@@ -41,4 +41,4 @@ jobs:
       - name: Create and push new tag
         run: |
           git tag v$(just print-version);
-          git push https://${{ secrets.RELEASE_PR_PAT }}@github.com/vadosware/pg_idkit.git --tags;
+          git push https://${{ secrets.RELEASE_PR_PAT }}@github.com/VADOSWARE/pg_idkit.git --tags;

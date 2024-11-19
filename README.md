@@ -65,7 +65,7 @@ docker run \
     -e POSTGRES_PASSWORD=replace_this \
     -p 5432 \
     --name pg_idkit \
-    ghcr.io/vadosware/pg_idkit:0.2.4-pg17.0-alpine3.18-amd64
+    ghcr.io/vadosware/pg_idkit:0.2.4-pg17.0-alpine3.20.3-amd64
 ```
 
 > [!WARNING]

@@ -86,7 +86,7 @@ RUN chmod g+w -R /usr/local/sccache
 
 # Install & Initialize pgrx
 # Install development/build/testing deps
-RUN su idkit -c "cargo install just sccache cargo-cache cargo-get cargo-edit cargo-pgrx@$CARGO_PGRX_VERSION"
+RUN su idkit -c "cargo install --locked just sccache cargo-cache cargo-get cargo-edit cargo-pgrx@$CARGO_PGRX_VERSION"
 
 # Initialize cargo pgrx
 #

@@ -55,14 +55,14 @@ runs:
   using: "composite"
   steps:
     # Checkout the repo
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
     #########
     # Cache #
     #########
 
     - name: Cache CARGO_HOME
-      uses: actions/cache@v3
+      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
       continue-on-error: false
       with:
         path: |
@@ -70,7 +70,7 @@ runs:
         key: pg_idkit-tests-rust-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}
 
     - name: Cache apt install
-      uses: actions/cache@v3
+      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
       continue-on-error: false
       with:
         path: |
@@ -78,7 +78,7 @@ runs:
         key: pg_idkit-tests-apt-cache-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}
 
     - name: Cache sccache
-      uses: actions/cache@v3
+      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
       continue-on-error: false
       with:
         path: |
@@ -86,7 +86,7 @@ runs:
         key: pg_idkit-tests-sccache-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}
 
     - name: Cache pgrx init
-      uses: actions/cache@v3
+      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
       continue-on-error: false
       with:
         path: |
@@ -227,6 +227,6 @@ runs:
     # Upload artifact
     - name: Upload artifact
       if: ${{ inputs.artifact-upload }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         path: pg_idkit-*.tar.gz

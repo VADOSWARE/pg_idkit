@@ -1,5 +1,8 @@
-# rust:1.81.0-slim-bullseye as of 2024/03/06
-FROM rust:1.81.0-slim-bullseye@sha256:60fd98e4f6b0cc14964d74edf0dc884e101945b4a1e2eaa7112daeb1d84619ff
+# rust:1.85.1-slim-bullseye as of 2025/03/27
+FROM rust:1.85.1-slim-bullseye@sha256:1eca9af45f393ac4669b9b63659529638359575f6268cbd4e6543ddc46c53803
+
+ARG CARGO_PGRX_VERSION=0.12.5
+ENV CARGO_PGRX_VERSION=${CARGO_PGRX_VERSION}
 
 ENV CARGO_HOME=/usr/local/cargo
 ENV CARGO_TARGET_DIR=/usr/local/build/target
@@ -56,7 +59,7 @@ RUN set -uex; \
 RUN apt-get update && \
     apt-get install -y --no-install-recommends ca-certificates \
     git build-essential libpq-dev \
-    postgresql postgresql-server-dev-15 \
+    postgresql-server-dev-all \
     curl libreadline6-dev zlib1g-dev libclang-dev \
     pkg-config cmake nodejs
 
@@ -83,7 +86,7 @@ RUN chmod g+w -R /usr/local/sccache
 
 # Install & Initialize pgrx
 # Install development/build/testing deps
-RUN su idkit -c "cargo install just sccache cargo-cache cargo-get cargo-edit cargo-pgrx@0.12.5"
+RUN su idkit -c "cargo install just sccache cargo-cache cargo-get cargo-edit cargo-pgrx@$CARGO_PGRX_VERSION"
 
 # Initialize cargo pgrx
 #

@@ -71,7 +71,7 @@ _check-installed-version tool msg:
 # Build #
 #########
 
-version := env_var_or_default("VERSION", `cargo get package.version`)
+version := env_var_or_default("VERSION", "0.2.4")
 revision := env_var_or_default("REVISION", `git rev-parse --short HEAD`)
 
 @get-version: _check-tool-cargo-get
@@ -193,9 +193,15 @@ builder_gnu_image_name_full := env_var_or_default("BUILDER_IMAGE_NAME_FULL", bui
 # builder_musl_image_tag := env_var_or_default("BUILDER_IMAGE_TAG", "0.1.x")
 # builder_musl_image_name_full := env_var_or_default("BUILDER_IMAGE_NAME_FULL", builder_musl_image_name + ":" + builder_musl_image_tag)
 
+builder_image_arg_cargo_pgrx_version := env_var_or_default("BUILDER_IMAGE_ARG_CARGO_PGRX_VERSION", "0.12.5")
+
 # Build the docker image used in BUILDER
 build-builder-image:
-    {{docker}} build -f {{builder_gnu_dockerfile_path}} -t {{builder_gnu_image_name_full}} .
+    {{docker}} build \
+      -f {{builder_gnu_dockerfile_path}} \
+      -t {{builder_gnu_image_name_full}} \
+      --build-arg CARGO_PGRX_VERSION={{builder_image_arg_cargo_pgrx_version}} \
+      .
 
 # Push the docker image used in BUILDER (to GitHub Container Registry)
 push-builder-image:

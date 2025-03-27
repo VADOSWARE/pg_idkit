@@ -36,7 +36,7 @@ getrandom = { version = "0.2" }
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 svix-ksuid = { version = "0.8" }
 nanoid = { version = "0.4" }
-pgrx = { version = "=0.12.5" }
+pgrx = { version = "=0.13.1" }
 pushid = { version = "0.0.1" }
 timeflake-rs = { version = "0.3" }
 ulid = { version = "1.1", features = [ "uuid" ] }
@@ -45,7 +45,7 @@ xid = { version = "1.1" }
 time = { version = "0.3" }
 
 [dev-dependencies]
-pgrx-tests = { version = "=0.12.5" }
+pgrx-tests = { version = "=0.13.1" }
 
 [profile.dev]
 panic = "unwind"

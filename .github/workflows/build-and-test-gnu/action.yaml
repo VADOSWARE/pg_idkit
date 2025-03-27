@@ -45,11 +45,11 @@ inputs:
     default: pg16
     decription: |
       PGRX version (ex. 'pg15', 'pg16')
-  pg-version:
+  pkg-pg-version:
     type: string
     default: 16.4
     decription: |
-      Postgres version (ex. '15.8', '16.4')
+      Postgres version (ex. '15.8', '16.4') used for packaging
 outputs: {}
 runs:
   using: "composite"
@@ -123,7 +123,7 @@ runs:
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
-        PKG_PG_VERSION: ${{ inputs.pg-version }}
+        PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
       run: |
@@ -144,7 +144,7 @@ runs:
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
-        PKG_PG_VERSION: ${{ inputs.pg-version }}
+        PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
       run: |
@@ -162,7 +162,7 @@ runs:
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
-        PKG_PG_VERSION: ${{ inputs.pg-version }}
+        PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
       run: |
@@ -179,7 +179,7 @@ runs:
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
-        PKG_PG_VERSION: ${{ inputs.pg-version }}
+        PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
       run: |
@@ -195,7 +195,7 @@ runs:
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
-        PKG_PG_VERSION: ${{ inputs.pg-version }}
+        PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
       run: |
@@ -217,7 +217,7 @@ runs:
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
-        PKG_PG_VERSION: ${{ inputs.pg-version }}
+        PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         PKG_TARBALL_SUFFIX: ${{ inputs.artifact-tarball-suffix }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}

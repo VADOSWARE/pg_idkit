@@ -18,16 +18,21 @@ jobs:
             arch: x86_64
           pgrx:
             version: pg15
+            pg-version: 15.7
         - rpm:
             arch: x86_64
           pgrx:
             version: pg16
+            pg-version: 16.8
         - rpm:
             arch: x86_64
           pgrx:
             version: pg17
+            pg-version: 17.4
     steps:
       - uses: actions/checkout@v4
 
       - name: Build & test the project
         uses: ./.github/workflows/build-and-test-gnu
+        with:
+          pkg-pg-version: ${{ matrix.config.pgrx.pg-version }}

@@ -260,6 +260,16 @@ If you'd like to contribute code, get started by:
 4. Creating a feature/bugfix/etc branch  (we expect [conventional commits][conventional-commits], i.e. `feat: new awesome feature`)
 5. Opening a Pull Request to this repository
 
+## FAQ/Common Issues
+
+### Error: `pgXX` is not managed by pgrx
+
+If you find this, you're likely using a version of [`cargo-pgrx`][cargo-pgrx] that is too old.
+
+```console
+cargo install --locked cargo-pgrx
+```
+
 [a-chilton]: https://github.com/chilts
 [a-feerasta]: https://github.com/alizain
 [cargo-get]: https://crates.io/crates/cargo-get

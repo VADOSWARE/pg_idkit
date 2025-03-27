@@ -1,7 +1,7 @@
 FROM alpine:3.19.0@sha256:13b7e62e8df80264dbb747995705a986aa530415763a6c58f84a3ca8af9a5bcd AS builder
 
 # Allow for overriding rust toolcahin version
-ARG RUST_TOOLCHAIN_VERSION=1.76
+ARG RUST_TOOLCHAIN_VERSION=1.85.1
 ENV RUST_TOOLCHAIN_VERSION=$RUST_TOOLCHAIN_VERSION
 
 # Allow for overriding of PGRX PG version that is used

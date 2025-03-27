@@ -4,7 +4,7 @@ version = "0.2.4"
 edition = "2021"
 authors = ["Victor Adossi <vados@vadosware.io>"]
 license = "MIT"
-rust-version = "1.81.0"
+rust-version = "1.85.1"
 description = """
 A Postgres extension for generating UUIDs
 """
@@ -30,22 +30,22 @@ pg17 = ["pgrx/pg17", "pgrx-tests/pg17"]
 pg_test = []
 
 [dependencies]
-cuid = "1.3"
-cuid2 = "0.1"
-getrandom = "0.2"
+cuid = { version = "1.3" }
+cuid2 = { version = "0.1" }
+getrandom = { version = "0.2" }
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
-svix-ksuid = "0.8"
-nanoid = "0.4"
-pgrx = "=0.12.5"
-pushid = "0.0.1"
-timeflake-rs = "0.3"
+svix-ksuid = { version = "0.8" }
+nanoid = { version = "0.4" }
+pgrx = { version = "=0.12.5" }
+pushid = { version = "0.0.1" }
+timeflake-rs = { version = "0.3" }
 ulid = { version = "1.1", features = [ "uuid" ] }
 uuid = { version = "1.10", features = [ "v6", "v7" ] }
-xid = "1.1"
-time = "0.3"
+xid = { version = "1.1" }
+time = { version = "0.3" }
 
 [dev-dependencies]
-pgrx-tests = "=0.12.5"
+pgrx-tests = { version = "=0.12.5" }
 
 [profile.dev]
 panic = "unwind"

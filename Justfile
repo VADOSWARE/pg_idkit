@@ -38,7 +38,7 @@ pgrx_pkg_output_dir := pgrx_pkg_path_prefix / "release" / "pg_idkit-" + pgrx_pg_
 
 docker_build_user := env_var_or_default('DOCKER_BUILD_USER', "root")
 
-default:
+@_default:
     {{just}} --list
 
 ###########
@@ -74,63 +74,112 @@ _check-installed-version tool msg:
 version := env_var_or_default("VERSION", "0.2.4")
 revision := env_var_or_default("REVISION", `git rev-parse --short HEAD`)
 
+# Print the current version (according to the script)
+[group('meta')]
 @get-version: _check-tool-cargo-get
     echo -n {{version}}
 
+# Print the current revision (according to the script)
+[group('meta')]
 @get-revision: _check-tool-cargo-get
     echo -n {{revision}}
 
+############
+# Metadata #
+############
+
+# Print the current version
+[group('meta')]
 print-version:
     #!/usr/bin/env -S {{shell}} -euo pipefail
     echo -n `{{just}} get-version`
 
+# Print the current revision
+[group('meta')]
 print-revision:
     #!/usr/bin/env -S {{shell}} -euo pipefail
     echo -n `{{just}} get-revision`
 
+# Print package output directory
+[group('meta')]
 print-pkg-output-dir:
     echo -n {{pgrx_pkg_output_dir}}
 
-changelog:
-    {{git}} cliff --unreleased --tag={{version}} --prepend={{changelog_file_path}}
-
 # Set the version on the package
+[group('release')]
 set-version version:
     {{cargo}} set-version {{version}}
 
-lint:
-    {{cargo}} clippy {{cargo_features_arg}} {{cargo_profile_arg}} --all-targets
+###############
+# Development #
+###############
 
-build:
-    {{cargo}} build {{cargo_features_arg}} {{cargo_profile_arg}}
-
-build-release:
-    {{cargo}} build --release {{cargo_features_arg}}
-
-build-watch: _check-tool-cargo _check-tool-cargo-watch
-    {{cargo_watch}} -x "build $(CARGO_BUILD_FLAGS)" --watch src
-
-build-test-watch: _check-tool-cargo _check-tool-cargo-watch
-    {{cargo_watch}} -x "test $(CARGO_BUILD_FLAGS)" --watch src
-
-build-package:
-    PGRX_IGNORE_RUST_VERSIONS=y {{cargo}} pgrx package --pg-config {{pkg_pg_config_path}} -vvv
-
-package: build-package
-    mkdir -p pkg/pg_idkit-$({{just}} print-version)
-    cp -r $({{just}} print-pkg-output-dir)/* pkg/pg_idkit-$({{just}} print-version)
-    {{tar}} -C pkg -cvf pg_idkit-$(just print-version){{pkg_tarball_suffix}}.tar.gz  pg_idkit-$({{just}} print-version)
-
-test:
-    {{cargo}} test {{cargo_profile_arg}}
-    {{cargo}} pgrx test
-
+# Initialize pgrx
+[group('setup')]
 pgrx-init:
     #!/usr/bin/env -S {{shell}} -euo pipefail
     if [ ! -d "{{pkg_pg_config_path}}" ]; then
       echo "failed to find pgrx init dir [{{pkg_pg_config_path}}], running pgrx init...";
       {{cargo}} pgrx init
     fi
+
+# Perform all required setup for the project
+[group('setup')]
+setup:
+    {{just}} pgrx-init
+
+# Lint the project
+[group('dev')]
+lint:
+    {{cargo}} clippy {{cargo_features_arg}} {{cargo_profile_arg}} --all-targets
+
+# Build the pg_idkit project
+[group('dev')]
+build:
+    {{cargo}} build {{cargo_features_arg}} {{cargo_profile_arg}}
+
+# Build the project continuously
+[group('dev')]
+build-watch: _check-tool-cargo _check-tool-cargo-watch
+    {{cargo_watch}} -x "build $(CARGO_BUILD_FLAGS)" --watch src
+
+# Build the release version
+[group('dev')]
+build-release:
+    {{cargo}} build --release {{cargo_features_arg}}
+
+# Build tests continuously
+[group('dev')]
+build-test-watch: _check-tool-cargo _check-tool-cargo-watch
+    {{cargo_watch}} -x "test $(CARGO_BUILD_FLAGS)" --watch src
+
+# Run tests
+[group('test')]
+test:
+    {{cargo}} test {{cargo_profile_arg}}
+    {{cargo}} pgrx test
+
+###########
+# Release #
+###########
+
+# Build the package
+[group('release')]
+build-package:
+    PGRX_IGNORE_RUST_VERSIONS=y {{cargo}} pgrx package --pg-config {{pkg_pg_config_path}} -vvv
+
+# Package the project
+[group('release')]
+package: build-package
+    mkdir -p pkg/pg_idkit-$({{just}} print-version)
+    cp -r $({{just}} print-pkg-output-dir)/* pkg/pg_idkit-$({{just}} print-version)
+    {{tar}} -C pkg -cvf pg_idkit-$(just print-version){{pkg_tarball_suffix}}.tar.gz  pg_idkit-$({{just}} print-version)
+
+# Generate changelog
+[group('release')]
+changelog:
+    {{git}} cliff --unreleased --tag={{version}} --prepend={{changelog_file_path}}
+
 
 ##########
 # Docker #
@@ -163,6 +212,7 @@ _ensure-file file:
     fi;
 
 # Log in with docker using local credentials
+[group('package')]
 docker-login:
     {{just}} _ensure-file {{docker_password_path}}
     {{just}} _ensure-file {{docker_username_path}}
@@ -196,6 +246,7 @@ builder_gnu_image_name_full := env_var_or_default("BUILDER_IMAGE_NAME_FULL", bui
 builder_image_arg_cargo_pgrx_version := env_var_or_default("BUILDER_IMAGE_ARG_CARGO_PGRX_VERSION", "0.12.5")
 
 # Build the docker image used in BUILDER
+[group('package')]
 build-builder-image:
     {{docker}} build \
       -f {{builder_gnu_dockerfile_path}} \
@@ -204,6 +255,7 @@ build-builder-image:
       .
 
 # Push the docker image used in BUILDER (to GitHub Container Registry)
+[group('package')]
 push-builder-image:
     {{docker}} push {{builder_gnu_image_name_full}}
 
@@ -223,10 +275,12 @@ base_pkg_image_tag := env_var_or_default("POSGRES_IMAGE_VERSION", base_pkg_versi
 base_pkg_image_name_full := env_var_or_default("PKG_IMAGE_NAME_FULL", base_pkg_image_name + ":" + base_pkg_image_tag)
 
 # Build the base image for packaging
+[group('package')]
 build-base-pkg-image:
       {{docker}} build --build-arg USER={{docker_build_user}} -f {{base_pkg_dockerfile_path}} . -t {{base_pkg_image_name_full}};
 
 # Push the base image for packaging
+[group('package')]
 push-base-pkg-image:
       {{docker}} push {{base_pkg_image_name_full}}
 
@@ -239,10 +293,12 @@ push-base-pkg-image:
 #
 
 # Build the docker image for pg_idkit
+[group('package')]
 build-image:
     {{docker}} build {{docker_platform_arg}} {{docker_progress_arg}} -f {{img_dockerfile_path}} -t {{pgidkit_image_name_full}} --build-arg USER={{docker_build_user}} --build-arg PGIDKIT_REVISION={{revision}} --build-arg PGIDKIT_VERSION={{pgidkit_image_tag}} .
 
 # Push the docker image for pg_idkit
+[group('package')]
 push-image:
     {{docker}} push {{pgidkit_image_name_full}}
 
@@ -259,6 +315,7 @@ rpm_output_path := "target" / "generate-rpm" / rpm_file_name
 rpm_scratch_location := "/tmp/pg_idkit/rpm/scratch"
 
 # Build an RPM distribution for pg_idkit
+[group('package-rpm')]
 build-rpm: _check-tool-strip _check-tool-cargo-generate-rpm
     CARGO_FEATURES={{pgrx_pg_version}} {{just}} package
     {{strip}} -s {{pgrx_pkg_output_dir}}/lib/postgresql/pg_idkit.so
@@ -266,8 +323,12 @@ build-rpm: _check-tool-strip _check-tool-cargo-generate-rpm
     cp -r {{pgrx_pkg_output_dir}} {{rpm_scratch_location}}
     {{cargo_generate_rpm}} --variant {{pgrx_pg_version}}
 
+# Print the RPM output file name
+[group('package-rpm')]
 @print-rpm-output-file-name:
     echo -n {{rpm_file_name}}
 
+# Print the RPM output path
+[group('package-rpm')]
 @print-rpm-output-path:
     echo -n {{rpm_output_path}}

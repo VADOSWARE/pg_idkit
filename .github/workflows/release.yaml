@@ -33,7 +33,7 @@ jobs:
           - pgrx:
               pg-version: pg16
             pg:
-              version: "16.4"
+              version: "16.8"
           - pgrx:
               pg-version: pg17
             pg:
@@ -63,7 +63,7 @@ jobs:
           - pgrx:
               pg-version: pg16
             pg:
-              version: "16.4"
+              version: "16.8"
           - pgrx:
               pg-version: pg17
             pg:

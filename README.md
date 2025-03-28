@@ -104,7 +104,7 @@ cargo install cargo-get cargo-pgrx just
 just package
 ```
 
-After running these commands you should see the following directory structure in `target/release/pg_idkit-pg16`:
+After running these commands you should see the following directory structure in `target/release/pg_idkit-pg17`:
 
 ```
 target/release/pg_idkit-pg16

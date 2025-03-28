@@ -47,9 +47,9 @@ inputs:
       PGRX version (ex. 'pg15', 'pg16')
   pkg-pg-version:
     type: string
-    default: 16.4
+    default: 17.4
     decription: |
-      Postgres version (ex. '15.8', '16.4') used for packaging
+      Postgres version (ex. '15.8', '16.8', '17.4') used for packaging
 outputs: {}
 runs:
   using: "composite"

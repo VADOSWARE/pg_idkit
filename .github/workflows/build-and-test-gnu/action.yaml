@@ -1,5 +1,7 @@
 name: build-and-test
+
 description: Build and test pg_idkit (meant to run inside pg_idkit/builder container)
+
 inputs:
   artifact-upload:
     type: boolean
@@ -50,7 +52,9 @@ inputs:
     default: 17.4
     decription: |
       Postgres version (ex. '17.4') used for packaging
+
 outputs: {}
+
 runs:
   using: "composite"
   steps:

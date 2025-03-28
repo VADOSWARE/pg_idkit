@@ -43,3 +43,4 @@ jobs:
         with:
           pkg-pg-version: ${{ matrix.config.pgrx.pkg-pg-version }}
           pgrx-pg-version: ${{ matrix.config.pgrx.pgrx-pg-version }}
+          artifact-upload: false

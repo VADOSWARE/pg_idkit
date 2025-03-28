@@ -23,7 +23,7 @@ jobs:
             container:
               arch: amd64
               pgrx_pg_version: pg15
-              pg_version: "15.8"
+              pg_version: "15.12"
               os_version: alpine3.20.3
           - triple: x86_64-unknown-linux-musl
             gh:

@@ -24,7 +24,7 @@ jobs:
             arch: x86_64
           pgrx:
             version: pg15
-            pg-version: 15.7
+            pg-version: 15.12
         - rpm:
             arch: x86_64
           pgrx:

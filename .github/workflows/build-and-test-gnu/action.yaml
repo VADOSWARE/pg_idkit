@@ -117,7 +117,7 @@ runs:
 
 
     - name: Reinstall deps due to GLIBC issue
-      if: ${{ inputs.artifact-upload }}
+      if: ${{ inputs.artifact-upload == 'true' }}
       shell: bash
       env:
         CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
@@ -211,7 +211,7 @@ runs:
 
     # Run cargo test
     - name: Build a package
-      if: ${{ inputs.artifact-upload }}
+      if: ${{ inputs.artifact-upload == 'true' }}
       shell: bash
       env:
         CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
@@ -230,7 +230,7 @@ runs:
 
     # Upload artifact
     - name: Upload artifact
-      if: ${{ inputs.artifact-upload }}
+      if: ${{ inputs.artifact-upload == 'true' }}
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         path: pg_idkit-*.tar.gz

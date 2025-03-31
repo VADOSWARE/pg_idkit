@@ -230,18 +230,12 @@ docker_progress_arg := env_var_or_default("DOCKER_PROGRESS_ARG", "")
 # and for performing builds when building release artifacts
 #
 
-builder_gnu_dockerfile_path := env_var_or_default("BUILDER_DOCKERFILE_PATH", "infra" / "docker" / "builder-gnu.Dockerfile")
-builder_gnu_image_name := env_var_or_default("BUILDER_IMAGE_NAME", "ghcr.io/vadosware/pg_idkit/builder-gnu")
-builder_gnu_image_tag := env_var_or_default("BUILDER_IMAGE_TAG", "0.1.x")
-builder_gnu_image_name_full := env_var_or_default("BUILDER_IMAGE_NAME_FULL", builder_gnu_image_name + ":" + builder_gnu_image_tag)
+builder_type := env_var_or_default("BUILDER_TYPE", "gnu") # alternatively, 'musl'
 
-## TODO: uncomment and edit build-builder-image once musl machinery is available
-## https://github.com/VADOSWARE/pg_idkit/issues/55
-#
-# builder_musl_dockerfile_path := env_var_or_default("BUILDER_DOCKERFILE_PATH", "infra" / "docker" / "builder-musl.Dockerfile")
-# builder_musl_image_name := env_var_or_default("BUILDER_IMAGE_NAME", "ghcr.io/vadosware/pg_idkit/builder-musl")
-# builder_musl_image_tag := env_var_or_default("BUILDER_IMAGE_TAG", "0.1.x")
-# builder_musl_image_name_full := env_var_or_default("BUILDER_IMAGE_NAME_FULL", builder_musl_image_name + ":" + builder_musl_image_tag)
+builder_dockerfile_path := env_var_or_default("BUILDER_DOCKERFILE_PATH", "infra" / "docker" / "builder-" + builder_type + ".Dockerfile")
+builder_image_name := env_var_or_default("BUILDER_IMAGE_NAME", "ghcr.io/vadosware/pg_idkit/builder-" + builder_type)
+builder_image_tag := env_var_or_default("BUILDER_IMAGE_TAG", "0.1.x")
+builder_image_name_full := env_var_or_default("BUILDER_IMAGE_NAME_FULL", builder_image_name + ":" + builder_image_tag)
 
 builder_image_arg_cargo_pgrx_version := env_var_or_default("BUILDER_IMAGE_ARG_CARGO_PGRX_VERSION", "0.12.5")
 
@@ -249,15 +243,15 @@ builder_image_arg_cargo_pgrx_version := env_var_or_default("BUILDER_IMAGE_ARG_CA
 [group('package')]
 build-builder-image:
     {{docker}} build \
-      -f {{builder_gnu_dockerfile_path}} \
-      -t {{builder_gnu_image_name_full}} \
+      -f {{builder_dockerfile_path}} \
+      -t {{builder_image_name_full}} \
       --build-arg CARGO_PGRX_VERSION={{builder_image_arg_cargo_pgrx_version}} \
       .
 
 # Push the docker image used in BUILDER (to GitHub Container Registry)
 [group('package')]
 push-builder-image:
-    {{docker}} push {{builder_gnu_image_name_full}}
+    {{docker}} push {{builder_image_name_full}}
 
 ###########################
 # Docker Image - base-pkg #

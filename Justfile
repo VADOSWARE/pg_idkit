@@ -26,7 +26,7 @@ cargo_features_arg := if cargo_features != "" {
 
 changelog_file_path := absolute_path(justfile_directory() / "CHANGELOG")
 
-pkg_pg_version := env_var_or_default("PKG_PG_VERSION", "17.0")
+pkg_pg_version := env_var_or_default("PKG_PG_VERSION", "17.4")
 pkg_pg_config_path := env_var_or_default("PKG_PG_CONFIG_PATH", "~/.pgrx/" + pkg_pg_version + "/pgrx-install/bin/pg_config")
 pkg_tarball_suffix := env_var_or_default("PKG_TARBALL_SUFFIX", "")
 
@@ -187,7 +187,7 @@ changelog:
 
 container_img_arch := env_var_or_default("CONTAINER_IMAGE_ARCH", "amd64")
 
-pg_image_version := env_var_or_default("POSTGRES_IMAGE_VERSION", "17.0")
+pg_image_version := env_var_or_default("POSTGRES_IMAGE_VERSION", "17.4")
 pg_os_image_version := env_var_or_default("POSTGRES_OS_IMAGE_VERSION", "alpine3.20.3")
 
 pgidkit_image_name := env_var_or_default("PGIDKIT_IMAGE_NAME", "ghcr.io/vadosware/pg_idkit")

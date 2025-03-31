@@ -49,7 +49,7 @@ COPY . .
 
 # Initialize pgrx
 ENV PGRX_IGNORE_RUST_VERSIONS=y
-RUN just pgrx-init
+RUN just pgrx-init-all
 
 # Build the package
 RUN RUSTFLAGS="-Ctarget-feature=-crt-static" just build package

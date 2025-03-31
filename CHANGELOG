@@ -1,6 +1,62 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2025-03-31
+
+### Bug Fixes
+
+- Clarify only long SHAs required, update repo URL
+- Disable test workflow on releases
+- Fix refname used for release
+- Use --locked when doing install in builder image
+- Always specify the packaged pg version
+- Version in readme
+- Update pg-version for 15
+- Update pgrx-pg-version to pg17
+- Pgrx-pg-version used for pg15
+- Do not upload artifacts
+- Boolean use
+- Revert change to legacy base-pkg build
+- Release PR prep
+- Dockerfile for 17.4
+
+### Documentation
+
+- Add FAQ/common issues section
+
+### Features
+
+- Enable tagging a specific ref for release
+- Enable building and pushing builder image from CI
+- Run CI on pull requests
+- Cancel in-progress PR tests
+- Add musl builds
+- Add CI workflow for building base-pkg image in CI
+- Add concurrency restriction for creating release pr
+- Add build-all target for pgrx
+
+### Miscellaneous Tasks
+
+- Update actions/checkout action in CI
+- Update readme quickstart version
+- Update rust toolchain & MSRV to 1.85.1
+- Add rust-toolchain.toml
+- Update pgrx 0.13.1
+- Use pinned deps
+- Update pg17 latest version
+- Pg15.8 -> 15.12
+- Update versions for pg17
+- Update base-pkg and add new pg17.4 Dockerfile
+- Update base alpine image version
+- Add test workflow to merge queue
+- Update default rust version to 1.85.1
+- Update dockerfiles to use new target
+
+### Refactor
+
+- Justfile grouping
+- Init only one pg version
+
 ## [0.2.4] - 2024-10-01
 
 ### Bug Fixes

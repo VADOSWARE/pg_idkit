@@ -71,7 +71,7 @@ _check-installed-version tool msg:
 # Build #
 #########
 
-version := env_var_or_default("VERSION", "0.2.4")
+version := env_var_or_default("VERSION", "0.3.0")
 revision := env_var_or_default("REVISION", `git rev-parse --short HEAD`)
 
 # Print the current version (according to the script)

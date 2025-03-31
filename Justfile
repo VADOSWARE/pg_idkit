@@ -123,6 +123,12 @@ pgrx-init:
       {{cargo}} pgrx init --{{pgrx_pg_version}}=download
     fi
 
+# Initialize all pgrx versions
+[group('setup')]
+pgrx-init-all:
+    #!/usr/bin/env -S {{shell}} -euo pipefail
+    {{cargo}} pgrx init
+
 # Perform all required setup for the project
 [group('setup')]
 setup:

@@ -8,6 +8,10 @@ on:
         required: false
         type: string
 
+concurrency:
+  group: pg_idkit-create-release-pr # Project-wide
+  cancel-in-progress: true
+
 jobs:
   create-release-pr:
     permissions:

@@ -188,7 +188,7 @@ changelog:
 container_img_arch := env_var_or_default("CONTAINER_IMAGE_ARCH", "amd64")
 
 pg_image_version := env_var_or_default("POSTGRES_IMAGE_VERSION", "17.4")
-pg_os_image_version := env_var_or_default("POSTGRES_OS_IMAGE_VERSION", "alpine3.20.3")
+pg_os_image_version := env_var_or_default("POSTGRES_OS_IMAGE_VERSION", "alpine3.21.3")
 
 pgidkit_image_name := env_var_or_default("PGIDKIT_IMAGE_NAME", "ghcr.io/vadosware/pg_idkit")
 pgidkit_image_tag := env_var_or_default("POSGRES_IMAGE_VERSION", version + "-" + "pg" + pg_image_version + "-" + pg_os_image_version + "-" + container_img_arch)

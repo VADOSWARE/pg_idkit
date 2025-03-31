@@ -120,7 +120,7 @@ pgrx-init:
     #!/usr/bin/env -S {{shell}} -euo pipefail
     if [ ! -d "{{pkg_pg_config_path}}" ]; then
       echo "failed to find pgrx init dir [{{pkg_pg_config_path}}], running pgrx init...";
-      {{cargo}} pgrx init
+      {{cargo}} pgrx init --{{pgrx_pg_version}}=download
     fi
 
 # Perform all required setup for the project

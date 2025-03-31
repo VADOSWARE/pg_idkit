@@ -1,7 +1,7 @@
-name: ci-builder-image
+name: base-pkg-image
 
 description: |
-  Build (and push) the CI builder image
+  Build (and push) the base-pkg image
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ on:
       cargo-pgrx-version:
         required: false
         type: string
-        default: "0.12.5"
+        default: "0.13.1"
         description: |
           version of cargo-pgrx to download (inside image build)
 
@@ -37,12 +37,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build builder image
+      - name: Build base-pkg image
         env:
-          BUILDER_IMAGE_ARG_CARGO_PGRX_VERSION: ${{ inputs.cargo-pgrx-version || '0.12.5' }}
+          BUILDER_IMAGE_ARG_CARGO_PGRX_VERSION: ${{ inputs.cargo-pgrx-version }}
         run: |
-          just build-builder-image
+          just build-base-pkg-image
 
-      - name: Push builder image
+      - name: Push base-pkg image
         run: |
-          just push-builder-image
+          just push-base-pkg-image

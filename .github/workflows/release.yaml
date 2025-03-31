@@ -44,7 +44,7 @@ jobs:
       - name: Build the RPM (reuse workflow)
         uses: ./.github/workflows/build-rpm
         with:
-          artifact-upload: true
+          artifact-upload: ${{ startsWith(github.ref, 'refs/tags/v') }}
           pgrx-pg-version: ${{ matrix.config.pgrx.pg-version }}
           pg-version: ${{ matrix.config.pg.version }}
 
@@ -78,7 +78,7 @@ jobs:
         uses: ./.github/workflows/build-and-test
         with:
           libc: ${{ matrix.libc.gnu }}
-          artifact-upload: true
+          artifact-upload: ${{ startsWith(github.ref, 'refs/tags/v') }}
           artifact-tarball-suffix: "-${{ matrix.config.pgrx.pg-version }}-${{ matrix.config.libc }}"
           pgrx-pg-version: ${{ matrix.config.pgrx.pg-version }}
           pg-version: ${{ matrix.config.pg.version }}

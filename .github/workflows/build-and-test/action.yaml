@@ -10,9 +10,9 @@ inputs:
       Desired artifact name (will replace the natural name)
   artifact-tarball-suffix:
     type: string
-    default: "gnu"
+    default: "musl"
     description: |
-      Suffix that will be used on the tarball artifact (ex. '-gnu')
+      Suffix that will be used on the tarball artifact (ex. '-musl')
   rust-container-version:
     type: string
     default: 1.76
@@ -21,6 +21,9 @@ inputs:
   apt-cache-dir:
     type: string
     default: /var/cache/apt
+  apk-cache-dir:
+    type: string
+    default: /var/cache/apk
   cargo-home-dir:
     type: string
     default: /usr/local/cargo
@@ -52,6 +55,12 @@ inputs:
     default: 17.4
     decription: |
       Postgres version (ex. '17.4') used for packaging
+  libc:
+    type: string
+    required: true
+    default: gnu
+    description: |
+      libc implementation to build under (either 'gnu' or 'musl')
 
 outputs: {}
 
@@ -69,33 +78,43 @@ runs:
       uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
       continue-on-error: false
       with:
+        key: pg_idkit-tests-rust-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}-${{ inputs.artifact-tarball-suffix }}
         path: |
           ${{ inputs.cargo-home-dir }}
-        key: pg_idkit-tests-rust-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}
 
     - name: Cache apt install
       uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+      if: ${{ inputs.libc == 'gnu' }} # gnu ~= OS w/ apt installed
       continue-on-error: false
       with:
+        key: pg_idkit-tests-apt-cache-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}-${{ inputs.artifact-tarball-suffix }}
         path: |
           ${{ inputs.apt-cache-dir }}
-        key: pg_idkit-tests-apt-cache-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}
+
+    - name: Cache apk install
+      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+      if: ${{ inputs.libc == 'musl' }} # musl ~= alpine
+      continue-on-error: false
+      with:
+        key: pg_idkit-tests-apk-cache-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}-${{ inputs.artifact-tarball-suffix }}
+        path: |
+          ${{ inputs.apk-cache-dir }}
 
     - name: Cache sccache
       uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
       continue-on-error: false
       with:
+        key: pg_idkit-tests-sccache-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}-${{ inputs.artifact-tarball-suffix }}
         path: |
           ${{ inputs.sccache-dir }}
-        key: pg_idkit-tests-sccache-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}
 
     - name: Cache pgrx init
       uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
       continue-on-error: false
       with:
+        key: pg_idkit-tests-pgrx-init-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}-${{ inputs.artifact-tarball-suffix }}
         path: |
           /home/${{ inputs.user }}/.pgrx
-        key: pg_idkit-tests-pgrx-init-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}
 
     #########
     # Setup #
@@ -114,24 +133,6 @@ runs:
       run: |
         git config --global --add safe.directory /__w/pg_idkit/pg_idkit
         su idkit -c "git config --global --add safe.directory /__w/pg_idkit/pg_idkit"
-
-
-    - name: Reinstall deps due to GLIBC issue
-      if: ${{ inputs.artifact-upload == 'true' }}
-      shell: bash
-      env:
-        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
-        CARGO_HOME: ${{ inputs.cargo-home-dir }}
-        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
-        CARGO_PROFILE: ${{ inputs.cargo-profile }}
-        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
-        PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
-        PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
-        PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
-        SCCACHE_DIR: ${{ inputs.sccache-dir }}
-        DOCKER_BUILD_USER: ${{ inputs.user }}
-      run: |
-        su idkit -c "cargo install --locked --force cargo-get cargo-edit"
 
     ###############
     # Build/Tests #

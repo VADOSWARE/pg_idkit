@@ -23,53 +23,23 @@ jobs:
 
       # Set up caching
       - uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2.7.8
-      - name: Cache default PGRX_HOME
-        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
-        continue-on-error: false
-        with:
-          path: |
-            /home/runner/.pgrx
-          key: pg_idkit-pkg-rpm-pgrx-${{ matrix.config.rpm.arch }}-${{ runner.os }}
 
       # Install deps
       - uses: chainguard-dev/actions/setup-gitsign@main
-      - name: Install cargo-release
-        uses: taiki-e/cache-cargo-install-action@4d586f211d9b0bca9e7b59e57e2a0febf36c0929 # v2.1.1
-        with:
-          tool: cargo-release
-      - name: Install just
-        uses: taiki-e/cache-cargo-install-action@4d586f211d9b0bca9e7b59e57e2a0febf36c0929 # v2.1.1
-        with:
-          tool: just
-      - name: Install cargo-get
-        uses: taiki-e/cache-cargo-install-action@4d586f211d9b0bca9e7b59e57e2a0febf36c0929 # v2.1.1
-        with:
-          tool: cargo-get
-      - name: Install cargo-pgrx
-        uses: taiki-e/cache-cargo-install-action@4d586f211d9b0bca9e7b59e57e2a0febf36c0929 # v2.1.1
-        with:
-          tool: cargo-pgrx
-      - name: Install git-cliff
-        uses: taiki-e/cache-cargo-install-action@4d586f211d9b0bca9e7b59e57e2a0febf36c0929 # v2.1.1
-        with:
-          tool: git-cliff
-      - name: Install cargo-edit
-        uses: taiki-e/cache-cargo-install-action@4d586f211d9b0bca9e7b59e57e2a0febf36c0929 # v2.1.1
-        with:
-          tool: cargo-edit
-
-      # Initialize PGRX
-      - name: Initialize cargo-pgrx
+      - uses: cargo-bins/cargo-binstall@main
+      - name: Install rust deps
         run: |
-          [[ -d /home/runner/.pgrx ]] || cargo pgrx init
+          cargo binstall cargo-release just cargo-get git-cliff cargo-edit
 
-      # Prep the project
+      # Prep the new version
       - name: Detect version (current or input)
         id: detect-version
-        env:
-          VERSION: ${{ inputs.version }}
         run: |
-          echo value=$(just print-version) >> $GITHUB_OUTPUT
+          if [ -z "${{ inputs.version || '' }}" ]; then
+            echo value=$(just print-version) >> $GITHUB_OUTPUT;
+          else
+            echo value="${{ inputs.version }}" >> $GITHUB_OUTPUT;
+          fi
       - name: Set version
         env:
           VERSION: ${{ steps.detect-version.outputs.value }}

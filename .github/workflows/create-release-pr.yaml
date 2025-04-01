@@ -30,10 +30,26 @@ jobs:
 
       # Install deps
       - uses: chainguard-dev/actions/setup-gitsign@main
-      - uses: cargo-bins/cargo-binstall@main
-      - name: Install rust deps
-        run: |
-          cargo binstall cargo-release just cargo-get git-cliff cargo-edit
+      - name: Install cargo-release
+        uses: taiki-e/cache-cargo-install-action@4d586f211d9b0bca9e7b59e57e2a0febf36c0929 # v2.1.1
+        with:
+          tool: cargo-release
+      - name: Install just
+        uses: taiki-e/cache-cargo-install-action@4d586f211d9b0bca9e7b59e57e2a0febf36c0929 # v2.1.1
+        with:
+          tool: just
+      - name: Install cargo-get
+        uses: taiki-e/cache-cargo-install-action@4d586f211d9b0bca9e7b59e57e2a0febf36c0929 # v2.1.1
+        with:
+          tool: cargo-get
+      - name: Install git-cliff
+        uses: taiki-e/cache-cargo-install-action@4d586f211d9b0bca9e7b59e57e2a0febf36c0929 # v2.1.1
+        with:
+          tool: git-cliff
+      - name: Install cargo-edit
+        uses: taiki-e/cache-cargo-install-action@4d586f211d9b0bca9e7b59e57e2a0febf36c0929 # v2.1.1
+        with:
+          tool: cargo-edit
 
       # Prep the new version
       - name: Detect version (current or input)

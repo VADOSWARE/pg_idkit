@@ -121,7 +121,7 @@ runs:
     #########
 
     - name: Add idkit to group
-      shell: bash
+      shell: sh
       run: |
         chgrp -R idkit $HOME &&
         chgrp -R idkit /__w/pg_idkit &&
@@ -129,7 +129,7 @@ runs:
 
     # Add directory used by worker as safe dir for git
     - name: Add git safe dir
-      shell: bash
+      shell: sh
       run: |
         git config --global --add safe.directory /__w/pg_idkit/pg_idkit
         su idkit -c "git config --global --add safe.directory /__w/pg_idkit/pg_idkit"
@@ -140,7 +140,7 @@ runs:
 
     # Initialize cargo-pgrx if necessary
     - name: Initialize cargo-pgrx
-      shell: bash
+      shell: sh
       env:
         CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
@@ -158,7 +158,7 @@ runs:
 
     # Run cargo check
     - name: Run cargo check
-      shell: bash
+      shell: sh
       env:
         CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
@@ -175,7 +175,7 @@ runs:
 
     # Run cargo build
     - name: Run cargo test
-      shell: bash
+      shell: sh
       env:
         CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
@@ -192,7 +192,7 @@ runs:
 
     # Run cargo test
     - name: Run cargo test
-      shell: bash
+      shell: sh
       env:
         CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
@@ -213,7 +213,7 @@ runs:
     # Run cargo test
     - name: Build a package
       if: ${{ inputs.artifact-upload == 'true' }}
-      shell: bash
+      shell: sh
       env:
         CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
         CARGO_HOME: ${{ inputs.cargo-home-dir }}

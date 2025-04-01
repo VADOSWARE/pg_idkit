@@ -45,6 +45,11 @@ inputs:
   user:
     type: string
     default: idkit
+  cargo-pgrx-version:
+    type: string
+    default: 0.13.1
+    decription: |
+      cargo-pgrx version (ex. '0.13.1')
   pgrx-pg-version:
     type: string
     default: pg17
@@ -133,8 +138,7 @@ runs:
       shell: sh
       run: |
         apk add --no-cache git coreutils bash clang clang-dev clang-libs \
-        coreutils curl gcc make musl-dev openssl-dev util-linux-dev
-
+        coreutils curl gcc make musl-dev openssl-dev util-linux-dev llvm
 
     # Add directory used by worker as safe dir for git
     - name: Add git safe dir
@@ -143,9 +147,19 @@ runs:
         git config --global --add safe.directory /__w/pg_idkit/pg_idkit
         su idkit -c "git config --global --add safe.directory /__w/pg_idkit/pg_idkit"
 
+
     ###############
     # Build/Tests #
     ###############
+
+    # NOTE: for some reason, cargo-pgrx must be re-installed on alpine before use
+    - name: Install cargo-pgrx again
+      if: ${{ inputs.libc == 'musl' }} # musl ~= alpine
+      shell: sh
+      env:
+        RUSTFLAGS: "-Ctarget-feature=-crt-static"
+      run: |
+        su idkit -c "cargo install --locked cargo-pgrx@${{ inputs.cargo-pgrx-version }}"
 
     # Initialize cargo-pgrx if necessary
     - name: Initialize cargo-pgrx

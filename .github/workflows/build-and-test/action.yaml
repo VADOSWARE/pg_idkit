@@ -136,9 +136,12 @@ runs:
     - name: install utils for alpine
       if: ${{ inputs.libc == 'musl' }} # musl ~= alpine
       shell: sh
+      # formerly: clang clang-dev clang-libs \
       run: |
-        apk add --no-cache git coreutils bash clang clang-dev clang-libs \
-        coreutils curl gcc make musl-dev openssl-dev util-linux-dev llvm
+        apk add --no-cache musl-dev openssl-dev util-linux-dev \
+        clang clang-dev clang-libs \
+        llvm \
+        git coreutils bash curl gcc make
 
     # Add directory used by worker as safe dir for git
     - name: Add git safe dir
@@ -147,19 +150,9 @@ runs:
         git config --global --add safe.directory /__w/pg_idkit/pg_idkit
         su idkit -c "git config --global --add safe.directory /__w/pg_idkit/pg_idkit"
 
-
     ###############
     # Build/Tests #
     ###############
-
-    # NOTE: for some reason, cargo-pgrx must be re-installed on alpine before use
-    - name: Install cargo-pgrx again
-      if: ${{ inputs.libc == 'musl' }} # musl ~= alpine
-      shell: sh
-      env:
-        RUSTFLAGS: "-Ctarget-feature=-crt-static"
-      run: |
-        su idkit -c "cargo install --locked cargo-pgrx@${{ inputs.cargo-pgrx-version }}"
 
     # Initialize cargo-pgrx if necessary
     - name: Initialize cargo-pgrx
@@ -181,6 +174,7 @@ runs:
 
     # Run cargo check
     - name: Run cargo check
+      if: ${{ inputs.libc == 'gnu' }}
       shell: sh
       env:
         CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
@@ -193,6 +187,26 @@ runs:
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
+      run: |
+        su idkit -c "cargo check"
+
+    # Run cargo check
+    - name: Run cargo check
+      if: ${{ inputs.libc == 'musl' }} # musl ~= alpine
+      shell: sh
+      env:
+        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
+        CARGO_HOME: ${{ inputs.cargo-home-dir }}
+        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
+        CARGO_PROFILE: ${{ inputs.cargo-profile }}
+        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
+        PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
+        PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
+        PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
+        SCCACHE_DIR: ${{ inputs.sccache-dir }}
+        DOCKER_BUILD_USER: ${{ inputs.user }}
+        # We must build w/out static when on alpine
+        RUSTFLAGS: "-Ctarget-feature=-crt-static"
       run: |
         su idkit -c "cargo check"
 

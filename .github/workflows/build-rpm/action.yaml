@@ -62,6 +62,11 @@ runs:
       with:
         tool: cargo-get,just,cargo-generate-rpm,cargo-pgrx@${{ inputs.cargo-pgrx-version }}
 
+    - name: Install pg deps
+      shell: sh
+      run: |
+        apt install -y readline-dev
+
     - name: Initialize cargo-pgrx
       shell: bash
       env:

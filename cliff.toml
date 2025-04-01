@@ -60,6 +60,8 @@ commit_parsers = [
 # filter out the commits that are not matched by commit parsers
 filter_commits = true
 
+filter = { exclude = { scopes = ["ci", "infra", "deps", "ops"] } }
+
 # glob pattern for matching git tags
 tag_pattern = "v[0-9]*"
 

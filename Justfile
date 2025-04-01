@@ -72,7 +72,6 @@ _check-installed-version tool msg:
 #########
 
 version := env_var_or_default("VERSION", "0.3.0")
-revision := env_var_or_default("REVISION", `git rev-parse --short HEAD`)
 
 # Print the current version (according to the script)
 [group('meta')]
@@ -82,7 +81,7 @@ revision := env_var_or_default("REVISION", `git rev-parse --short HEAD`)
 # Print the current revision (according to the script)
 [group('meta')]
 @get-revision: _check-tool-cargo-get
-    echo -n {{revision}}
+    echo -n `git rev-parse --short HEAD`
 
 ############
 # Metadata #
@@ -185,7 +184,6 @@ package: build-package
 [group('release')]
 changelog:
     {{git}} cliff --unreleased --tag={{version}} --prepend={{changelog_file_path}}
-
 
 ##########
 # Docker #
@@ -295,7 +293,15 @@ push-base-pkg-image:
 # Build the docker image for pg_idkit
 [group('package')]
 build-image:
-    {{docker}} build {{docker_platform_arg}} {{docker_progress_arg}} -f {{img_dockerfile_path}} -t {{pgidkit_image_name_full}} --build-arg USER={{docker_build_user}} --build-arg PGIDKIT_REVISION={{revision}} --build-arg PGIDKIT_VERSION={{pgidkit_image_tag}} .
+    {{docker}} build \
+      {{docker_platform_arg}} \
+      {{docker_progress_arg}} \
+      -f {{img_dockerfile_path}} \
+      -t {{pgidkit_image_name_full}} \
+      --build-arg USER={{docker_build_user}} \
+      --build-arg PGIDKIT_REVISION=`{{just}} get-revision` \
+      --build-arg PGIDKIT_VERSION={{pgidkit_image_tag}} \
+      .
 
 # Push the docker image for pg_idkit
 [group('package')]

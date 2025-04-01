@@ -21,11 +21,16 @@ permissions:
   contents: none
 
 jobs:
-  build-and-push-builder-image:
+  builder-image:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+    strategy:
+      matrix:
+        libc:
+          - gnu
+          - musl
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3
@@ -39,10 +44,13 @@ jobs:
 
       - name: Build builder image
         env:
+          BUILDER_TYPE: ${{ matrix.libc }}
           BUILDER_IMAGE_ARG_CARGO_PGRX_VERSION: ${{ inputs.cargo-pgrx-version || '0.12.5' }}
         run: |
           just build-builder-image
 
       - name: Push builder image
+        env:
+          BUILDER_TYPE: ${{ matrix.libc }}
         run: |
           just push-builder-image

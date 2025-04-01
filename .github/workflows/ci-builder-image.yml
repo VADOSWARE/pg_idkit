@@ -9,7 +9,7 @@ on:
       cargo-pgrx-version:
         required: false
         type: string
-        default: "0.12.5"
+        default: "0.13.1"
         description: |
           version of cargo-pgrx to download (inside image build)
 
@@ -45,7 +45,7 @@ jobs:
       - name: Build builder image
         env:
           BUILDER_TYPE: ${{ matrix.libc }}
-          BUILDER_IMAGE_ARG_CARGO_PGRX_VERSION: ${{ inputs.cargo-pgrx-version || '0.12.5' }}
+          BUILDER_IMAGE_ARG_CARGO_PGRX_VERSION: ${{ inputs.cargo-pgrx-version }}
         run: |
           just build-builder-image
 

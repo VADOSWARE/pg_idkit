@@ -141,7 +141,7 @@ runs:
         apk add --no-cache musl-dev openssl-dev util-linux-dev \
         clang clang-dev clang-libs \
         llvm \
-        git coreutils bash curl gcc make
+        git coreutils bash curl gcc make tar
 
     # Add directory used by worker as safe dir for git
     - name: Add git safe dir

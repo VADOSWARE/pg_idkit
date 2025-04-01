@@ -174,25 +174,6 @@ runs:
 
     # Run cargo check
     - name: Run cargo check
-      if: ${{ inputs.libc == 'gnu' }}
-      shell: sh
-      env:
-        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
-        CARGO_HOME: ${{ inputs.cargo-home-dir }}
-        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
-        CARGO_PROFILE: ${{ inputs.cargo-profile }}
-        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
-        PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
-        PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
-        PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
-        SCCACHE_DIR: ${{ inputs.sccache-dir }}
-        DOCKER_BUILD_USER: ${{ inputs.user }}
-      run: |
-        su idkit -c "cargo check"
-
-    # Run cargo check
-    - name: Run cargo check
-      if: ${{ inputs.libc == 'musl' }} # musl ~= alpine
       shell: sh
       env:
         CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
@@ -206,7 +187,8 @@ runs:
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
         # We must build w/out static when on alpine
-        RUSTFLAGS: "-Ctarget-feature=-crt-static"
+        # (this fixes the libclang dynamic loading not supported error)
+        RUSTFLAGS: ${{ inputs.libc == 'musl' &&  '-Ctarget-feature=-crt-static' || '' }}
       run: |
         su idkit -c "cargo check"
 
@@ -224,6 +206,9 @@ runs:
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
+        # We must build w/out static when on alpine
+        # (this fixes the libclang dynamic loading not supported error)
+        RUSTFLAGS: ${{ inputs.libc == 'musl' &&  '-Ctarget-feature=-crt-static' || '' }}
       run: |
         su idkit -c "cargo build"
 
@@ -240,6 +225,9 @@ runs:
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
+        # We must build w/out static when on alpine
+        # (this fixes the libclang dynamic loading not supported error)
+        RUSTFLAGS: ${{ inputs.libc == 'musl' &&  '-Ctarget-feature=-crt-static' || '' }}
       run: |
         su idkit -c "cargo test"
 
@@ -263,6 +251,9 @@ runs:
         PKG_TARBALL_SUFFIX: ${{ inputs.artifact-tarball-suffix }}
         SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
+        # We must build w/out static when on alpine
+        # (this fixes the libclang dynamic loading not supported error)
+        RUSTFLAGS: ${{ inputs.libc == 'musl' &&  '-Ctarget-feature=-crt-static' || '' }}
       run: |
         su idkit -c "just package"
 

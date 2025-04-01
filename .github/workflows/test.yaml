@@ -14,15 +14,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
+  test-gnu:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/vadosware/pg_idkit/builder-gnu:0.1.x
     strategy:
       matrix:
-        libc:
-          - gnu
-          - musl
         config:
           - rpm:
               arch: x86_64
@@ -45,7 +42,40 @@ jobs:
       - name: Build & test the project
         uses: ./.github/workflows/build-and-test
         with:
-          libc: ${{ matrix.libc }}
+          libc: gnu
+          pkg-pg-version: ${{ matrix.config.pgrx.pkg-pg-version }}
+          pgrx-pg-version: ${{ matrix.config.pgrx.pgrx-pg-version }}
+          artifact-upload: false
+
+  test-musl:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/vadosware/pg_idkit/builder-musl:0.1.x
+    strategy:
+      matrix:
+        config:
+          - rpm:
+              arch: x86_64
+            pgrx:
+              pgrx-pg-version: pg15
+              pkg-pg-version: 15.12
+          - rpm:
+              arch: x86_64
+            pgrx:
+              pgrx-pg-version: pg16
+              pkg-pg-version: 16.8
+          - rpm:
+              arch: x86_64
+            pgrx:
+              pgrx-pg-version: pg17
+              pkg-pg-version: 17.4
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Build & test the project
+        uses: ./.github/workflows/build-and-test
+        with:
+          libc: musl
           pkg-pg-version: ${{ matrix.config.pgrx.pkg-pg-version }}
           pgrx-pg-version: ${{ matrix.config.pgrx.pgrx-pg-version }}
           artifact-upload: false

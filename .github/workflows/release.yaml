@@ -44,7 +44,7 @@ jobs:
       - name: Build the RPM (reuse workflow)
         uses: ./.github/workflows/build-rpm
         with:
-          artifact-upload: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          artifact-upload: true
           pgrx-pg-version: ${{ matrix.config.pgrx.pg-version }}
           pg-version: ${{ matrix.config.pg.version }}
 
@@ -78,7 +78,7 @@ jobs:
         uses: ./.github/workflows/build-and-test
         with:
           libc: ${{ matrix.libc }}
-          artifact-upload: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          artifact-upload: true
           artifact-tarball-suffix: "-${{ matrix.config.pgrx.pg-version }}-${{ matrix.libc }}"
           pgrx-pg-version: ${{ matrix.config.pgrx.pg-version }}
           pkg-pg-version: ${{ matrix.config.pg.version }}
@@ -96,13 +96,13 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       # Download all artifacts
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
         with:
           path: artifacts
 
       # Create release (pre-release if we're prepping)
       - name: Create release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@c95fe1489396fe8a9eb87c0abf8aa5b2ef267fda # v2.2.1
         with:
           prerelease: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}
           draft: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}

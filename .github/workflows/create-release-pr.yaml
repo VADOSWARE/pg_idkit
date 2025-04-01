@@ -89,7 +89,7 @@ jobs:
               - [ ] Update `README.md` to use the newest version of Postgres, if it has changed (ex. `16.2` -> `17.0`)
               - [ ] Update `README.md` to soon-to-be-released pg_idkit (ex. `pg_idkit-0.2.0` -> `pg_idkit-0.2.1`)
               - [ ] Update `generate-rpm` configuration in `Cargo.toml` version references (ex. `--0.2.0.sql` -> `--0.2.1.sql`)
-              - [ ] Update default version in `justfile
+              - [ ] Update default version in `justfile`
 
             See CHANGELOG for changes made to this release before it goes out.
           labels: |

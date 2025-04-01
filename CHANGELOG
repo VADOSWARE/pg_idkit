@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [0.3.0] - 2025-03-31
+## [0.3.0] - 2025-04-01
 
 ### Bug Fixes
 
@@ -19,6 +19,18 @@ All notable changes to this project will be documented in this file.
 - Revert change to legacy base-pkg build
 - Release PR prep
 - Dockerfile for 17.4
+- Only perform artifact upload on release tag
+- Run release artifact CI properly
+- Use of gnu/libc in workflows
+- Build zip on musl
+- Rpm build
+- Release flows
+- Justfile usage
+- Re-install cargo-pgrx before use
+- Filter ci,infra,deps,ops from changelog
+- Use static args during check on musl
+- Use RUSTFLAGS for musl build
+- Download artifact version
 
 ### Documentation
 
@@ -34,6 +46,7 @@ All notable changes to this project will be documented in this file.
 - Add CI workflow for building base-pkg image in CI
 - Add concurrency restriction for creating release pr
 - Add build-all target for pgrx
+- Publish both builder images
 
 ### Miscellaneous Tasks
 
@@ -51,6 +64,8 @@ All notable changes to this project will be documented in this file.
 - Add test workflow to merge queue
 - Update default rust version to 1.85.1
 - Update dockerfiles to use new target
+- Update pgrx version defaults
+- Clean out unused builder-musl lines
 
 ### Refactor
 

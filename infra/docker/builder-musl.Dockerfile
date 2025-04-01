@@ -29,21 +29,8 @@ COPY --from=sccache-build /usr/local/cargo/bin/sccache /usr/local/cargo/bin/scca
 # Setup Postgres #
 ##################
 
-# # Add postgresql.org PGP keys
-# RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add
-
-# # Add postgres repo
-# RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-
 # Install dependencies for building postgres, NodeJS, etc
 RUN apk add postgresql-dev nodejs
-
-# RUN apt-get update && \
-#     apt-get install -y --no-install-recommends ca-certificates \
-#     git build-essential libpq-dev \
-#     postgresql-server-dev-all \
-#     curl libreadline6-dev zlib1g-dev libclang-dev \
-#     pkg-config cmake nodejs
 
 # Add postgres user to wheel group
 RUN addgroup --system idkit && \
@@ -51,10 +38,6 @@ RUN addgroup --system idkit && \
     mkdir -p /home/idkit && \
     chown idkit:idkit /home/idkit && \
     adduser idkit wheel
-
-# # Allow writing to postgres extensions folder
-# RUN chmod g+w -R /usr/share/postgresql/**/extension && \
-#     chmod g+w -R /usr/lib/postgresql/**/lib
 
 ###############
 # Setup Cargo #

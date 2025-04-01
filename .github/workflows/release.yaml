@@ -74,14 +74,14 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Build the package (reuse workflow)
+      - name: Build and test
         uses: ./.github/workflows/build-and-test
         with:
           libc: ${{ matrix.libc }}
           artifact-upload: ${{ startsWith(github.ref, 'refs/tags/v') }}
           artifact-tarball-suffix: "-${{ matrix.config.pgrx.pg-version }}-${{ matrix.libc }}"
           pgrx-pg-version: ${{ matrix.config.pgrx.pg-version }}
-          pg-version: ${{ matrix.config.pg.version }}
+          pkg-pg-version: ${{ matrix.config.pg.version }}
 
   release:
     runs-on: ubuntu-latest

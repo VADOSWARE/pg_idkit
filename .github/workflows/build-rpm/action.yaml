@@ -65,7 +65,8 @@ runs:
     - name: Install pg deps
       shell: sh
       run: |
-        apt install -y readline-dev
+        sudo apt update
+        sudo apt install -y libreadline6-dev
 
     - name: Initialize cargo-pgrx
       shell: bash

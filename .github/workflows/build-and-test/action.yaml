@@ -128,6 +128,15 @@ runs:
         chmod g+w -R /__w/pg_idkit
 
     # Add directory used by worker as safe dir for git
+    - name: install utils for alpine
+      if: ${{ inputs.libc == 'musl' }} # musl ~= alpine
+      shell: sh
+      run: |
+        apk add --no-cache git coreutils bash clang clang-dev clang-libs \
+        coreutils curl gcc make musl-dev openssl-dev util-linux-dev
+
+
+    # Add directory used by worker as safe dir for git
     - name: Add git safe dir
       shell: sh
       run: |

@@ -75,6 +75,16 @@ runs:
     # Checkout the repo
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
+    - name: install utils for alpine
+      if: ${{ inputs.libc == 'musl' }} # musl ~= alpine
+      shell: sh
+      # formerly: clang clang-dev clang-libs \
+      run: |
+        apk add --no-cache musl-dev openssl-dev util-linux-dev \
+        clang clang-dev clang-libs \
+        llvm \
+        git coreutils bash curl gcc make tar
+
     #########
     # Cache #
     #########
@@ -131,17 +141,6 @@ runs:
         chgrp -R idkit $HOME &&
         chgrp -R idkit /__w/pg_idkit &&
         chmod g+w -R /__w/pg_idkit
-
-    # Add directory used by worker as safe dir for git
-    - name: install utils for alpine
-      if: ${{ inputs.libc == 'musl' }} # musl ~= alpine
-      shell: sh
-      # formerly: clang clang-dev clang-libs \
-      run: |
-        apk add --no-cache musl-dev openssl-dev util-linux-dev \
-        clang clang-dev clang-libs \
-        llvm \
-        git coreutils bash curl gcc make
 
     # Add directory used by worker as safe dir for git
     - name: Add git safe dir
@@ -235,6 +234,26 @@ runs:
     # Artifacts #
     #############
 
+    # Get some metadata about the artifact
+    - name: Run cargo test
+      id: artifact-meta
+      shell: sh
+      env:
+        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
+        CARGO_HOME: ${{ inputs.cargo-home-dir }}
+        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
+        CARGO_PROFILE: ${{ inputs.cargo-profile }}
+        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
+        PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
+        PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
+        SCCACHE_DIR: ${{ inputs.sccache-dir }}
+        DOCKER_BUILD_USER: ${{ inputs.user }}
+        # We must build w/out static when on alpine
+        # (this fixes the libclang dynamic loading not supported error)
+        RUSTFLAGS: ${{ inputs.libc == 'musl' &&  '-Ctarget-feature=-crt-static' || '' }}
+      run: |
+        echo release-version=$(su idkit -c "just print-version") >> $GITHUB_OUTPUT
+
     # Run cargo test
     - name: Build a package
       if: ${{ inputs.artifact-upload == 'true' }}
@@ -262,4 +281,5 @@ runs:
       if: ${{ inputs.artifact-upload == 'true' }}
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
-        path: pg_idkit-*.tar.gz
+        path: pg_idkit-${{ steps.artifact-meta.outputs.release-version }}-${{ inputs.pgrx-pg-version }}-${{ inputs.libc }}.tar.gz
+        name: pg_idkit-${{ steps.artifact-meta.outputs.release-version }}-${{ inputs.pgrx-pg-version }}-${{ inputs.libc }}.tar.gz

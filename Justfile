@@ -76,7 +76,7 @@ version := env_var_or_default("VERSION", "0.3.0")
 # Print the current version (according to the script)
 [group('meta')]
 @get-version: _check-tool-cargo-get
-    echo -n {{version}}
+    echo -n `cargo get package.version`
 
 # Print the current revision (according to the script)
 [group('meta')]

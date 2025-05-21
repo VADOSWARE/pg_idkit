@@ -28,9 +28,9 @@ inputs:
       PGRX version (ex. 'pg17')
   pg-version:
     type: string
-    default: 17.4
+    default: 17.5
     decription: |
-      Postgres version (ex. '17.4')
+      Postgres version (ex. '17.5')
   cargo-pgrx-version:
     type: string
     default: 0.13.1

@@ -57,9 +57,9 @@ inputs:
       PGRX version (ex. 'pg17')
   pkg-pg-version:
     type: string
-    default: 17.4
+    default: 17.5
     decription: |
-      Postgres version (ex. '17.4') used for packaging
+      Postgres version (ex. '17.5') used for packaging
   libc:
     type: string
     required: true

@@ -26,7 +26,7 @@ cargo_features_arg := if cargo_features != "" {
 
 changelog_file_path := absolute_path(justfile_directory() / "CHANGELOG")
 
-pkg_pg_version := env_var_or_default("PKG_PG_VERSION", "17.4")
+pkg_pg_version := env_var_or_default("PKG_PG_VERSION", "17.5")
 pkg_pg_config_path := env_var_or_default("PKG_PG_CONFIG_PATH", "~/.pgrx/" + pkg_pg_version + "/pgrx-install/bin/pg_config")
 pkg_tarball_suffix := env_var_or_default("PKG_TARBALL_SUFFIX", "")
 

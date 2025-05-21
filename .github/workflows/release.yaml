@@ -19,6 +19,9 @@ on:
       # Run on released tags (created by automated post-merge release-tagging), to generate the actual release
       - v[0-9]+\.[0-9]+\.[0-9]+
 
+concurrency:
+  group: release
+
 jobs:
   build-rpm:
     runs-on: ubuntu-latest

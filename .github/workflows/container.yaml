@@ -23,7 +23,7 @@ jobs:
             container:
               arch: amd64
               pgrx_pg_version: pg15
-              pg_version: "15.12"
+              pg_version: "15.13"
               os_version: alpine3.21.3
           - triple: x86_64-unknown-linux-musl
             gh:
@@ -31,7 +31,7 @@ jobs:
             container:
               arch: amd64
               pgrx_pg_version: pg16
-              pg_version: "16.8"
+              pg_version: "16.9"
               os_version: alpine3.21.3
           - triple: x86_64-unknown-linux-musl
             gh:
@@ -39,7 +39,7 @@ jobs:
             container:
               arch: amd64
               pgrx_pg_version: pg17
-              pg_version: "17.4"
+              pg_version: "17.5"
               os_version: alpine3.21.3
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2

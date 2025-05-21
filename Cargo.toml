@@ -39,7 +39,7 @@ nanoid = { version = "0.4" }
 pgrx = { version = "=0.13.1" }
 pushid = { version = "0.0.1" }
 timeflake-rs = { version = "0.3" }
-ulid = { version = "1.1", features = [ "uuid" ] }
+ulid = { version = "1.2", features = [ "uuid" ] }
 uuid = { version = "1.10", features = [ "v6", "v7" ] }
 xid = { version = "1.1" }
 time = { version = "0.3" }

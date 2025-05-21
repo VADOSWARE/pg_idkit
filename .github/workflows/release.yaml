@@ -23,7 +23,6 @@ on:
 jobs:
   build-rpm:
     runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/prep-release-v')  }}
     strategy:
       matrix:
         config:
@@ -51,7 +50,6 @@ jobs:
 
   build-zip:
     runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/prep-release-v')  }}
     container:
       image: ghcr.io/vadosware/pg_idkit/builder-${{ matrix.libc }}:0.1.x
     strategy:
@@ -100,7 +98,6 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/prep-release-v')  }}
     permissions:
       contents: write
     needs:
@@ -119,8 +116,8 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
-          prerelease: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}
-          draft: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}
+          prerelease: true
+          draft: true
           tag_name: ${{ github.ref_name || inputs.version }}
           # NOTE: while we have the CHANGELOG file, it always contains *all* changes,
           # so we will use the generated GitHub commits for now

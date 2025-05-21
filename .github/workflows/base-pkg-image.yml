@@ -9,7 +9,7 @@ on:
       cargo-pgrx-version:
         required: false
         type: string
-        default: "0.13.1"
+        default: "0.14.1"
         description: |
           version of cargo-pgrx to download (inside image build)
 

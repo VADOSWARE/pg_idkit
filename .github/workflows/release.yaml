@@ -102,6 +102,34 @@ jobs:
       - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
         with:
           path: pg_idkit-*.tar.gz
+      # TODO:
+      #
+      # 1. tar -xvf pg_idkit
+      #
+      # 2. install postgres (by verison)
+      # apt install -y postgresql-common
+      # /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -i -v 17
+      # apt install -y postgres-17
+      # export PATH=/usr/lib/postgresql/17/bin:$PATH
+      #
+      # 3. install the extension from zip file
+      # (unzip to current directory?)
+      # pg_config --sharedir (.sql, .control files go here)
+      # pg_config --pkglibdir (shared objects for extensions go here)
+      # cd pg_idkit-0.3.0
+      # chmod a+rwx lib/postgresql/*.so
+      # cp lib/postgresql/*.so $(pg_config --pkglibdir)
+      # chmod a+rwx share/postgresql/extension/*
+      # cp share/postgresql/extension/*.sql $(pg_config --sharedir)/extension
+      # cp share/postgresql/extension/*.control $(pg_config --sharedir)/extension
+      #
+      # 4. Start the db
+      # su postgres
+      # export PATH=/usr/lib/postgresql/17/bin:$PATH
+      # pg_ctl initdb -D ~/pg
+      # pg_ctl -D ~/pg -l ~/pg/log start
+      # (look for DB start in logs?)
+      # psql -e "CREATE EXTENSION pg_idkit; SELECT idkit_uuidv7_generate();"
 
   release:
     runs-on: ubuntu-latest

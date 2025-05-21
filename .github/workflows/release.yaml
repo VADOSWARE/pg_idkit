@@ -83,14 +83,28 @@ jobs:
           pgrx-pg-version: ${{ matrix.config.pgrx.pg-version }}
           pkg-pg-version: ${{ matrix.config.pg.version }}
 
+  test-rpm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
+        with:
+          path: pg_idkit-*.rpm
+
+  test-zip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
+        with:
+          path: pg_idkit-*.tar.gz
+
   release:
     runs-on: ubuntu-latest
     if: ${{ startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/prep-release-v')  }}
     permissions:
       contents: write
     needs:
-      - build-rpm
-      - build-zip
+      - test-rpm
+      - test-zip
     steps:
       # Checkout the repository
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2

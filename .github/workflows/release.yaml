@@ -26,14 +26,14 @@ jobs:
     strategy:
       matrix:
         config:
-          - pgrx:
-              pg-version: pg15
-            pg:
-              version: "15.12"
-          - pgrx:
-              pg-version: pg16
-            pg:
-              version: "16.8"
+          # - pgrx:
+          #     pg-version: pg15
+          #   pg:
+          #     version: "15.12"
+          # - pgrx:
+          #     pg-version: pg16
+          #   pg:
+          #     version: "16.8"
           - pgrx:
               pg-version: pg17
             pg:
@@ -58,14 +58,14 @@ jobs:
           - gnu
           - musl
         config:
-          - pgrx:
-              pg-version: pg15
-            pg:
-              version: "15.12"
-          - pgrx:
-              pg-version: pg16
-            pg:
-              version: "16.8"
+          # - pgrx:
+          #     pg-version: pg15
+          #   pg:
+          #     version: "15.12"
+          # - pgrx:
+          #     pg-version: pg16
+          #   pg:
+          #     version: "16.8"
           - pgrx:
               pg-version: pg17
             pg:

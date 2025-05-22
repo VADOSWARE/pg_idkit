@@ -121,18 +121,6 @@ runs:
     # Setup #
     #########
 
-    - uses: cargo-bins/cargo-binstall@main
-
-    - name: Install pgrx
-      shell: sh
-      run: |
-        cargo binstall -y cargo-pgrx@${{ inputs.cargo-pgrx-version }}
-
-    - name: Install pgrx
-      shell: sh
-      run: |
-        cargo install cargo-pgrx@${{ inputs.cargo-pgrx-version }}
-
     - name: Add idkit to group
       shell: sh
       run: |

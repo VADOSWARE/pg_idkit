@@ -30,12 +30,6 @@ inputs:
   cargo-target-dir:
     type: string
     default: /usr/local/build/target
-  sccache-dir:
-    type: string
-    default: /usr/local/sccache
-  cargo-build-rustc-wrapper:
-    type: string
-    default: /usr/local/cargo/bin/sccache
   cargo-env-incremental:
     type: string
     default: "0"
@@ -115,13 +109,8 @@ runs:
         path: |
           ${{ inputs.apk-cache-dir }}
 
-    - name: Cache sccache
-      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
-      continue-on-error: false
-      with:
-        key: pg_idkit-tests-sccache-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}-${{ inputs.artifact-tarball-suffix }}
-        path: |
-          ${{ inputs.sccache-dir }}
+    - name: Run sccache-cache
+      uses: mozilla-actions/sccache-action@v0.0.9
 
     - name: Cache pgrx init
       uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
@@ -162,7 +151,6 @@ runs:
     - name: Initialize cargo-pgrx
       shell: sh
       env:
-        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
@@ -170,7 +158,6 @@ runs:
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
-        SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
       run: |
         cargo pgrx --version
@@ -180,7 +167,6 @@ runs:
     - name: Run cargo check
       shell: sh
       env:
-        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
@@ -188,7 +174,6 @@ runs:
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
-        SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
         # We must build w/out static when on alpine
         # (this fixes the libclang dynamic loading not supported error)
@@ -200,7 +185,6 @@ runs:
     - name: Run cargo test
       shell: sh
       env:
-        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
@@ -208,7 +192,6 @@ runs:
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
-        SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
         # We must build w/out static when on alpine
         # (this fixes the libclang dynamic loading not supported error)
@@ -220,14 +203,12 @@ runs:
     - name: Run cargo test
       shell: sh
       env:
-        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
-        SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
         # We must build w/out static when on alpine
         # (this fixes the libclang dynamic loading not supported error)
@@ -244,14 +225,12 @@ runs:
       id: artifact-meta
       shell: sh
       env:
-        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
         CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
-        SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
         # We must build w/out static when on alpine
         # (this fixes the libclang dynamic loading not supported error)
@@ -264,7 +243,6 @@ runs:
       if: ${{ inputs.artifact-upload == 'true' }}
       shell: sh
       env:
-        CARGO_BUILD_RUSTC_WRAPPER: ${{ inputs.cargo-build-rustc-wrapper }}
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
@@ -273,7 +251,6 @@ runs:
         PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         PKG_TARBALL_SUFFIX: ${{ inputs.artifact-tarball-suffix }}
-        SCCACHE_DIR: ${{ inputs.sccache-dir }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
         # We must build w/out static when on alpine
         # (this fixes the libclang dynamic loading not supported error)

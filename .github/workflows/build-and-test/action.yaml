@@ -27,9 +27,6 @@ inputs:
   cargo-home-dir:
     type: string
     default: /usr/local/cargo
-  cargo-target-dir:
-    type: string
-    default: /usr/local/build/target
   cargo-env-incremental:
     type: string
     default: "0"
@@ -161,9 +158,7 @@ runs:
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
-        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
-        PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
       run: |
@@ -177,9 +172,7 @@ runs:
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
-        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
-        PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
         # We must build w/out static when on alpine
@@ -195,9 +188,7 @@ runs:
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
-        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
-        PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
         # We must build w/out static when on alpine
@@ -213,7 +204,6 @@ runs:
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
-        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
@@ -235,7 +225,6 @@ runs:
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
-        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
@@ -253,9 +242,7 @@ runs:
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
         CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
         CARGO_PROFILE: ${{ inputs.cargo-profile }}
-        CARGO_TARGET_DIR: ${{ inputs.cargo-target-dir }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
-        PGRX_PKG_PATH_PREFIX: ${{ inputs.cargo-target-dir }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         PKG_TARBALL_SUFFIX: ${{ inputs.artifact-tarball-suffix }}
         DOCKER_BUILD_USER: ${{ inputs.user }}

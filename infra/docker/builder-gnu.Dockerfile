@@ -4,12 +4,6 @@ FROM rust:1.85.1-slim-bullseye@sha256:1eca9af45f393ac4669b9b63659529638359575f62
 ARG CARGO_PGRX_VERSION=0.14.1
 ENV CARGO_PGRX_VERSION=${CARGO_PGRX_VERSION}
 
-ENV CARGO_HOME=/usr/local/cargo
-ENV CARGO_TARGET_DIR=/usr/local/build/target
-ENV SCCACHE_DIR=/usr/local/sccache
-# Disable cargo incremental builds since sccache can't support them
-ENV CARGO_INCREMENTAL=0
-
 # Install deps
 #
 # NOTE: some deps are used by cargo-pgrx at build/test time (ex. bison)
@@ -25,9 +19,6 @@ RUN apt update && \
     wget \
     bison \
     flex
-RUN cargo install sccache --locked
-
-ENV CARGO_BUILD_RUSTC_WRAPPER=/usr/local/cargo/bin/sccache
 
 ##################
 # Setup Postgres #
@@ -77,16 +68,9 @@ RUN chmod g+w -R /usr/share/postgresql/**/extension && \
 # Setup Cargo #
 ###############
 
-# Allow writing to cargo cache by idkit (now part of root group)
-RUN chmod g+w -R /usr/local/cargo
-RUN chmod g+w -R /usr/local/build
-
-RUN mkdir /usr/local/sccache
-RUN chmod g+w -R /usr/local/sccache
-
 # Install & Initialize pgrx
 # Install development/build/testing deps
-RUN su idkit -c "cargo install --locked just sccache cargo-cache cargo-get cargo-edit cargo-pgrx@$CARGO_PGRX_VERSION"
+RUN su idkit -c "cargo install --locked just cargo-cache cargo-get cargo-edit cargo-pgrx@$CARGO_PGRX_VERSION"
 
 # Initialize cargo pgrx
 #

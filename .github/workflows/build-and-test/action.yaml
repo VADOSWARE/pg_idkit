@@ -135,6 +135,11 @@ runs:
     # Setup #
     #########
 
+    - name: Install pgrx
+      shell: sh
+      run: |
+        cargo install cargo-pgrx@${{ inputs.cargo-pgrx-version }}
+
     - name: Add idkit to group
       shell: sh
       run: |

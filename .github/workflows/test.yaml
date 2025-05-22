@@ -17,7 +17,7 @@ jobs:
   test-gnu:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/vadosware/pg_idkit/builder-gnu:0.1.x
+      image: ghcr.io/vadosware/pg_idkit/builder-gnu:0.1.x@sha256:d2632a0d78ab428588230c8666c20562a3fcbb0191557c675ba4bf075f134934
     strategy:
       matrix:
         config:
@@ -50,7 +50,7 @@ jobs:
   test-musl:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/vadosware/pg_idkit/builder-musl:0.1.x
+      image: ghcr.io/vadosware/pg_idkit/builder-musl:0.1.x@sha256:11827154256e8cf066f5e90a2f3e4a14263b16975a5a5e978b21b832d675c9b0
     strategy:
       matrix:
         config:

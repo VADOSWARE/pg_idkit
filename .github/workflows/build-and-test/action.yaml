@@ -149,8 +149,11 @@ runs:
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
+        # We must build w/out static when on alpine
+        # (this fixes the libclang dynamic loading not supported error)
+        RUSTFLAGS: ${{ inputs.libc == 'musl' &&  '-Ctarget-feature=-crt-static' || '' }}
       run: |
-        cargo pgrx --version
+        su idkit -c "cargo install cargo-pgrx@${{ inputs.cargo-pgrx-version }}"
         su idkit -c "just pgrx-init"
 
     # Run cargo check

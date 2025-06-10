@@ -105,7 +105,7 @@ jobs:
 
       # Create release (pre-release if we're prepping)
       - name: Create release
-        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631 # v2.2.2
+        uses: softprops/action-gh-release@d5382d3e6f2fa7bd53cb749d33091853d4985daf # v2.3.0
         with:
           prerelease: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}
           draft: ${{ startsWith(github.ref, 'refs/heads/prep-release') }}

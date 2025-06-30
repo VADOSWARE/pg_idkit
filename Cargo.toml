@@ -35,7 +35,7 @@ getrandom = { version = "0.2" }
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 svix-ksuid = { version = "0.8" }
 nanoid = { version = "0.4" }
-pgrx = { version = "=0.14.1" }
+pgrx = { version = "=0.15.0" }
 pushid = { version = "0.0.1" }
 timeflake-rs = { version = "0.3" }
 ulid = { version = "1.2", features = [ "uuid" ] }

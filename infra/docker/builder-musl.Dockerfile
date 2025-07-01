@@ -1,7 +1,7 @@
 # rust:1.85.1-alpine3.21 as of 2025/03/31
 FROM rust:1.85.1-alpine3.21@sha256:4333721398de61f53ccbe53b0b855bcc4bb49e55828e8f652d7a8ac33dd0c118
 
-ARG CARGO_PGRX_VERSION=0.14.1
+ARG CARGO_PGRX_VERSION=0.15.0
 ENV CARGO_PGRX_VERSION=${CARGO_PGRX_VERSION}
 
 RUN apk add --no-cache musl-dev openssl-dev perl make

@@ -241,7 +241,7 @@ builder_image_name := env_var_or_default("BUILDER_IMAGE_NAME", "ghcr.io/vadoswar
 builder_image_tag := env_var_or_default("BUILDER_IMAGE_TAG", "0.1.x")
 builder_image_name_full := env_var_or_default("BUILDER_IMAGE_NAME_FULL", builder_image_name + ":" + builder_image_tag)
 
-builder_image_arg_cargo_pgrx_version := env_var_or_default("BUILDER_IMAGE_ARG_CARGO_PGRX_VERSION", "0.14.1")
+builder_image_arg_cargo_pgrx_version := env_var_or_default("BUILDER_IMAGE_ARG_CARGO_PGRX_VERSION", "0.15.0")
 
 # Build the docker image used in BUILDER
 [group('package')]

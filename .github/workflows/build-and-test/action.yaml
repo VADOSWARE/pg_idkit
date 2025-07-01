@@ -38,9 +38,9 @@ inputs:
     default: idkit
   cargo-pgrx-version:
     type: string
-    default: 0.14.1
+    default: 0.15.0
     decription: |
-      cargo-pgrx version (ex. '0.14.1')
+      cargo-pgrx version (ex. '0.15.0')
   pgrx-pg-version:
     type: string
     default: pg17

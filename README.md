@@ -40,6 +40,7 @@ postgres=# SELECT idkit_uuidv7_generate();
 | [cuid][cuid] (deprecated) | `idkit_cuid_generate()`                     | [`cuid`][crate-cuid]                 | CUID                                                     |
 |                           | `idkit_cuid_extract_timestamptz(TEXT)`      |                                      |                                                          |
 | [cuid2][cuid2]            | `idkit_cuid2_generate()`                    | [`cuid2`][crate-cuid2]               | CUID2                                                    |
+|                           | `idkit_cuid2_custom_generate(length)`       |                                      | CUID2 with custom length                                |
 
 This Postgres extension is made possible thanks to [`pgrx`][pgrx].
 

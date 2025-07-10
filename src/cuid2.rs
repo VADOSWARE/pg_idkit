@@ -8,7 +8,7 @@ fn idkit_cuid2_generate() -> String {
 
 /// Generate a custom cuid2 UUID with specified length
 #[pg_extern]
-fn idkit_cuid2_custom_generate(length: i32) -> Result<String, String> {
+fn idkit_cuid2_generate_with_len(length: i32) -> Result<String, String> {
     if length < 2 {
         return Err("CUID2 length must be at least 2".to_string());
     }
@@ -53,17 +53,17 @@ mod tests {
     /// Test custom length generation
     #[pg_test]
     fn test_cuid2_custom_length() {
-        let generated = crate::cuid2::idkit_cuid2_custom_generate(16).unwrap();
+        let generated = crate::cuid2::idkit_cuid2_generate_with_len(16).unwrap();
         assert_eq!(generated.len(), 16);
         
-        let generated_32 = crate::cuid2::idkit_cuid2_custom_generate(32).unwrap();
+        let generated_32 = crate::cuid2::idkit_cuid2_generate_with_len(32).unwrap();
         assert_eq!(generated_32.len(), 32);
     }
 
     /// Test invalid length handling
     #[pg_test]
     fn test_cuid2_invalid_length() {
-        let result = crate::cuid2::idkit_cuid2_custom_generate(1);
+        let result = crate::cuid2::idkit_cuid2_generate_with_len(1);
         assert!(result.is_err());
         assert!(result.unwrap_err().contains("must be at least 2"));
     }
@@ -74,7 +74,7 @@ mod tests {
         let generated = crate::cuid2::idkit_cuid2_generate();
         assert!(cuid2::is_cuid2(&generated));
 
-        let generated_custom = crate::cuid2::idkit_cuid2_custom_generate(16).unwrap();
+        let generated_custom = crate::cuid2::idkit_cuid2_generate_with_len(16).unwrap();
         assert!(cuid2::is_cuid2(&generated_custom));
     }
 }

@@ -7,6 +7,7 @@ mod ksuid_ms;
 mod nanoid;
 mod pushid;
 mod timeflake;
+mod typeid;
 mod ulid;
 mod uuid_v6;
 mod uuid_v7;

@@ -70,6 +70,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e16d2d3311acee920a9eb8d33b8cbc1787ce4a264e85f964c2404b969bdcd487"
 
 [[package]]
+name = "arrayvec"
+version = "0.7.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7c02d123df017efcdfbd739ef81735b36c5ba83ec3c59c80a9d7ecc718f92e50"
+
+[[package]]
 name = "async-trait"
 version = "0.1.88"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1339,6 +1345,7 @@ dependencies = [
 name = "pg_idkit"
 version = "0.3.0"
 dependencies = [
+ "anyhow",
  "chrono",
  "cuid",
  "cuid2",
@@ -1350,6 +1357,7 @@ dependencies = [
  "svix-ksuid",
  "time",
  "timeflake-rs",
+ "type-safe-id",
  "ulid",
  "uuid",
  "xid",
@@ -2340,6 +2348,18 @@ name = "toml_write"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bfb942dfe1d8e29a7ee7fcbde5bd2b9a25fb89aa70caea2eba3bee836ff41076"
+
+[[package]]
+name = "type-safe-id"
+version = "0.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dd9267f90719e0433aae095640b294ff36ccbf89649ecb9ee34464ec504be157"
+dependencies = [
+ "arrayvec",
+ "rand 0.9.1",
+ "thiserror 2.0.12",
+ "uuid",
+]
 
 [[package]]
 name = "typenum"

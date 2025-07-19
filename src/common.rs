@@ -7,11 +7,21 @@ pub(crate) trait OrPgrxError<T> {
     /// Convert the given type to a T, possibly failing
     /// and calling [`pgrx::error`], with a given prefix if an error is returned
     fn or_pgrx_error(self, prefix: impl AsRef<str>) -> T;
+
+    /// Convert the given type to a T, possibly failing
+    /// and calling [`pgrx::error`], executing the provided function to generate
+    /// a prefixt hat will then be turned into a pgrx error.
+    fn or_else_pgrx_error(self, prefix_fn: impl FnOnce() -> String) -> T
+    where
+        Self: Sized,
+    {
+        self.or_pgrx_error(prefix_fn())
+    }
 }
 
 impl<T, E> OrPgrxError<T> for Result<T, E>
 where
-    E: std::error::Error,
+    E: std::fmt::Display,
 {
     fn or_pgrx_error(self, prefix: impl AsRef<str>) -> T {
         match self {

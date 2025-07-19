@@ -71,7 +71,7 @@ _check-installed-version tool msg:
 # Build #
 #########
 
-version := env_var_or_default("VERSION", "0.3.0")
+version := env_var_or_default("VERSION", "0.3.1")
 
 # Print the current version (according to the script)
 [group('meta')]

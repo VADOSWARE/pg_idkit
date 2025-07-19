@@ -71,7 +71,7 @@ docker run \
     -e POSTGRES_PASSWORD=replace_this \
     -p 5432 \
     --name pg_idkit \
-    ghcr.io/vadosware/pg_idkit:0.3.0-pg17.5-alpine3.21.3-amd64
+    ghcr.io/vadosware/pg_idkit:0.3.1-pg17.5-alpine3.21.3-amd64
 ```
 
 > [!WARNING]
@@ -125,7 +125,7 @@ target/release/pg_idkit-pg17
 │                   └── share
 │                       └── postgresql
 │                           └── extension
-│                               ├── pg_idkit--0.3.0.sql
+│                               ├── pg_idkit--0.3.1.sql
 │                               └── pg_idkit.control
 └── usr
     ├── lib
@@ -144,7 +144,7 @@ As the installation of the extension into a specific version of postgres uses yo
 In the example above, the [files you need for a Postgres extension][pg-ext-files] are:
 
 - `target/release/home/<user>/.pgrx/17.5/pgrx-install/lib/postgresql/pg_idkit.so`
-- `target/release/home/<user>/.pgrx/17.5/pgrx-install/share/postgresql/extension/pg_idkit--0.3.0.sql`
+- `target/release/home/<user>/.pgrx/17.5/pgrx-install/share/postgresql/extension/pg_idkit--0.3.1.sql`
 - `target/release/home/<user>/.pgrx/17.5/pgrx-install/share/postgresql/extension/pg_idkit.control`
 
 Install these files in the relevant folders for your Postgres installation -- note that exactly where these files should go can can differ across linux distributions and containerized environments.
@@ -191,7 +191,7 @@ docker run \
     -e POSTGRES_PASSWORD=replace_this \
     -p 5432 \
     --name pg_idkit \
-    ghcr.io/vadosware/pg_idkit:0.3.0-pg17.5-alpine3.18-amd64
+    ghcr.io/vadosware/pg_idkit:0.3.1-pg17.5-alpine3.18-amd64
 ```
 
 From another terminal, you can exec into the `pg_idkit` container and enable `pg_idkit`:
@@ -228,10 +228,10 @@ RPMs are produced upon [every official release](/releases) of `pg_idkit`.
 
 Grab a released version of the RPM (or build one yourself by running `just build-rpm` after [setting up local development][guide-localdev]).
 
-For example, with an RPM named `pg_idkit-0.3.0-pg17.x86_64.rpm`, you should be able to run:
+For example, with an RPM named `pg_idkit-0.3.1-pg17.x86_64.rpm`, you should be able to run:
 
 ```
-dnf install pg_idkit-0.3.0-pg17.x86_64.rpm
+dnf install pg_idkit-0.3.1-pg17.x86_64.rpm
 ```
 
 </details>

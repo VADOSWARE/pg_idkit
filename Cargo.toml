@@ -29,19 +29,22 @@ pg17 = ["pgrx/pg17", "pgrx-tests/pg17"]
 pg_test = []
 
 [dependencies]
+getrandom = { version = "0.2" }
+pgrx = { version = "=0.15.0" }
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+anyhow = { version = "1", default-features = false }
+time = { version = "0.3" }
+
 cuid = { version = "1.3" }
 cuid2 = { version = "0.1" }
-getrandom = { version = "0.2" }
-chrono = { version = "0.4", default-features = false, features = ["clock"] }
 svix-ksuid = { version = "0.8" }
 nanoid = { version = "0.4" }
-pgrx = { version = "=0.15.0" }
 pushid = { version = "0.0.1" }
 timeflake-rs = { version = "0.3" }
-ulid = { version = "1.2", features = [ "uuid" ] }
-uuid = { version = "1.17", features = [ "v6", "v7" ] }
+ulid = { version = "1.2", features = ["uuid"] }
+uuid = { version = "1.17", features = ["v4", "v6", "v7"] }
 xid = { version = "1.1" }
-time = { version = "0.3" }
+type-safe-id = { version = "0.3.3", default-features = false }
 
 [dev-dependencies]
 pgrx-tests = { version = "=0.15.0" }

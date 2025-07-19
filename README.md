@@ -40,7 +40,11 @@ postgres=# SELECT idkit_uuidv7_generate();
 | [cuid][cuid] (deprecated) | `idkit_cuid_generate()`                     | [`cuid`][crate-cuid]                 | CUID                                                     |
 |                           | `idkit_cuid_extract_timestamptz(TEXT)`      |                                      |                                                          |
 | [cuid2][cuid2]            | `idkit_cuid2_generate()`                    | [`cuid2`][crate-cuid2]               | CUID2                                                    |
-|                           | `idkit_cuid2_generate_with_len(length)`     |                                      | CUID2 with custom length                                |
+|                           | `idkit_cuid2_generate_with_len(length)`     |                                      | CUID2 with custom length                                 |
+| [typeid][typeid]          | `idkit_typeid_generate(TEXT)`               | [`type-safe-id`][crate-type-safe-id] | TYPEID with provided prefix and UUIDv7 now()             |
+|                           | `idkit_typeid_generate_text(TEXT)`          |                                      | TYPEID with provided prefix and UUIDv7 now()             |
+|                           | `idkit_typeid_from_uuid_v7(TEXT, TEXT)`     |                                      | TYPEID from a given UUID v7                              |
+|                           | `idkit_typeid_extract_timestamptz(TEXT)`    |                                      | Extract a timestamp from a given typeid                  |
 
 This Postgres extension is made possible thanks to [`pgrx`][pgrx].
 
@@ -55,6 +59,7 @@ This Postgres extension is made possible thanks to [`pgrx`][pgrx].
 [crate-xid]: https://crates.io/crates/xid
 [crate-cuid]: https://crates.io/crates/cuid
 [crate-cuid2]: https://crates.io/crates/cuid2
+[crate-type-safe-id]: https://crates.io/crates/type-safe-id
 
 ## Quickstart
 
@@ -108,7 +113,7 @@ just package
 After running these commands you should see the following directory structure in `target/release/pg_idkit-pg17`:
 
 ```
-target/release/pg_idkit-pg16
+target/release/pg_idkit-pg17
 ├── home
 │   └── <user>
 │       └── .pgrx

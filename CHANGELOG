@@ -1,6 +1,25 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.3.1] - 2025-07-19
+
+### Features
+
+- Add typeid support (#112)
+
+- Added CUID2 custom length (#111)
+
+### Miscellaneous Tasks
+
+- Bump uuid from 1.16.0 to 1.17.0
+- Bump softprops/action-gh-release from 2.2.1 to 2.2.2 (#99)
+- Bump actions/download-artifact from 4.2.1 to 4.3.0 (#100)
+- Bump softprops/action-gh-release from 2.2.2 to 2.3.2 (#103)
+- Bump taiki-e/cache-cargo-install-action from 2.1.1 to 2.1.2 (#104)
+- Bump Swatinem/rust-cache from 2.7.8 to 2.8.0 (#105)
+- Bump taiki-e/cache-cargo-install-action from 2.1.2 to 2.2.0 (#106)
+- Update pgrx to 0.15.0 (#109)
+
 ## [0.3.0] - 2025-05-21
 
 ### Bug Fixes

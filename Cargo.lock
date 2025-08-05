@@ -1351,7 +1351,7 @@ dependencies = [
  "cuid2",
  "getrandom 0.2.16",
  "nanoid",
- "pgrx",
+ "pgrx 0.15.0",
  "pgrx-tests",
  "pushid",
  "svix-ksuid",
@@ -1376,9 +1376,31 @@ dependencies = [
  "heapless",
  "libc",
  "once_cell",
- "pgrx-macros",
- "pgrx-pg-sys",
- "pgrx-sql-entity-graph",
+ "pgrx-macros 0.15.0",
+ "pgrx-pg-sys 0.15.0",
+ "pgrx-sql-entity-graph 0.15.0",
+ "seahash",
+ "serde",
+ "serde_cbor",
+ "serde_json",
+ "thiserror 2.0.12",
+ "uuid",
+]
+
+[[package]]
+name = "pgrx"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2c898b37587b29f8fa7ca20bfaaf57103e10fa81e6caed2cc7b742f96088d851"
+dependencies = [
+ "bitflags 2.9.1",
+ "bitvec",
+ "enum-map",
+ "libc",
+ "once_cell",
+ "pgrx-macros 0.16.0",
+ "pgrx-pg-sys 0.16.0",
+ "pgrx-sql-entity-graph 0.16.0",
  "seahash",
  "serde",
  "serde_cbor",
@@ -1397,7 +1419,26 @@ dependencies = [
  "cc",
  "clang-sys",
  "eyre",
- "pgrx-pg-config",
+ "pgrx-pg-config 0.15.0",
+ "proc-macro2",
+ "quote",
+ "regex",
+ "shlex",
+ "syn 2.0.101",
+ "walkdir",
+]
+
+[[package]]
+name = "pgrx-bindgen"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "35439a65a6c0cc17e9758005da0557cff583a3e4da0f92a4a744494ac21c190e"
+dependencies = [
+ "bindgen",
+ "cc",
+ "clang-sys",
+ "eyre",
+ "pgrx-pg-config 0.16.0",
  "proc-macro2",
  "quote",
  "regex",
@@ -1412,7 +1453,19 @@ version = "0.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f230769493bf567f137de23264d604d267dd72b8a77c596528e43cf423c6208e"
 dependencies = [
- "pgrx-sql-entity-graph",
+ "pgrx-sql-entity-graph 0.15.0",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.101",
+]
+
+[[package]]
+name = "pgrx-macros"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3586274c7d7237e68bebb871cf9244444f1ad78bb395679ad4ef1015db302454"
+dependencies = [
+ "pgrx-sql-entity-graph 0.16.0",
  "proc-macro2",
  "quote",
  "syn 2.0.101",
@@ -1440,6 +1493,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "pgrx-pg-config"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0cc24f6663377dca8797ff3561d9ecdaef47e518ca2e2438fd85ef3c20f421ea"
+dependencies = [
+ "cargo_toml",
+ "codepage",
+ "encoding_rs",
+ "eyre",
+ "home",
+ "owo-colors",
+ "pathsearch",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.12",
+ "toml",
+ "url",
+ "winapi",
+]
+
+[[package]]
 name = "pgrx-pg-sys"
 version = "0.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1447,9 +1521,24 @@ checksum = "fcbfa98ec7a90252d13a78ac666541173dbb01a2fc1ba20131db6490c0711125"
 dependencies = [
  "cee-scape",
  "libc",
- "pgrx-bindgen",
- "pgrx-macros",
- "pgrx-sql-entity-graph",
+ "pgrx-bindgen 0.15.0",
+ "pgrx-macros 0.15.0",
+ "pgrx-sql-entity-graph 0.15.0",
+ "serde",
+ "sptr",
+]
+
+[[package]]
+name = "pgrx-pg-sys"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b44a35477c0752c00cab38c2d8b7ea2d2d3554e3385870d7ad43e3ae5ade66a9"
+dependencies = [
+ "cee-scape",
+ "libc",
+ "pgrx-bindgen 0.16.0",
+ "pgrx-macros 0.16.0",
+ "pgrx-sql-entity-graph 0.16.0",
  "serde",
  "sptr",
 ]
@@ -1471,19 +1560,35 @@ dependencies = [
 ]
 
 [[package]]
-name = "pgrx-tests"
-version = "0.15.0"
+name = "pgrx-sql-entity-graph"
+version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9791c709882f3af9545bcca71670fdd82768f67a428b416b6210eae3773dbd0d"
+checksum = "59036a5849c5b0bca0f33df1fdd72206ceb74712959756b3fecba56a8e19d52a"
+dependencies = [
+ "convert_case",
+ "eyre",
+ "petgraph",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.101",
+ "thiserror 2.0.12",
+ "unescape",
+]
+
+[[package]]
+name = "pgrx-tests"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1455045c6345fcb1f1f441205735719290cb1cd71975e0a37693adb807b1b8a3"
 dependencies = [
  "clap-cargo",
  "eyre",
  "libc",
  "owo-colors",
  "paste",
- "pgrx",
- "pgrx-macros",
- "pgrx-pg-config",
+ "pgrx 0.16.0",
+ "pgrx-macros 0.16.0",
+ "pgrx-pg-config 0.16.0",
  "postgres",
  "proptest",
  "rand 0.9.1",

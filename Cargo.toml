@@ -30,7 +30,7 @@ pg_test = []
 
 [dependencies]
 getrandom = { version = "0.2" }
-pgrx = { version = "=0.15.0" }
+pgrx = { version = "=0.16.0" }
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 anyhow = { version = "1", default-features = false }
 time = { version = "0.3" }
@@ -47,7 +47,7 @@ xid = { version = "1.1" }
 type-safe-id = { version = "0.3.3", default-features = false }
 
 [dev-dependencies]
-pgrx-tests = { version = "=0.15.0" }
+pgrx-tests = { version = "=0.16.0" }
 
 [profile.dev]
 panic = "unwind"

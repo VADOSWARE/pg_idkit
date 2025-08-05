@@ -13,10 +13,6 @@ on:
         description: |
           version of cargo-pgrx to download (inside image build)
 
-concurrency:
-  group: pg_idkit # Project-wide
-  cancel-in-progress: true
-
 permissions:
   contents: none
 

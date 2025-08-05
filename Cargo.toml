@@ -29,7 +29,7 @@ pg17 = ["pgrx/pg17", "pgrx-tests/pg17"]
 pg_test = []
 
 [dependencies]
-getrandom = { version = "0.2" }
+getrandom = { version = "0.3" }
 pgrx = { version = "=0.16.0" }
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 anyhow = { version = "1", default-features = false }

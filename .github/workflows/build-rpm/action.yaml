@@ -33,9 +33,9 @@ inputs:
       Postgres version (ex. '17.5')
   cargo-pgrx-version:
     type: string
-    default: 0.15.0
+    default: 0.16.0
     decription: |
-      cargo-pgrx version (ex. '0.15.0')
+      cargo-pgrx version (ex. '0.16.0')
   user:
     type: string
     default: runner

@@ -2,7 +2,6 @@ use std::io::{Error as IoError, ErrorKind};
 use std::str::FromStr;
 
 use chrono::DateTime;
-use getrandom::getrandom;
 use pgrx::datum::TimestampWithTimeZone;
 use pgrx::pg_extern;
 use uuid::Uuid;
@@ -12,7 +11,7 @@ use crate::common::{naive_datetime_to_pg_timestamptz, OrPgrxError};
 /// Generate a new UUIDv6
 fn new_uuidv6() -> Uuid {
     let mut buf = [0u8; 6];
-    getrandom(&mut buf).or_pgrx_error("failed to get random bytes for building uuidv6");
+    getrandom::fill(&mut buf).or_pgrx_error("failed to get random bytes for building uuidv6");
     Uuid::now_v6(&buf)
 }
 

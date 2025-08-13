@@ -42,7 +42,7 @@ jobs:
               pg_version: "17.5"
               os_version: alpine3.21.3
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - uses: docker/setup-qemu-action@v3
       - uses: taiki-e/install-action@v2
         with:

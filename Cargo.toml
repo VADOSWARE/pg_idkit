@@ -42,7 +42,7 @@ nanoid = { version = "0.4" }
 pushid = { version = "0.0.1" }
 timeflake-rs = { version = "0.3" }
 ulid = { version = "1.2", features = ["uuid"] }
-uuid = { version = "1.17", features = ["v4", "v6", "v7"] }
+uuid = { version = "1.18", features = ["v4", "v6", "v7"] }
 xid = { version = "1.1" }
 type-safe-id = { version = "0.3.3", default-features = false }
 

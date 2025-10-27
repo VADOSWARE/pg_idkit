@@ -15,7 +15,7 @@ inputs:
       Suffix that will be used on the tarball artifact (ex. '-musl')
   rust-container-version:
     type: string
-    default: 1.85.1
+    default: 1.90.0
     description: |
       Version of rust to use in the container
   apt-cache-dir:

@@ -23,19 +23,19 @@ inputs:
       Architecture to use while building the RPM
   pgrx-pg-version:
     type: string
-    default: pg17
+    default: pg18
     decription: |
-      PGRX version (ex. 'pg17')
+      PGRX version (ex. 'pg18')
   pg-version:
     type: string
-    default: 17.5
+    default: 18.0
     decription: |
-      Postgres version (ex. '17.5')
+      Postgres version (ex. '18.0')
   cargo-pgrx-version:
     type: string
-    default: 0.16.0
+    default: 0.16.1
     decription: |
-      cargo-pgrx version (ex. '0.16.0')
+      cargo-pgrx version (ex. '0.16.1')
   user:
     type: string
     default: runner

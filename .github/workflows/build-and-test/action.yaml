@@ -38,19 +38,19 @@ inputs:
     default: idkit
   cargo-pgrx-version:
     type: string
-    default: 0.16.0
+    default: 0.16.1
     decription: |
-      cargo-pgrx version (ex. '0.16.0')
+      cargo-pgrx version (ex. '0.16.1')
   pgrx-pg-version:
     type: string
-    default: pg17
+    default: pg18
     decription: |
-      PGRX version (ex. 'pg17')
+      PGRX version (ex. 'pg18')
   pkg-pg-version:
     type: string
-    default: 17.5
+    default: 18.0
     decription: |
-      Postgres version (ex. '17.5') used for packaging
+      Postgres version (ex. '18.0') used for packaging
   libc:
     type: string
     required: true

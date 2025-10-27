@@ -71,7 +71,7 @@ docker run \
     -e POSTGRES_PASSWORD=replace_this \
     -p 5432 \
     --name pg_idkit \
-    ghcr.io/vadosware/pg_idkit:0.3.1-pg17.5-alpine3.21.3-amd64
+    ghcr.io/vadosware/pg_idkit:0.3.1-pg18.0-alpine3.22.2-amd64
 ```
 
 > [!WARNING]
@@ -83,7 +83,7 @@ Once the postgres server is running, open another shell and connect to the docke
 
 ```console
 ➜ docker exec -it pg_idkit psql -U postgres
-psql (17.5)
+psql (18.0)
 Type "help" for help.
 
 postgres=# CREATE EXTENSION pg_idkit;
@@ -117,7 +117,7 @@ target/release/pg_idkit-pg17
 ├── home
 │   └── <user>
 │       └── .pgrx
-│           └── 17.5
+│           └── 18.0
 │               └── pgrx-install
 │                   ├── lib
 │                   │   └── postgresql
@@ -143,9 +143,9 @@ As the installation of the extension into a specific version of postgres uses yo
 
 In the example above, the [files you need for a Postgres extension][pg-ext-files] are:
 
-- `target/release/home/<user>/.pgrx/17.5/pgrx-install/lib/postgresql/pg_idkit.so`
-- `target/release/home/<user>/.pgrx/17.5/pgrx-install/share/postgresql/extension/pg_idkit--0.3.1.sql`
-- `target/release/home/<user>/.pgrx/17.5/pgrx-install/share/postgresql/extension/pg_idkit.control`
+- `target/release/home/<user>/.pgrx/18.0/pgrx-install/lib/postgresql/pg_idkit.so`
+- `target/release/home/<user>/.pgrx/18.0/pgrx-install/share/postgresql/extension/pg_idkit--0.3.1.sql`
+- `target/release/home/<user>/.pgrx/18.0/pgrx-install/share/postgresql/extension/pg_idkit.control`
 
 Install these files in the relevant folders for your Postgres installation -- note that exactly where these files should go can can differ across linux distributions and containerized environments.
 
@@ -191,14 +191,14 @@ docker run \
     -e POSTGRES_PASSWORD=replace_this \
     -p 5432 \
     --name pg_idkit \
-    ghcr.io/vadosware/pg_idkit:0.3.1-pg17.5-alpine3.18-amd64
+    ghcr.io/vadosware/pg_idkit:0.3.1-pg18.0-alpine3.22.2-amd64
 ```
 
 From another terminal, you can exec into the `pg_idkit` container and enable `pg_idkit`:
 
 ```console
 ➜ docker exec -it pg_idkit psql -U postgres
-psql (17.5)
+psql (18.0)
 Type "help" for help.
 
 postgres=# CREATE EXTENSION pg_idkit;

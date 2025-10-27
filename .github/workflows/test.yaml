@@ -36,6 +36,11 @@ jobs:
             pgrx:
               pgrx-pg-version: pg17
               pkg-pg-version: 17.5
+          - rpm:
+              arch: x86_64
+            pgrx:
+              pgrx-pg-version: pg18
+              pkg-pg-version: 18.0
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
@@ -69,6 +74,11 @@ jobs:
             pgrx:
               pgrx-pg-version: pg17
               pkg-pg-version: 17.5
+          - rpm:
+              arch: x86_64
+            pgrx:
+              pgrx-pg-version: pg18
+              pkg-pg-version: 18.0
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 

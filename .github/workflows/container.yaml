@@ -23,24 +23,24 @@ jobs:
             container:
               arch: amd64
               pgrx_pg_version: pg15
-              pg_version: "15.13"
-              os_version: alpine3.21.3
+              pg_version: "15.14"
+              os_version: alpine3.22.2
           - triple: x86_64-unknown-linux-musl
             gh:
               runner: ubuntu-22.04
             container:
               arch: amd64
               pgrx_pg_version: pg16
-              pg_version: "16.9"
-              os_version: alpine3.21.3
+              pg_version: "16.10"
+              os_version: alpine3.22.2
           - triple: x86_64-unknown-linux-musl
             gh:
               runner: ubuntu-22.04
             container:
               arch: amd64
               pgrx_pg_version: pg17
-              pg_version: "17.5"
-              os_version: alpine3.21.3
+              pg_version: "17.6"
+              os_version: alpine3.22.2
           - triple: x86_64-unknown-linux-musl
             gh:
               runner: ubuntu-22.04
@@ -48,7 +48,7 @@ jobs:
               arch: amd64
               pgrx_pg_version: pg18
               pg_version: "18.0"
-              os_version: alpine3.21.3
+              os_version: alpine3.22.2
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - uses: docker/setup-qemu-action@v3

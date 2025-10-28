@@ -32,15 +32,15 @@ jobs:
           - pgrx:
               pg-version: pg15
             pg:
-              version: "15.13"
+              version: "15.14"
           - pgrx:
               pg-version: pg16
             pg:
-              version: "16.9"
+              version: "16.10"
           - pgrx:
               pg-version: pg17
             pg:
-              version: "17.5"
+              version: "17.6"
           - pgrx:
               pg-version: pg18
             pg:
@@ -69,15 +69,15 @@ jobs:
           - pgrx:
               pg-version: pg15
             pg:
-              version: "15.13"
+              version: "15.14"
           - pgrx:
               pg-version: pg16
             pg:
-              version: "16.9"
+              version: "16.10"
           - pgrx:
               pg-version: pg17
             pg:
-              version: "17.5"
+              version: "17.6"
           - pgrx:
               pg-version: pg18
             pg:

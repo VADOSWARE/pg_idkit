@@ -1,6 +1,37 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2025-10-28
+
+### Bug Fixes
+
+- Remove concurrency for base/ci builder image jobs
+
+### Miscellaneous Tasks
+
+- Add CODEOWNERS (#115)
+- Bump taiki-e/cache-cargo-install-action from 2.2.0 to 2.3.0 (#114)
+- Update to pgrx v0.16.0 (#118)
+- Bump getrandom from 0.2.16 to 0.3.3 (#119)
+- Bump actions/download-artifact from 4.3.0 to 5.0.0 (#120)
+- Bump actions/checkout from 4.2.2 to 5.0.0 (#121)
+- Bump uuid from 1.17.0 to 1.18.0 (#122)
+- Bump anyhow from 1.0.98 to 1.0.99 (#123)
+- Bump time from 0.3.41 to 0.3.42 (#124)
+- Bump uuid from 1.18.0 to 1.18.1 (#125)
+- Bump time from 0.3.42 to 0.3.43 (#126)
+- Bump softprops/action-gh-release from 2.3.2 to 2.3.3 (#127)
+- Bump chrono from 0.4.41 to 0.4.42 (#128)
+- Bump Swatinem/rust-cache from 2.8.0 to 2.8.1 (#129)
+- Bump taiki-e/cache-cargo-install-action from 2.3.0 to 2.3.1 (#132)
+- Bump anyhow from 1.0.99 to 1.0.100 (#131)
+- Bump time from 0.3.43 to 0.3.44 (#130)
+- Bump softprops/action-gh-release from 2.3.3 to 2.3.4 (#133)
+- Bump softprops/action-gh-release from 2.3.4 to 2.4.0 (#134)
+- Bump softprops/action-gh-release from 2.4.0 to 2.4.1 (#135)
+- Bump getrandom from 0.3.3 to 0.3.4 (#136)
+- Update rust toolchain & MSRV to 1.90.0 (#138)
+
 ## [0.3.1] - 2025-07-19
 
 ### Features

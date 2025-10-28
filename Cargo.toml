@@ -1,6 +1,6 @@
 [package]
 name = "pg_idkit"
-version = "0.3.1"
+version = "0.4.0"
 edition = "2021"
 authors = ["Victor Adossi <vados@vadosware.io>"]
 license = "MIT"

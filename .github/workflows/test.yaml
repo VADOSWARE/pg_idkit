@@ -25,17 +25,17 @@ jobs:
               arch: x86_64
             pgrx:
               pgrx-pg-version: pg15
-              pkg-pg-version: 15.13
+              pkg-pg-version: 15.14
           - rpm:
               arch: x86_64
             pgrx:
               pgrx-pg-version: pg16
-              pkg-pg-version: 16.9
+              pkg-pg-version: 16.10
           - rpm:
               arch: x86_64
             pgrx:
               pgrx-pg-version: pg17
-              pkg-pg-version: 17.5
+              pkg-pg-version: 17.6
           - rpm:
               arch: x86_64
             pgrx:
@@ -63,17 +63,17 @@ jobs:
               arch: x86_64
             pgrx:
               pgrx-pg-version: pg15
-              pkg-pg-version: 15.13
+              pkg-pg-version: 15.14
           - rpm:
               arch: x86_64
             pgrx:
               pgrx-pg-version: pg16
-              pkg-pg-version: 16.9
+              pkg-pg-version: 16.10
           - rpm:
               arch: x86_64
             pgrx:
               pgrx-pg-version: pg17
-              pkg-pg-version: 17.5
+              pkg-pg-version: 17.6
           - rpm:
               arch: x86_64
             pgrx:

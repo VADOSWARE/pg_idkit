@@ -42,7 +42,7 @@ jobs:
               pgrx-pg-version: pg18
               pkg-pg-version: 18.0
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
 
       - name: Build & test the project
         uses: ./.github/workflows/build-and-test
@@ -80,7 +80,7 @@ jobs:
               pgrx-pg-version: pg18
               pkg-pg-version: 18.0
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
 
       - name: Build & test the project
         uses: ./.github/workflows/build-and-test

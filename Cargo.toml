@@ -30,7 +30,7 @@ pg18 = ["pgrx/pg18", "pgrx-tests/pg18"]
 pg_test = []
 
 [dependencies]
-getrandom = { version = "0.3" }
+getrandom = { version = "0.4" }
 pgrx = { version = "=0.16.1" }
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 anyhow = { version = "1", default-features = false }

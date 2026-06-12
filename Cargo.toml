@@ -48,7 +48,7 @@ xid = { version = "1.1" }
 type-safe-id = { version = "0.3.3", default-features = false }
 
 [dev-dependencies]
-pgrx-tests = { version = "=0.16.1" }
+pgrx-tests = { version = "=0.18.1" }
 
 [profile.dev]
 panic = "unwind"

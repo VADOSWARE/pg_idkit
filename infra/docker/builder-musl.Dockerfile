@@ -1,7 +1,11 @@
 # rust:1.90.0-alpine3.22 as of 2025/03/31
 FROM rust:1.90.0-alpine3.22@sha256:b4b54b176a74db7e5c68fdfe6029be39a02ccbcfe72b6e5a3e18e2c61b57ae26
 
-ARG CARGO_PGRX_VERSION=0.16.0
+ARG RUST_TOOLCHAIN_VERSION=1.98.0
+RUN rustup toolchain install --profile minimal $RUST_TOOLCHAIN_VERSION && \
+    rustup default $RUST_TOOLCHAIN_VERSION
+
+ARG CARGO_PGRX_VERSION=0.19.2
 ENV CARGO_PGRX_VERSION=${CARGO_PGRX_VERSION}
 
 RUN apk add --no-cache musl-dev openssl-dev perl make

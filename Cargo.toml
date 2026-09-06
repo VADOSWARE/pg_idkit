@@ -4,7 +4,7 @@ version = "0.4.0"
 edition = "2021"
 authors = ["Victor Adossi <vados@vadosware.io>"]
 license = "MIT"
-rust-version = "1.90"
+rust-version = "1.96"
 description = """
 A Postgres extension for generating UUIDs
 """
@@ -15,13 +15,8 @@ maintenance = { status = "actively-maintained" }
 [lib]
 crate-type = ["cdylib", "lib"]
 
-[[bin]]
-name = "pgrx_embed_pg_idkit"
-path = "src/bin/pgrx_embed.rs"
-
 [features]
 default = ["pg17"]
-pg13 = ["pgrx/pg13", "pgrx-tests/pg13"]
 pg14 = ["pgrx/pg14", "pgrx-tests/pg14"]
 pg15 = ["pgrx/pg15", "pgrx-tests/pg15"]
 pg16 = ["pgrx/pg16", "pgrx-tests/pg16"]
@@ -31,7 +26,7 @@ pg_test = []
 
 [dependencies]
 getrandom = { version = "0.4" }
-pgrx = { version = "=0.16.1" }
+pgrx = { version = "=0.19.2" }
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 anyhow = { version = "1", default-features = false }
 time = { version = "0.3" }
@@ -48,7 +43,7 @@ xid = { version = "1.1" }
 type-safe-id = { version = "0.3.3", default-features = false }
 
 [dev-dependencies]
-pgrx-tests = { version = "=0.16.1" }
+pgrx-tests = { version = "=0.19.2" }
 
 [profile.dev]
 panic = "unwind"
@@ -65,15 +60,6 @@ inherits = "test"
 
 [package.metadata.generate-rpm]
 assets = []
-
-[package.metadata.generate-rpm.variants.pg13]
-assets = [
-  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/lib/postgresql/pg_idkit.so", dest = "/usr/lib64/pgsql/pg_idkit.so", mode = "755" },
-  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit--0.4.0.sql", dest = "/usr/share/pgsql/extension/pg_idkit--0.4.0.sql", mode = "755" },
-  { source = "/tmp/pg_idkit/rpm/scratch/pgrx-install/share/postgresql/extension/pg_idkit.control", dest = "/usr/share/pgsql/extension/pg_idkit.control", mode = "755" },
-]
-requires = { postgresql-server = "> 13", glibc = "*" }
-release = "pg13"
 
 [package.metadata.generate-rpm.variants.pg14]
 assets = [

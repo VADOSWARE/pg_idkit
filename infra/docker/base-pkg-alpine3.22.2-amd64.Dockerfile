@@ -1,7 +1,7 @@
 FROM alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412 AS builder
 
 # Allow for overriding rust toolcahin version
-ARG RUST_TOOLCHAIN_VERSION=1.90.0
+ARG RUST_TOOLCHAIN_VERSION=1.98.0
 ENV RUST_TOOLCHAIN_VERSION=$RUST_TOOLCHAIN_VERSION
 
 # Allow for overriding of PGRX PG version that is used
@@ -41,7 +41,8 @@ RUN cargo install just cargo-get
 
 # Install pgrx
 # (disabling the static C runtime is required since pgrx requires dynamic linking w/ libssl and libcrypto)
-RUN RUSTFLAGS="-Ctarget-feature=-crt-static" cargo install --locked cargo-pgrx@0.16.1
+ARG CARGO_PGRX_VERSION=0.19.2
+RUN RUSTFLAGS="-Ctarget-feature=-crt-static" cargo install --locked cargo-pgrx@$CARGO_PGRX_VERSION
 
 # Copy in pg_idkit code
 WORKDIR /pg_idkit

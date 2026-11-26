@@ -14,28 +14,28 @@ inputs:
   gh-runner:
     type: string
     default: ubuntu-latest
-    decription: |
+    description: |
       GitHub runner to use
   rpm-arch:
     type: string
     default: x86_64
-    decription: |
+    description: |
       Architecture to use while building the RPM
   pgrx-pg-version:
     type: string
     default: pg18
-    decription: |
+    description: |
       PGRX version (ex. 'pg18')
   pg-version:
     type: string
     default: 18.0
-    decription: |
+    description: |
       Postgres version (ex. '18.0')
   cargo-pgrx-version:
     type: string
-    default: 0.19.2
-    decription: |
-      cargo-pgrx version (ex. '0.19.2')
+    default: 0.20.1
+    description: |
+      cargo-pgrx version (ex. '0.20.1')
   user:
     type: string
     default: runner
@@ -55,7 +55,7 @@ runs:
       with:
         path: |
           /home/runner/.pgrx
-        key: pg_idkit-pkg-rpm-pgrx-${{ inputs.rpm-arch }}-${{ inputs.gh-runner }}
+        key: pg_idkit-pkg-rpm-pgrx-${{ inputs.pgrx-pg-version }}-${{ inputs.cargo-pgrx-version }}-${{ inputs.rpm-arch }}-${{ inputs.gh-runner }}
 
     - name: Install Rust deps
       uses: taiki-e/install-action@v2
@@ -74,7 +74,7 @@ runs:
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pg-version }}
       run: |
-        [[ -d /home/runner/.pgrx ]] || cargo pgrx init
+        just pgrx-init
 
     - name: Build RPM
       shell: bash

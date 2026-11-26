@@ -15,7 +15,7 @@ inputs:
       Suffix that will be used on the tarball artifact (ex. '-musl')
   rust-container-version:
     type: string
-    default: 1.98.0
+    default: 1.99.1
     description: |
       Version of rust to use in the container
   apt-cache-dir:
@@ -38,18 +38,18 @@ inputs:
     default: idkit
   cargo-pgrx-version:
     type: string
-    default: 0.19.2
-    decription: |
-      cargo-pgrx version (ex. '0.19.2')
+    default: 0.20.1
+    description: |
+      cargo-pgrx version (ex. '0.20.1')
   pgrx-pg-version:
     type: string
     default: pg18
-    decription: |
+    description: |
       PGRX version (ex. 'pg18')
   pkg-pg-version:
     type: string
     default: 18.0
-    decription: |
+    description: |
       Postgres version (ex. '18.0') used for packaging
   libc:
     type: string
@@ -113,7 +113,7 @@ runs:
       uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
       continue-on-error: false
       with:
-        key: pg_idkit-tests-pgrx-init-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}-${{ inputs.artifact-tarball-suffix }}
+        key: pg_idkit-tests-pgrx-init-${{ inputs.libc }}-${{ inputs.pgrx-pg-version }}-${{ inputs.cargo-pgrx-version }}-${{ inputs.rust-container-version }}-cargo-${{ runner.os }}-${{ inputs.artifact-tarball-suffix }}
         path: |
           /home/${{ inputs.user }}/.pgrx
 
@@ -144,8 +144,8 @@ runs:
       shell: sh
       env:
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
-        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
-        CARGO_PROFILE: ${{ inputs.cargo-profile }}
+        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incremental }}
+        CARGO_PROFILE: ${{ inputs.cargo-env-profile }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
@@ -153,7 +153,10 @@ runs:
         # (this fixes the libclang dynamic loading not supported error)
         RUSTFLAGS: ${{ inputs.libc == 'musl' &&  '-Ctarget-feature=-crt-static' || '' }}
       run: |
-        su idkit -c "cargo install cargo-pgrx@${{ inputs.cargo-pgrx-version }}"
+        export RUSTUP_HOME=/home/idkit/.rustup
+        echo "RUSTUP_HOME=$RUSTUP_HOME" >> "$GITHUB_ENV"
+        su idkit -c "rustup toolchain install ${{ inputs.rust-container-version }} --profile minimal"
+        su idkit -c "cargo install --locked cargo-pgrx@${{ inputs.cargo-pgrx-version }}"
         su idkit -c "just pgrx-init"
 
     # Run cargo check
@@ -161,8 +164,8 @@ runs:
       shell: sh
       env:
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
-        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
-        CARGO_PROFILE: ${{ inputs.cargo-profile }}
+        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incremental }}
+        CARGO_PROFILE: ${{ inputs.cargo-env-profile }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
@@ -170,15 +173,15 @@ runs:
         # (this fixes the libclang dynamic loading not supported error)
         RUSTFLAGS: ${{ inputs.libc == 'musl' &&  '-Ctarget-feature=-crt-static' || '' }}
       run: |
-        su idkit -c "cargo check"
+        su idkit -c "cargo check --no-default-features --features $PGRX_PG_VERSION"
 
     # Run cargo build
     - name: Run cargo test
       shell: sh
       env:
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
-        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
-        CARGO_PROFILE: ${{ inputs.cargo-profile }}
+        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incremental }}
+        CARGO_PROFILE: ${{ inputs.cargo-env-profile }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
@@ -186,15 +189,15 @@ runs:
         # (this fixes the libclang dynamic loading not supported error)
         RUSTFLAGS: ${{ inputs.libc == 'musl' &&  '-Ctarget-feature=-crt-static' || '' }}
       run: |
-        su idkit -c "cargo build"
+        su idkit -c "cargo build --no-default-features --features $PGRX_PG_VERSION"
 
     # Run cargo test
     - name: Run cargo test
       shell: sh
       env:
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
-        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
-        CARGO_PROFILE: ${{ inputs.cargo-profile }}
+        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incremental }}
+        CARGO_PROFILE: ${{ inputs.cargo-env-profile }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
@@ -202,7 +205,7 @@ runs:
         # (this fixes the libclang dynamic loading not supported error)
         RUSTFLAGS: ${{ inputs.libc == 'musl' &&  '-Ctarget-feature=-crt-static' || '' }}
       run: |
-        su idkit -c "cargo test"
+        su idkit -c "cargo test --no-default-features --features $PGRX_PG_VERSION"
 
     #############
     # Artifacts #
@@ -214,8 +217,8 @@ runs:
       shell: sh
       env:
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
-        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
-        CARGO_PROFILE: ${{ inputs.cargo-profile }}
+        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incremental }}
+        CARGO_PROFILE: ${{ inputs.cargo-env-profile }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         DOCKER_BUILD_USER: ${{ inputs.user }}
@@ -231,8 +234,8 @@ runs:
       shell: sh
       env:
         CARGO_HOME: ${{ inputs.cargo-home-dir }}
-        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incrmental }}
-        CARGO_PROFILE: ${{ inputs.cargo-profile }}
+        CARGO_INCREMENTAL: ${{ inputs.cargo-env-incremental }}
+        CARGO_PROFILE: ${{ inputs.cargo-env-profile }}
         PGRX_PG_VERSION: ${{ inputs.pgrx-pg-version }}
         PKG_PG_VERSION: ${{ inputs.pkg-pg-version }}
         PKG_TARBALL_SUFFIX: ${{ inputs.artifact-tarball-suffix }}

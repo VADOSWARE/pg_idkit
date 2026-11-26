@@ -1,11 +1,10 @@
-# rust:1.90.0-slim-bullseye as of 2025/10/27
-FROM rust:1.90.0-slim-bullseye@sha256:63a3432f5182b5fb2e5a0d8c2a7c189b0e35735342155a1459e735d6786007c3
+FROM rust:1.99.1-slim-bookworm@sha256:f2c004e3d2d8b547e8cf7ffbc29205385f4e71d23e53e4e383065db5e9f822cd
 
-ARG RUST_TOOLCHAIN_VERSION=1.98.0
+ARG RUST_TOOLCHAIN_VERSION=1.99.1
 RUN rustup toolchain install --profile minimal $RUST_TOOLCHAIN_VERSION && \
     rustup default $RUST_TOOLCHAIN_VERSION
 
-ARG CARGO_PGRX_VERSION=0.19.2
+ARG CARGO_PGRX_VERSION=0.20.1
 ENV CARGO_PGRX_VERSION=${CARGO_PGRX_VERSION}
 
 # Install deps
@@ -32,7 +31,7 @@ RUN apt update && \
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add
 
 # Add postgres repo
-RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 
 # Install pg15
 RUN apt -y update && apt -y upgrade && apt install -y postgresql-15

@@ -27,14 +27,11 @@ cargo_features_arg := if cargo_features != "" {
 changelog_file_path := absolute_path(justfile_directory() / "CHANGELOG")
 
 pkg_pg_version := env_var_or_default("PKG_PG_VERSION", "18.0")
-pkg_pg_config_path := env_var_or_default("PKG_PG_CONFIG_PATH", "~/.pgrx/" + pkg_pg_version + "/pgrx-install/bin/pg_config")
+pkg_pg_config_path := env_var_or_default("PKG_PG_CONFIG_PATH", env_var("HOME") + "/.pgrx/" + pkg_pg_version + "/pgrx-install/bin/pg_config")
 pkg_tarball_suffix := env_var_or_default("PKG_TARBALL_SUFFIX", "")
 
 pgrx_pg_version := env_var_or_default("PGRX_PG_VERSION", "pg18")
 pgrx_pkg_path_prefix := env_var_or_default("PGRX_PKG_PATH_PREFIX", "target")
-# If /root, 'home' does not appear in the generated prefix
-pkg_user_dir_prefix := if docker_build_user == "root" { docker_build_user } else { "home/" + docker_build_user }
-pgrx_pkg_output_dir := pgrx_pkg_path_prefix / "release" / "pg_idkit-" + pgrx_pg_version / pkg_user_dir_prefix / ".pgrx" / pkg_pg_version / "pgrx-install"
 
 docker_build_user := env_var_or_default('DOCKER_BUILD_USER', "root")
 
@@ -102,7 +99,10 @@ print-revision:
 # Print package output directory
 [group('meta')]
 print-pkg-output-dir:
-    echo -n {{pgrx_pkg_output_dir}}
+    #!/usr/bin/env -S {{shell}} -euo pipefail
+    pg_config="$({{just}} _pkg-pg-config)"
+    bindir="$("$pg_config" --bindir)"
+    printf '%s%s' '{{pgrx_pkg_path_prefix}}/release/pg_idkit-{{pgrx_pg_version}}' "${bindir%/bin}"
 
 # Set the version on the package
 [group('release')]
@@ -113,12 +113,22 @@ set-version version:
 # Development #
 ###############
 
+# Prefer a configured build path, then use the installed minor for this major.
+_pkg-pg-config:
+    #!/usr/bin/env -S {{shell}} -euo pipefail
+    pg_config="{{pkg_pg_config_path}}"
+    major={{replace(pgrx_pg_version, "pg", "")}}
+    if [[ -x "$pg_config" && "$("$pg_config" --version)" == "PostgreSQL $major."* ]]; then
+      printf '%s\n' "$pg_config"
+    else
+      {{cargo}} pgrx info pg-config {{replace(pgrx_pg_version, "pg", "")}}
+    fi
+
 # Initialize pgrx
 [group('setup')]
 pgrx-init:
     #!/usr/bin/env -S {{shell}} -euo pipefail
-    if [ ! -d "{{pkg_pg_config_path}}" ]; then
-      echo "failed to find pgrx init dir [{{pkg_pg_config_path}}], running pgrx init...";
+    if ! pg_config="$({{just}} _pkg-pg-config 2>/dev/null)" || [[ ! -x "$pg_config" ]]; then
       {{cargo}} pgrx init --{{pgrx_pg_version}}=download
     fi
 
@@ -171,7 +181,7 @@ test:
 # Build the package
 [group('release')]
 build-package:
-    PGRX_IGNORE_RUST_VERSIONS=y {{cargo}} pgrx package --pg-config {{pkg_pg_config_path}} -vvv
+    PGRX_IGNORE_RUST_VERSIONS=y {{cargo}} pgrx package --pg-config "$({{just}} _pkg-pg-config)" --no-default-features --features {{pgrx_pg_version}} -vvv
 
 # Package the project
 [group('release')]
@@ -241,7 +251,7 @@ builder_image_name := env_var_or_default("BUILDER_IMAGE_NAME", "ghcr.io/vadoswar
 builder_image_tag := env_var_or_default("BUILDER_IMAGE_TAG", "0.1.x")
 builder_image_name_full := env_var_or_default("BUILDER_IMAGE_NAME_FULL", builder_image_name + ":" + builder_image_tag)
 
-builder_image_arg_cargo_pgrx_version := env_var_or_default("BUILDER_IMAGE_ARG_CARGO_PGRX_VERSION", "0.19.2")
+builder_image_arg_cargo_pgrx_version := env_var_or_default("BUILDER_IMAGE_ARG_CARGO_PGRX_VERSION", "0.20.1")
 
 # Build the docker image used in BUILDER
 [group('package')]
@@ -324,9 +334,9 @@ rpm_scratch_location := "/tmp/pg_idkit/rpm/scratch"
 [group('package-rpm')]
 build-rpm: _check-tool-strip _check-tool-cargo-generate-rpm
     CARGO_FEATURES={{pgrx_pg_version}} {{just}} package
-    {{strip}} -s {{pgrx_pkg_output_dir}}/lib/postgresql/pg_idkit.so
+    {{strip}} -s "$({{just}} print-pkg-output-dir)"/lib/postgresql/pg_idkit.so
     mkdir -p {{rpm_scratch_location}}
-    cp -r {{pgrx_pkg_output_dir}} {{rpm_scratch_location}}
+    cp -r "$({{just}} print-pkg-output-dir)" {{rpm_scratch_location}}
     {{cargo_generate_rpm}} --variant {{pgrx_pg_version}}
 
 # Print the RPM output file name
